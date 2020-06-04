@@ -1,3 +1,5 @@
 # RegularExpressions
 
-A description of this package.
+Regular expressions modeled after Python's re module.
+
+Includes regexMatch, regexFindall, regexSub, and regexSplit.

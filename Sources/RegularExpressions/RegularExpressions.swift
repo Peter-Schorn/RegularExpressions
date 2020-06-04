@@ -23,11 +23,9 @@ public struct RegexGroup: Equatable {
 /**
  Represents a regular expression match
  ```
- public struct RegexMatch {
-     let fullMatch: String
-     let range: Range<String.Index>
-     let groups: [RegexGroup?]
- }
+ let fullMatch: String
+ let range: Range<String.Index>
+ let groups: [RegexGroup?]
  ```
  */
 public struct RegexMatch: Equatable {
@@ -154,28 +152,21 @@ public extension String {
            (e.g., unbalanced parentheses). **Never** throws an error
            if no matches are found.
      
-     - Returns: An array of tuples, each of which contains the full match,
+     - Returns: An array of matches, each of which contains the full match,
        the range of the full match in the original text,
        and an array of the capture groups.
        
-       Each capture group is an optional tuple containing the matched text
+       Each capture group is an optional RegexGroup containing the matched text
        and the range of the matched text, or nil if the group was not matched.
        
        The ranges returned by this function can be used in the subscript for
        the original text, or for self.replacingCharacters(in:with:)
        to modify the text. Note that after the original text has been modified,
-       the ranges may be invalid because characters may  have shifted
+       the ranges may be invalid because characters may have shifted
        to difference indices.
      
        If no matches were found at all, returns nil, **not an empty array**.
      
-     ```
-     public typealias RegexMatch = (
-         fullMatch: String,
-         range: Range<String.Index>,
-         groups: [(match: String, range: Range<String.Index>)?]
-     )
-     ```
      Example Usage:
      ```
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
@@ -225,8 +216,6 @@ public extension String {
         let regexResults = regex.matches(
             in: self, range: NSRange(location: 0, length: self.count)
         )
-
-        // let x = self.replacingCharacters(in:with:)
         
         var allMatches: [RegexMatch] = []
         
@@ -293,7 +282,7 @@ public extension String {
        - pattern: Regular expression pattern.
        - with: The string to replace matching patterns with.
          defaults to an empty string.
-       - options: The options for the regular expression
+       - options: The options for the regular expression.
              .regularExpression will be added to these options
      - Returns: The new string. If no matches were found,
            the string is left unchanged.

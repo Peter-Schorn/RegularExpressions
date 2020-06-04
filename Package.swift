@@ -25,11 +25,11 @@ let package = Package(
         .target(
             name: "RegularExpressions",
             dependencies: []
+        ),
+        .testTarget(
+            name: "RegularExpressionsTests",
+            dependencies: ["RegularExpressions"]
         )
+        
     ]
 )
-
-
-/*
- /Users/pschorn/Swift/Libraries/RegularExpressions/Package.swift: dependency 'Utilities' in target 'RegularExpressionsTests' requires explicit declaration; provide the name of the package dependency with '.package(name: "Utilities", url: "https://github.com/Peter-Schorn/Swift_Utilities", from: "2.1.5")'
- */
