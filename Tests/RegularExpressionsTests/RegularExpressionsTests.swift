@@ -2,8 +2,19 @@ import Foundation
 import RegularExpressions
 import XCTest
 
-extension RegularExpressionsTests {
+
+typealias Opt = Optional
+
+final class RegularExpressionsTests: XCTestCase {
     
+    static var allTests = [
+        ("testRegexFindAll", testRegexFindAll),
+        ("testRegexMatch", testRegexMatch),
+        ("testRegexSub", testRegexSub),
+        ("testRegexSplit", testRegexSplit),
+        
+    ]
+
     /// Assert that the reported ranges of the matches in the original text
     /// are correct.
     func assertRegexRangesMatch(
