@@ -1,7 +1,7 @@
 import Foundation
 
 
-extension String {
+public extension String {
     
     /**
      Finds the first match for a regular expression pattern in a string.

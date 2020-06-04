@@ -8,7 +8,7 @@
 import Foundation
 
 
-extension String {
+public extension String {
     
     /**
      Performs a regular expression replacement.
