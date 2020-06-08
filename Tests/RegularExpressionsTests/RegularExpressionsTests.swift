@@ -2,8 +2,39 @@ import Foundation
 import RegularExpressions
 import XCTest
 
+public extension XCTestCase {
 
-typealias Opt = Optional
+    typealias Opt = Optional
+    
+    
+    /// Assert that `body` does not throw.
+    /// If it does, call XCTFail with the `message`,
+    /// (unless it is empty), the error thrown from body,
+    /// and the file and line passed in.
+    ///
+    /// - Parameters:
+    ///   - message: The message to display if body throws.
+    ///   - file: The file the error should be displayed for
+    ///   - line: The line number the error should be displayed for
+    ///   - body: The block of code that might throw an error
+    func assertNoThrow(
+        _ message: String = "",
+        file: StaticString = #file,
+        line: UInt = #line,
+        _ body: () throws -> Void
+    ) {
+        
+        do {
+            try body()
+        
+        } catch {
+            let errorMsg = message.isEmpty ? "\(error)" : "\(message)\n\(error)"
+            XCTFail(errorMsg, file: file, line: line)
+        }
+    }
+
+}
+
 
 final class RegularExpressionsTests: XCTestCase {
     
@@ -11,10 +42,9 @@ final class RegularExpressionsTests: XCTestCase {
         ("testRegexFindAll", testRegexFindAll),
         ("testRegexMatch", testRegexMatch),
         ("testRegexSub", testRegexSub),
-        ("testRegexSplit", testRegexSplit),
-        
+        ("testRegexSplit", testRegexSplit)
     ]
-
+        
     /// Assert that the reported ranges of the matches in the original text
     /// are correct.
     func assertRegexRangesMatch(
@@ -32,6 +62,13 @@ final class RegularExpressionsTests: XCTestCase {
     
     func testRegexFindAll() {
     
+        // MARK: Intentional Fail
+        
+        assertNoThrow {
+            let match = try "abc".regexMatch("a")
+            print(match)
+        }
+        
         let inputText = "season 8, episode 5; season 5, episode 20"
     
     
@@ -74,42 +111,32 @@ final class RegularExpressionsTests: XCTestCase {
         }  // end checkRegexMatches
     
         let pattern = #"season (\d+), EPISODE (\d+)"#
-        let regexObject = RegexObject(
+        let regexObject = try! NSRegularExpression(
             pattern: pattern, options: [.caseInsensitive]
         )
     
-        do {
+        assertNoThrow {
             let noObject = try inputText.regexFindAll(pattern, [.caseInsensitive])
             let withObject = try inputText.regexFindAll(regexObject)
             XCTAssertEqual(noObject, withObject)
-    
-        } catch {
-            XCTFail("\(error)")
         }
     
-    
-        do {
+        assertNoThrow {
             if let results = try inputText.regexFindAll(pattern, [.caseInsensitive]) {
                 checkRegexMatches(results, input: inputText)
             }
             else {
                 XCTFail("should've found match")
             }
-    
-        } catch {
-            XCTFail("\(error)")
         }
     
-        do {
+        assertNoThrow {
             if let results = try inputText.regexFindAll(regexObject) {
                 checkRegexMatches(results, input: inputText)
             }
             else {
                 XCTFail("should've found match")
             }
-    
-        } catch {
-            XCTFail("\(error)")
         }
     }
     
@@ -122,19 +149,16 @@ final class RegularExpressionsTests: XCTestCase {
         let pattern =
         #"^(http|https|ftp):[\/]{2}([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,4})(:[0-9]+)?\/?([a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)"#
     
-        let regexObject = RegexObject(pattern: pattern)
+        assertNoThrow {
+            let regexObject = try NSRegularExpression(pattern: pattern)
     
-        do {
             let noObject = try url.regexFindAll(pattern)
             let withObject = try url.regexFindAll(regexObject)
             XCTAssertEqual(noObject, withObject)
-    
-        } catch {
-            XCTFail("\(error)")
+            
         }
     
-    
-        do {
+        assertNoThrow {
             if let match = try url.regexMatch(pattern) {
     
                 assertRegexRangesMatch([match], inputText: url)
@@ -159,8 +183,6 @@ final class RegularExpressionsTests: XCTestCase {
                 XCTFail("should've found regex match")
             }
     
-        } catch {
-            XCTFail("\(error)")
         }
     
     
@@ -193,6 +215,7 @@ final class RegularExpressionsTests: XCTestCase {
     
     
     }
+    
     
     func testRegexSub() {
     

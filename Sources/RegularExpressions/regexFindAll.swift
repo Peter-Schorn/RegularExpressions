@@ -7,27 +7,28 @@ public extension String {
      Finds all matches for a regular expression pattern in a string.
      
      - Parameters:
-     - pattern: Regular expression pattern.
-     - options: Regular expression options, such as .caseInsensitive
+       - pattern: Regular expression pattern.
+       - options: Regular expression options, such as .caseInsensitive
      
      - Throws: If the regular expression pattern is invalid
-     (e.g., unbalanced parentheses). **Never** throws an error
-     if no matches are found.
+               (e.g., unbalanced parentheses). **Never** throws an error
+               if no matches are found.
      
      - Returns: An array of matches, each of which contains the full match,
-     the range of the full match in the original text,
-     and an array of the capture groups.
-     
-     Each capture group is an optional RegexGroup containing the matched text
-     and the range of the matched text, or nil if the group was not matched.
-     
-     The ranges returned by this function can be used in the subscript for
-     the original text, or for self.replacingCharacters(in:with:)
-     to modify the text. Note that after the original text has been modified,
-     the ranges may be invalid because characters may have shifted
-     to difference indices.
-     
-     If no matches were found at all, returns nil, **not an empty array**.
+                the range of the full match in the original text,
+                and an array of the capture groups.
+                
+                Each capture group is an optional RegexGroup containing
+                the matched text and the range of the matched text,
+                or nil if the group was not matched.
+                
+                The ranges returned by this function can be used in the subscript
+                for the original text, or for self.replacingCharacters(in:with:)
+                to modify the text. Note that after the original text has been
+                modified, the ranges may be invalid because characters may have
+                shifted to difference indices.
+                
+                If no matches were found at all, returns nil, **not an empty array**.
      
      Example Usage:
      ```
@@ -130,11 +131,12 @@ public extension String {
     /// Passes a regex object into `String.regexFindAll(_:_)`.
     /// See that function for more details.
     func regexFindAll(
-        _ regexObject: RegexObject
+        _ nsRegularExpression: NSRegularExpression
     ) throws -> [RegexMatch]? {
         
         return try self.regexFindAll(
-            regexObject.pattern, regexObject.options
+            nsRegularExpression.pattern,
+            nsRegularExpression.options
         )
     }
     

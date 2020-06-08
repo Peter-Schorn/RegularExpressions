@@ -64,5 +64,21 @@ public extension String {
         
     }
     
+    func regexSplit(
+        _ nsRegularExpression: NSRegularExpression,
+        ignoreIfEmpty: Bool = false,
+        maxLength: Int? = nil
+    ) throws -> [String] {
+        
+        return try self.regexSplit(
+            nsRegularExpression.pattern,
+            nsRegularExpression.options,
+            ignoreIfEmpty: ignoreIfEmpty,
+            maxLength: maxLength
+        )
+
+    }
+    
+    
     
 }

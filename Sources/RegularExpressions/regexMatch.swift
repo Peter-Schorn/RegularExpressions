@@ -14,8 +14,8 @@ public extension String {
         - options: Regular expression options, such as .caseInsensitive
      
      - Throws: If the regular expression pattern is invalid
-     (e.g., unbalanced paraentheses). **Never** throws an error
-     if no matches were found.
+               (e.g., unbalanced paraentheses). **Never** throws an error
+               if no matches were found.
      
      - Returns: The regular expression match or nil if no match was found.
      */
@@ -38,9 +38,12 @@ public extension String {
             let regexRange = Range(result.range, in: self)!
             var regexGroups: [RegexGroup?] = []
             
+            // for each of the capture groups.
             for match in 1..<result.numberOfRanges {
                 let nsRange = result.range(at: match)
                 
+                // if the capture group is nil because it was not matched.
+                // this can occur if the capture group is marked as optional.
                 if nsRange.location == NSNotFound {
                     regexGroups.append(nil)
                 }
@@ -66,13 +69,14 @@ public extension String {
         return nil
     }
 
-    /// See self.regexMatch(`_:_`)
+    /// See `String.regexMatch(_:_)`
     func regexMatch(
-        _ regexObject: RegexObject
+        _ nsRegularExpression: NSRegularExpression
     ) throws -> RegexMatch? {
         
         return try self.regexMatch(
-            regexObject.pattern, regexObject.options
+            nsRegularExpression.pattern,
+            nsRegularExpression.options
         )
     }
 

@@ -46,23 +46,3 @@ public struct RegexMatch: Equatable {
     
     
 }
-
-
-/// Holds a regular expression pattern (String)
-/// and NSRegularExpression.Options.
-/// Can be used on regexMatch, regexFindAll, and regexSplit.
-public struct RegexObject: Equatable {
-    
-    public init(
-        pattern: String,
-        options: NSRegularExpression.Options = []
-    ) {
-        self.pattern = pattern
-        self.options = options
-    }
-    
-    public var pattern: String
-    public var options: NSRegularExpression.Options
-}
-
-
