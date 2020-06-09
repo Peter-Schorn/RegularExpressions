@@ -110,13 +110,14 @@ public func runShellScript(
  // exit code: 0
  ```
  */
+@discardableResult
 public func runShellScriptAsync(
     args: [String],
     launchPath: String = "/usr/bin/env",
     stdout: Pipe = Pipe(),
     stderror: Pipe = Pipe(),
     terminationHandler: ((Process, _ stdout: String?, _ stderror: String?) -> Void)?
-) {
+) -> Process {
 
     let task = setupShellScript(
         args: args,
@@ -135,7 +136,7 @@ public func runShellScriptAsync(
     
     // Launch the task
     task.launch()
-    
+    return task
 }
 
 

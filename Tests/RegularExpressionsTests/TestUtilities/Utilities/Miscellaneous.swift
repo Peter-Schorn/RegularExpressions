@@ -1,6 +1,5 @@
 
 import Foundation
-import SwiftUI
 
 
 public func UtilitiesTest() {
@@ -31,9 +30,9 @@ public func paddedPrint(
     padding: String = "\n\n"
 ) {
 
-    print(padding, terminator: "")
+    print(padding)
     unpackPrint(items, separator: separator, terminator: terminator)
-    print(padding, terminator: "")
+    print(padding)
 
 }
 

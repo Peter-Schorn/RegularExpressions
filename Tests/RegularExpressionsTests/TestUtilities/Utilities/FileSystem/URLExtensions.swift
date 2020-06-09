@@ -64,6 +64,7 @@ public extension URL {
 
 
 /// If the url is an alias, returns the path that the alias points to.
+/// Else, returns the original URL
 /// Throws an error if the file doesn't exist.
 public func resolveAlias(at url: URL) throws -> URL {
 

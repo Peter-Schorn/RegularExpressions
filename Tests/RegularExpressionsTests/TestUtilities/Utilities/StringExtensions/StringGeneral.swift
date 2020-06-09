@@ -92,14 +92,14 @@ public extension String {
     }
     
     
-    /// Returns an array of each line in the string
+    /// Returns an array of each line in the string.
     func lines() -> [String] {
         
         return self.split(separator: "\n").map { String($0) }
         
     }
     
-    /// Returns an array of each word in the string
+    /// Returns an array of each word in the string.
     func words() -> [String] {
         
         if let matches = try! self.regexFindAll(#"\w+"#) {
@@ -113,6 +113,7 @@ public extension String {
     /// ```
     /// "a".multiplied(by: 4) == "aaaa"
     /// ```
+    /// - Parameter amount: the number of time to repeat self
     func multiplied(by amount: Int) -> String {
         
         return (1...amount).map { _ in self }.joined()
@@ -121,6 +122,13 @@ public extension String {
     /// See self.multiplied(by:).
     mutating func multiply(by amount: Int) {
         self = self.multiplied(by: amount)
+    }
+    
+    
+    /// The full range of the string.
+    /// Equivalent to `self.startIndex..<self.endIndex`.
+    var fullRange: Range<String.Index> {
+        return self.startIndex..<self.endIndex
     }
         
     
@@ -141,6 +149,6 @@ public extension CustomStringInterpolation {
     }
 }
 
-@available(macOS 10.15, *)
+@available(macOS 10.15, iOS 13, *)
 extension LocalizedStringKey.StringInterpolation: CustomStringInterpolation { }
 extension String.StringInterpolation: CustomStringInterpolation { }

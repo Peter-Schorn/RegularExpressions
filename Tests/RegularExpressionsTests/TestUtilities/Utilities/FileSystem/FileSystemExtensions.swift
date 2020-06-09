@@ -2,7 +2,9 @@ import Foundation
 
 public func isExistingDirectory(_ path: URL) -> Bool {
     
-    return (try? path.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
+    return (
+        try? path.resourceValues(forKeys: [.isDirectoryKey])
+    )?.isDirectory ?? false
     
 }
 
@@ -54,24 +56,23 @@ public enum DeleteOptions {
 // #if os(macOS)
 
 /**
- Creates a temporary directory and passes the URL for it and a handler for deleting
- it into a closure.
+ Creates a temporary directory and passes the URL for it
+ and a handler for deleting it into a closure.
 
  See `FileManager.default.url(for:in:appropriateFor:create:)` for
  a disucssion of the directory, domain, and url parameters, which are
  forwarded through to that function. The default values for these parameters
  should be sufficient for the majority of use cases.
  
- 
  - Parameters:
    - deleteOptions:
      - .afterClosure: Deletes the directory immediately after the closure
            returns and sets `delelteClosure` to nil.
-     - .useHandler: Provides `delelteClosure`, which deletes the directory.
-           This is useful for asynchronous code.
-   - closure: Executes after the temporary directory is created.
-         If deleteOptions == .afterClosure, then `delelteClosure` is nil
-   - tempDir: The URL for the temporary directory
+     - .useHandler: Provides `delelteClosure`, which deletes the directory
+           when called. This is useful for asynchronous code.
+   - closure: Executes after the temporary directory is created,
+         passing in the URL for the temporary directory, and `deleteClosure?`.
+   - tempDir: The URL for the temporary directory.
    - delelteClosure: Deletes the directory when called. `() -> Void`
  - Returns: The URL of the directory, which may have already been deleted,
        depending on the options specified above.

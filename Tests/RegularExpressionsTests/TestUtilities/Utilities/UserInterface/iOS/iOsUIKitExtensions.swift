@@ -16,7 +16,7 @@ import UIKit
  
  - Warning: This function should be called on the main thread
  */
-func makeAlert(
+public func makeAlert(
     title: String? = nil,
     msg: String? = nil,
     buttons: [String] = ["OK"],
@@ -36,7 +36,7 @@ func makeAlert(
     return alert
 }
 
-extension UIScrollView {
+public extension UIScrollView {
     
     /// determines whether the user has scrolled near the bottom
     /// of the scroll view within the given tolerance.

@@ -1,7 +1,5 @@
 import Foundation
 
-
-
 public extension Bundle {
     
     /**

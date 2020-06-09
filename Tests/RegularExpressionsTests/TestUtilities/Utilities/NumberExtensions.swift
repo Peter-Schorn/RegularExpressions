@@ -18,19 +18,26 @@ public extension Double {
     }
 
     enum FormatOption {
-        case currency, stripTrailingZeros
+        case currency(CountryCode), stripTrailingZeros
+    }
+    enum CountryCode: String {
+        case US
     }
     
-    /// Formats double according to specifier
+    /// Formats the double as a string according to a specifier.
     ///
     /// FormatOptions:
-    /// - currency: prints dollar sign and two digits after decimal; e.g., $5.99
-    /// - stripTrailingZeros: removes insignificant trailing zeros
+    /// - currency: prints the currency symbol for the specified country
+    ///       and two digits after decimal. e.g., $5.99
+    /// - stripTrailingZeros: removes **insignificant** trailing zeros.
     func format(_ specifier: FormatOption) -> String {
         
         switch specifier {
-            case .currency:
-                return self.format("$%.2f")
+            case let .currency(country):
+                switch country {
+                    case .US:
+                        return self.format("$%.2f")
+                }
             case .stripTrailingZeros:
                 return self.format("%g")
         }

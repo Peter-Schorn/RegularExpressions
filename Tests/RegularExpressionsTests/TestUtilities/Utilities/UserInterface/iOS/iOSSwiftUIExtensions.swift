@@ -4,6 +4,7 @@
 import Foundation
 import SwiftUI
 
+@available(iOS 13.0, *)
 extension Color {
 
     public init(hex: String) {
