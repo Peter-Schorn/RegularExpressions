@@ -43,7 +43,7 @@ public extension String {
                 let nsRange = result.range(at: match)
                 
                 // if the capture group is nil because it was not matched.
-                // this can occur if the capture group is marked as optional.
+                // this can occur if the capture group is declared as optional.
                 if nsRange.location == NSNotFound {
                     regexGroups.append(nil)
                 }
