@@ -18,9 +18,12 @@ public extension String {
        - with: The string to replace matching patterns with.
          defaults to an empty string.
        - options: The options for the regular expression.
-             .regularExpression will be added to these options
-     - Returns: The new string. If no matches were found,
-           the string is left unchanged.
+             .regularExpression will be added to these options.
+     - Returns: The new string after the substitutions are made.
+           If no matches are found, the string is returned unchanged.
+     
+     - Warning: If the regular expression pattern is invalid, then no
+       substitutions will be made.
      */
     func regexSub(
         _ pattern: String,
