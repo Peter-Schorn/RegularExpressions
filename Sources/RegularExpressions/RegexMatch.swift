@@ -18,7 +18,8 @@ public extension String {
      
      - Returns: The regular expression match or nil if no match was found.
         
-     The match contains the matched text and the range of the matched text.
+     The match contains the matched text and the range of the matched text,
+     and an array of capture groups.
      Each capture group is an optional RegexGroup containing
      the matched text and the range of the matched text,
      or nil if the group was not matched.
