@@ -6,9 +6,6 @@ public extension String {
     /**
      Finds the first match for a regular expression pattern in a string.
      
-     Same as `String.regexFindAll(_:_:range:)` but only returns the first match.
-     See `String.regexFindAll(_:_:range:)` for example usage and full discussion.
-     
      - Parameters:
         - pattern: The regular expression pattern.
         - options: The regular expression options, such as .caseInsensitive
@@ -20,6 +17,40 @@ public extension String {
                if no matches were found.
      
      - Returns: The regular expression match or nil if no match was found.
+        
+     The match contains the matched text and the range of the matched text.
+     Each capture group is an optional RegexGroup containing
+     the matched text and the range of the matched text,
+     or nil if the group was not matched.
+     
+     The ranges returned by this function can be used in the subscript
+     for the original text, or for self.replacingCharacters(in:with:)
+     to modify the text. Note that after the original text has been
+     modified, the ranges may be invalid because characters may have
+     shifted to difference indices.
+     
+     Example usage:
+     ```
+     var inputText = "name: Chris Lattner"
+     let pattern = "name: ([a-z]+) ([a-z]+)"
+     
+     if let match = try! inputText.regexMatch(pattern, [.caseInsensitive]) {
+         print("full match: '\(match.fullMatch)'")
+         print("first capture group: '\(match.groups[0]!.match)'")
+         print("second capture group: '\(match.groups[1]!.match)'")
+         
+         inputText.replaceSubrange(match.groups[0]!.range, with: "Steven")
+         
+         print("after replacing text: '\(inputText)'")
+     }
+     ```
+     Output:
+     ```
+     // full match: 'name: Chris Lattner'
+     // first capture group: 'Chris'
+     // second capture group: 'Lattner'
+     // after replacing text: 'name: Steven Lattner'
+     ```
      */
     func regexMatch(
         _ pattern: String,

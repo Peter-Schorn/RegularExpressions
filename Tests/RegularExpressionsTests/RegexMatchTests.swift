@@ -5,11 +5,12 @@ import XCTest
 class RegexMatchTests: XCTestCase {
     
     static var allTests = [
-        ("testRegexMatch", testRegexMatch),
+        ("testRegexMatchURL", testRegexMatchURL),
+        ("testRegexMatchDetails", testRegexMatchDetails),
         ("testRegexMatchWithRange", testRegexMatchWithRange)
     ]
     
-    func testRegexMatch() {
+    func testRegexMatchURL() {
         
         let url = "https://www.sitepoint.com/demystifying-regex-with-practical-examples/"
         let pattern =
@@ -51,6 +52,9 @@ class RegexMatchTests: XCTestCase {
             
         }
         
+    }
+        
+    func testRegexMatchDetails() {
         
         let inputText = "Details {name: Peter, AGE: 21, seX: Male}"
         let pattern_2 = #"NAME: (\w+), age: (\d{2}), sex: (male|female)"#
@@ -79,6 +83,27 @@ class RegexMatchTests: XCTestCase {
             XCTFail("\(error)")
         }
         
+    }
+    
+    func testRegexMatchName() {
+        assertNoThrow {
+            
+            var inputText = "name: Chris Lattner"
+            let pattern = "name: ([a-z]+) ([a-z]+)"
+            
+            if let match = try inputText.regexMatch(pattern, [.caseInsensitive]) {
+                print("full match: '\(match.fullMatch)'")
+                XCTAssertEqual(match.fullMatch, "name: Chris Lattner")
+                XCTAssertEqual(match.groups[0]!.match, "Chris")
+                XCTAssertEqual(match.groups[1]!.match, "Lattner")
+                
+                inputText.replaceSubrange(match.groups[0]!.range, with: "Steven")
+                
+
+                XCTAssertEqual(inputText, "name: Steven Lattner")
+                
+            }
+        }
     }
  
     func testRegexMatchWithRange() {

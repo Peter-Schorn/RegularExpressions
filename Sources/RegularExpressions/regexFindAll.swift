@@ -31,7 +31,7 @@ public extension String {
      modified, the ranges may be invalid because characters may have
      shifted to difference indices.
      
-     Example Usage:
+     Example usage:
      ```
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
      let pattern = #"season (\d+), Episode (\d+)"#
