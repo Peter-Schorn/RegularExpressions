@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Peter Schorn on 6/4/20.
-//
-
 import Foundation
 
 
@@ -18,7 +11,7 @@ public extension String {
        - pattern: A regular expression pattern.
        - options: Regular expression options.
        - ignoreIfEmpty: If true, all empty strings will be
-             removed from the array. If false, they will be included.
+             removed from the array. If false (default), they will be included.
        - maxLength: The maximum length of the returned array.
              If nil (default), then the string is split
              on every occurence of the pattern.

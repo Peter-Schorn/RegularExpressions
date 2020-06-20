@@ -16,7 +16,7 @@ public extension String {
      - Parameters:
        - pattern: Regular expression pattern.
        - with: The string to replace matching patterns with.
-         defaults to an empty string.
+         Defaults to an empty string.
        - options: The options for the regular expression.
              .regularExpression will be added to these options.
      - Returns: The new string after the substitutions are made.
@@ -28,25 +28,31 @@ public extension String {
     func regexSub(
         _ pattern: String,
         with replacement: String = "",
-        _ options: NSString.CompareOptions = []
+        _ options: NSString.CompareOptions = [],
+        range: Range<String.Index>? = nil
+        
     ) -> String {
     
         var fullOptions = options
         fullOptions.insert(.regularExpression)
         
         return self.replacingOccurrences(
-            of: pattern, with: replacement, options: fullOptions
+            of: pattern,
+            with: replacement,
+            options: fullOptions,
+            range: range
         )
     }
     
-    /// See self.regexSub(`_:with:`_:)
+    /// See `self.regexSub(_:with:_:range:)`
     mutating func regexSubInPlace(
         _ pattern: String,
         with replacement: String = "",
-        _ options: NSString.CompareOptions = []
+        _ options: NSString.CompareOptions = [],
+        range: Range<String.Index>? = nil
     ) {
     
-        self = self.regexSub(pattern, with: replacement, options)
+        self = self.regexSub(pattern, with: replacement, options, range: range)
     }
 
 }

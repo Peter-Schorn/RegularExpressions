@@ -6,12 +6,14 @@ public extension String {
     /**
      Finds the first match for a regular expression pattern in a string.
      
-     Same as String.regexFindAll but only returns the first match.
-     See String.regexFindAll for example usage and full discussion.
+     Same as `String.regexFindAll(_:_:range:)` but only returns the first match.
+     See `String.regexFindAll(_:_:range:)` for example usage and full discussion.
      
      - Parameters:
-        - pattern: Regular expression pattern.
-        - options: Regular expression options, such as .caseInsensitive
+        - pattern: The regular expression pattern.
+        - options: The regular expression options, such as .caseInsensitive
+        - range: The range of self in which to search for the pattern.
+              If nil (default), then the entire string is searched.
      
      - Throws: If the regular expression pattern is invalid
                (e.g., unbalanced paraentheses). **Never** throws an error
@@ -21,7 +23,8 @@ public extension String {
      */
     func regexMatch(
         _ pattern: String,
-        _ options: NSRegularExpression.Options = []
+        _ options: NSRegularExpression.Options = [],
+        range: Range<String.Index>? = nil
     ) throws -> RegexMatch? {
         
         let regex = try NSRegularExpression(pattern: pattern, options: options)
@@ -29,7 +32,10 @@ public extension String {
         let nsString = self as NSString
 
         if let result = regex.firstMatch(
-            in: self, range: NSRange(location: 0, length: self.count)
+            in: self,
+            range: NSRange(
+                range ?? self.startIndex..<self.endIndex, in: self
+            )
         ) {
         
             let regexFullMatch = nsString.substring(
@@ -69,14 +75,22 @@ public extension String {
         return nil
     }
 
-    /// See `String.regexMatch(_:_)`
+    /// Passes a regex object into `String.regexMatch(_:_:range:)`.
+    /// See that function for more details.
+    /// - Parameters:
+    ///   - nsRegularExpression: An NSRegularExpression.
+    ///   - range: The range of self in which to search for
+    ///       matches for the pattern. If nil (default), then the entire string
+    ///       is searched.
     func regexMatch(
-        _ nsRegularExpression: NSRegularExpression
+        _ nsRegularExpression: NSRegularExpression,
+        range: Range<String.Index>? = nil
     ) throws -> RegexMatch? {
         
         return try self.regexMatch(
             nsRegularExpression.pattern,
-            nsRegularExpression.options
+            nsRegularExpression.options,
+            range: range
         )
     }
 

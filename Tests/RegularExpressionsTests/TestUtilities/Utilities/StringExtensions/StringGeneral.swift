@@ -5,6 +5,7 @@ import RegularExpressions
 
 /// Adds the ability to throw an error with a custom message
 /// Usage: `throw "There was an error"`
+/// `localizedDescription` returns self.
 extension String: Error, LocalizedError {
     
     public var errorDescription: String? {
@@ -102,11 +103,9 @@ public extension String {
     /// Returns an array of each word in the string.
     func words() -> [String] {
         
-        if let matches = try! self.regexFindAll(#"\w+"#) {
-            return matches.map { $0.fullMatch }
+        return try! self.regexFindAll(#"\w+"#).map { match in
+            match.fullMatch
         }
-        return []
-
     }
     
     /// Returns a new string with self repeated the specified number of times.
