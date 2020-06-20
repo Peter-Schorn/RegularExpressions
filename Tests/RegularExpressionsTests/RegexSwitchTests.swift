@@ -16,7 +16,7 @@ class RegexSwitchTests: XCTestCase {
             let inputString = "age: 21"
             var foundMatch = false
             
-            switch  inputString {
+            switch inputString {
                 case try Regex(#"\d+"#):
                     foundMatch = true
                 case try Regex("^[a-z]+$"):
@@ -26,7 +26,6 @@ class RegexSwitchTests: XCTestCase {
                 default:
                     XCTFail("should've matched first case statement")
             }
-            
             XCTAssert(foundMatch)
             
         }
