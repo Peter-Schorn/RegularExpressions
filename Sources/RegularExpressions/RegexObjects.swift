@@ -87,7 +87,6 @@ public extension NSRegularExpression {
      - Parameters:
        - pattern: The regular expression pattern.
        - options: Regular expression options, such as .caseInsensitive.
-       - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
      - Throws: If the regular expression pattern is invalid.
      */
     convenience init(
