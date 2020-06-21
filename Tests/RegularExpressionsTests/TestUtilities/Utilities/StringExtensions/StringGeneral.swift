@@ -25,7 +25,7 @@ public extension String {
     func strip(_ stripOptions: StripOptions) -> String {
         switch stripOptions {
             case .fileExt:
-                return self.regexSub(#"\.([^\.]*)$"#)
+                return try! self.regexSub(#"\.([^\.]*)$"#)
         }
     }
     

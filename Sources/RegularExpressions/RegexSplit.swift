@@ -8,8 +8,9 @@ public extension String {
      Splits the string by occurences of a pattern into an array.
      
      - Parameters:
-       - pattern: A regular expression pattern.
-       - options: Regular expression options.
+       - nsRegularExpression: An NSRegularExpression.
+             **Note:** This library defines a
+             `typealias Regex = NSRegularExpression`.
        - ignoreIfEmpty: If true, all empty strings will be
              removed from the array. If false (default), they will be included.
        - maxLength: The maximum length of the returned array.
@@ -20,18 +21,27 @@ public extension String {
      - Returns: An array of strings split on each occurence of the pattern.
            If no occurences of the pattern are found, then a single-element
            array containing the entire string will be returned.
+     
+     Example usage:
+     ```
+     let colors = "red and orange ANDyellow and    blue"
+     let regex = try! Regex(#"\s*and\s*"#, [.caseInsensitive])
+     let array = try! colors.regexSplit(regex)
+     // colors = ["red", "orange", "yellow", "blue"]
+     ```
      */
     func regexSplit(
-        _ pattern: String,
-        _ options: NSRegularExpression.Options = [],
+        _ nsRegularExpression: NSRegularExpression,
         ignoreIfEmpty: Bool = false,
         maxLength: Int? = nil
     ) throws -> [String] {
 
-        let regex = try NSRegularExpression(pattern: pattern, options: options)
     
-        let matches = regex.matches(
-            in: self, range: NSRange(0..<self.count)
+        let matches = nsRegularExpression.matches(
+            in: self,
+            range: NSRange(
+                self.startIndex..<self.endIndex, in: self
+            )
         )
         
         let ranges =
@@ -57,15 +67,41 @@ public extension String {
         
     }
     
+    /**
+     Splits the string by occurences of a pattern into an array.
+     
+     - Parameters:
+       - pattern: A regular expression pattern.
+       - options: Regular expression options.
+       - ignoreIfEmpty: If true, all empty strings will be
+             removed from the array. If false (default), they will be included.
+       - maxLength: The maximum length of the returned array.
+             If nil (default), then the string is split
+             on every occurence of the pattern.
+     - Throws: If the regular expression is invalid. **Never** throws
+           if no matches are found.
+     - Returns: An array of strings split on each occurence of the pattern.
+           If no occurences of the pattern are found, then a single-element
+           array containing the entire string will be returned.
+     
+     Example usage:
+     ```
+     let colors = "red,orange,yellow,blue"
+     let array = try! colors.regexSplit(",")
+     // colors = ["red", "orange", "yellow", "blue"]
+     ```
+     */
     func regexSplit(
-        _ nsRegularExpression: NSRegularExpression,
+        _ pattern: String,
+        _ options: NSRegularExpression.Options = [],
         ignoreIfEmpty: Bool = false,
         maxLength: Int? = nil
     ) throws -> [String] {
         
         return try self.regexSplit(
-            nsRegularExpression.pattern,
-            nsRegularExpression.options,
+            NSRegularExpression(
+                pattern: pattern, options: options
+            ),
             ignoreIfEmpty: ignoreIfEmpty,
             maxLength: maxLength
         )

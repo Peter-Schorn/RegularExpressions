@@ -7,7 +7,7 @@ public typealias Regex = NSRegularExpression
 /**
  Represents a regular expression capture group.
  ```
- /// The matched capture group.
+ /// The text of the capture group.
  public let match: String
  /// The range of the capture group.
  public let range: Range<String.Index>
@@ -20,7 +20,7 @@ public struct RegexGroup: Equatable {
         self.range = range
     }
     
-    /// The matched capture group.
+    /// The text of the capture group.
     public let match: String
     /// The range of the capture group.
     public let range: Range<String.Index>
@@ -28,7 +28,7 @@ public struct RegexGroup: Equatable {
 
 
 /**
- Represents a regular expression match
+ Represents a regular expression match.
  ```
  /// The full match of the pattern in the target string.
  public let fullMatch: String
@@ -61,6 +61,22 @@ public struct RegexMatch: Equatable {
 }
 
 
+/// Extensions cannot contain stored properties
+private var regexMatchingOptionsReference = NSMapTable<
+    NSRegularExpression, ClassWrapper<NSRegularExpression.MatchingOptions>
+>(
+    keyOptions: .weakMemory,
+    valueOptions: .strongMemory
+)
+
+private class ClassWrapper<T> {
+    var object: T
+    init(_ object: T) {
+        self.object = object
+    }
+}
+
+
 public extension NSRegularExpression {
 
     
@@ -71,6 +87,7 @@ public extension NSRegularExpression {
      - Parameters:
        - pattern: The regular expression pattern.
        - options: Regular expression options, such as .caseInsensitive.
+       - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
      - Throws: If the regular expression pattern is invalid.
      */
     convenience init(
@@ -79,6 +96,37 @@ public extension NSRegularExpression {
     ) throws {
         try self.init(pattern: pattern, options: options)
     }
+    
+    
+    convenience init(
+        pattern: String,
+        regexOptions: NSRegularExpression.Options = [],
+        matchingOptions: NSRegularExpression.MatchingOptions = []
+    ) throws {
+        
+        try self.init(pattern: pattern, options: regexOptions)
+        self.matchingOptions = matchingOptions
+        
+    }
+    
+    // extensions cannot contain stored properties
+    /// See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
+    var matchingOptions: NSRegularExpression.MatchingOptions {
+        get {
+            if let wrapper = regexMatchingOptionsReference.object(forKey: self) {
+                return wrapper.object
+            }
+            return []
+        }
+        set {
+            regexMatchingOptionsReference.setObject(
+                ClassWrapper(newValue), forKey: self
+            )
+        }
+    }
+    
+    
+    
     
 }
 

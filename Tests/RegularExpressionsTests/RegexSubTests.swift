@@ -5,14 +5,16 @@ import XCTest
 final class RegexSubTests: XCTestCase {
 
     static var allTests = [
-        ("testRegexSub", testRegexSub)
+        ("testRegexSub", testRegexSub),
+        ("testRegexSubInPlace", testRegexSubInPlace),
+        ("testRegexSubTemplates", testRegexSubTemplates),
+        ("testRegexSubMatchOptions", testRegexSubMatchOptions)
     ]
     
-    func testRegexSub() {
-    
+    func testRegexSub() throws {
     
         let text = "123 John Doe, age 21"
-        let newText = text.regexSub(#"\d+$"#, with: "unknown")
+        let newText = try text.regexSub(#"\d+$"#, with: "unknown")
         XCTAssertEqual(newText, "123 John Doe, age unknown")
     
         print("\n")
@@ -29,6 +31,51 @@ final class RegexSubTests: XCTestCase {
         )
     
     }
+    
+    func testRegexSubInPlace() throws {
+        
+        var text = "Have a terrible day"
+        try text.regexSubInPlace("terrible", with: "nice")
+        XCTAssertEqual(text, "Have a nice day")
 
+    }
 
+    func testRegexSubTemplates() {
+        
+        assertNoThrow {
+            let inputText = "(512) 721-8706"
+            
+            let newText = try inputText.regexSub(
+                #"\((\d{3})\)\s*(\d{3})-(\d{4})"#,
+                with: "$1$2$3"
+            )
+            
+            XCTAssertEqual(newText, "5127218706")
+        }
+        assertNoThrow {
+            let inputText = "Charles Darwin"
+            
+            let newText = try! inputText.regexSub(
+                #"(\w+) (\w+)"#,
+                with: "$2 $1"
+            )
+            
+            XCTAssertEqual(newText, "Darwin Charles")
+        }
+    
+
+    }
+    
+    func testRegexSubMatchOptions() throws {
+        
+        let name = "Peter Schorn"
+        let regexObject = try Regex(
+            pattern: #"\w+"#, regexOptions: [.caseInsensitive], matchingOptions: [.anchored]
+        )
+        let replacedText = name.regexSub(regexObject, with: "word")
+        // print(replacedText)
+        XCTAssertEqual(replacedText, "word Schorn")
+        
+    }
+    
 }
