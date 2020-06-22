@@ -4,9 +4,31 @@ import Foundation
 public typealias Regex = NSRegularExpression
 
 
+public enum RegexError: Error, LocalizedError {
+    case groupNamesCountDoesntMatch(
+        captureGroups: Int, groupNames: Int
+    )
+    
+    var localizedDescription: String {
+        switch self {
+            case let .groupNamesCountDoesntMatch(
+                captureGroups, groupNames
+            ):
+                return """
+                The number of capture groups (\(captureGroups)) \
+                doesn't match the number of group names (\(groupNames))
+                """
+        }
+    }
+    
+}
+
+
 /**
  Represents a regular expression capture group.
  ```
+ /// The name of the capture group
+ public let name: String?
  /// The text of the capture group.
  public let match: String
  /// The range of the capture group.
@@ -15,11 +37,18 @@ public typealias Regex = NSRegularExpression
  */
 public struct RegexGroup: Equatable {
     
-    public init(match: String, range: Range<String.Index>) {
+    public init(
+        match: String,
+        range: Range<String.Index>,
+        name: String? = nil
+    ) {
+        self.name = name
         self.match = match
         self.range = range
     }
     
+    /// The name of the capture group
+    public let name: String?
     /// The text of the capture group.
     public let match: String
     /// The range of the capture group.
@@ -56,6 +85,24 @@ public struct RegexMatch: Equatable {
     public let range: Range<String.Index>
     /// The capture groups.
     public let groups: [RegexGroup?]
+    
+    
+    /**
+     Returns a RegexGroup by name.
+     
+     - Parameter name: The name of the group.
+     
+     - Warning: This function will return nil if the name was not found,
+         **OR** if the group was not matched becase it was specified as
+         optional in the regular expression pattern.
+     */
+    public func group(named name: String) -> RegexGroup? {
+        return groups.first { group in
+            group?.name == name
+        } ?? nil
+        // unwrap the double-wrapped optional
+        // to a single-layer optional.
+    }
     
     
 }

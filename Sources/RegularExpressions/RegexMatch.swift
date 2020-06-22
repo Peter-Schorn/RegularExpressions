@@ -62,53 +62,74 @@ public extension String {
     */
     func regexMatch(
         _ nsRegularExpression: NSRegularExpression,
-        range: Range<String.Index>? = nil
+        range: Range<String.Index>? = nil,
+        groupNames: [String]? = nil
     ) throws -> RegexMatch? {
         
-        let nsString = self as NSString
-
-        if let result = nsRegularExpression.firstMatch(
+        guard let result = nsRegularExpression.firstMatch(
             in: self,
             range: NSRange(
                 range ?? self.startIndex..<self.endIndex, in: self
             )
-        ) {
-        
-            let regexFullMatch = nsString.substring(
-                with: result.range(at: 0)
-            )
-            let regexRange = Range(result.range, in: self)!
-            var regexGroups: [RegexGroup?] = []
-            
-            // for each of the capture groups.
-            for match in 1..<result.numberOfRanges {
-                let nsRange = result.range(at: match)
-                
-                // if the capture group is nil because it was not matched.
-                // this can occur if the capture group is declared as optional.
-                if nsRange.location == NSNotFound {
-                    regexGroups.append(nil)
-                }
-                else {
-                    // append the capture group text and the range thereof
-                    let range = Range(nsRange, in: self)!
-                    let capturedText = nsString.substring(with: nsRange)
-                    regexGroups.append(
-                        RegexGroup(match: capturedText, range: range)
-                    )
-                }
-                
-            }
-            
-            return RegexMatch(
-                fullMatch: regexFullMatch,
-                range: regexRange,
-                groups: regexGroups
-            )
-            
+        )
+        else {
+            return nil
         }
         
-        return nil
+        let nsString = self as NSString
+        
+        // MARK: Begin dupication
+        let regexFullMatch = nsString.substring(
+            with: result.range(at: 0)
+        )
+        let regexRange = Range(result.range, in: self)!
+        var regexGroups: [RegexGroup?] = []
+        
+        if let groupNames = groupNames {
+            // throw an error if the number of group names
+            // does not match the number of capture groups.
+            if groupNames.count != result.numberOfRanges - 1 {
+                throw RegexError.groupNamesCountDoesntMatch(
+                    captureGroups: regexGroups.count,
+                    groupNames: groupNames.count
+                )
+            }
+        }
+        
+        // for each of the capture groups.
+        for match in 1..<result.numberOfRanges {
+            
+            let groupName = groupNames?[match - 1]
+            
+            let nsRange = result.range(at: match)
+            
+            // if the capture group is nil because it was not matched.
+            // this can occur if the capture group is declared as optional.
+            if nsRange.location == NSNotFound {
+                regexGroups.append(nil)
+            }
+            else {
+                // append the capture group text and the range thereof
+                let range = Range(nsRange, in: self)!
+                let capturedText = nsString.substring(with: nsRange)
+                regexGroups.append(
+                    RegexGroup(
+                        match: capturedText,
+                        range: range,
+                        name: groupName
+                    )
+                )
+            }
+            
+        }
+        // MARK: End duplication
+        
+        return RegexMatch(
+            fullMatch: regexFullMatch,
+            range: regexRange,
+            groups: regexGroups
+        )
+        
     }
 
     /**

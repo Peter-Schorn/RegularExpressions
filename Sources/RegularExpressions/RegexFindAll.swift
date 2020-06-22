@@ -4,6 +4,66 @@ import Foundation
 public extension String {
     
     
+    private func regexGetMatch(
+        nsString: NSString,
+        regexResult: NSTextCheckingResult,
+        groupNames: [String]? = nil
+    ) throws -> RegexMatch {
+        
+        // MARK: Begin dupication
+        let regexFullMatch = nsString.substring(
+            with: regexResult.range(at: 0)
+        )
+        let regexRange = Range(regexResult.range, in: self)!
+        var regexGroups: [RegexGroup?] = []
+        
+        if let groupNames = groupNames {
+            // throw an error if the number of group names
+            // does not match the number of capture groups.
+            if groupNames.count != regexResult.numberOfRanges - 1 {
+                throw RegexError.groupNamesCountDoesntMatch(
+                    captureGroups: regexGroups.count,
+                    groupNames: groupNames.count
+                )
+            }
+        }
+        
+        // for each capture group
+        for match in 1..<regexResult.numberOfRanges {
+            
+            let groupName = groupNames?[match - 1]
+            
+            let nsRange = regexResult.range(at: match)
+            
+            if nsRange.location == NSNotFound {
+                regexGroups.append(nil)
+            }
+            else {
+                let capturedTextRange = Range(nsRange, in: self)!
+                let capturedText = nsString.substring(with: nsRange)
+                
+                regexGroups.append(
+                    RegexGroup(
+                        match: capturedText,
+                        range: capturedTextRange,
+                        name: groupName
+                    )
+                )
+            }
+            
+        }
+        
+        return RegexMatch(
+            fullMatch: regexFullMatch,
+            range: regexRange,
+            groups: regexGroups
+        )
+        
+        // MARK: End duplication
+        
+    }
+    
+    
     /**
      Finds all matches for a regular expression pattern in a string.
      
@@ -94,6 +154,7 @@ public extension String {
         // for each full match
         for result in regexResults {
             
+            // MARK: Begin dupication
             let regexFullMatch = nsString.substring(
                 with: result.range(at: 0)
             )
@@ -120,6 +181,7 @@ public extension String {
                 }
                 
             }
+            // MARK: End duplication
             
             allMatches.append(
                 RegexMatch(
