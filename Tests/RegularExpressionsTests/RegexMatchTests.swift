@@ -60,7 +60,7 @@ class RegexMatchTests: XCTestCase {
         let pattern_2 = #"NAME: (\w+), age: (\d{2}), sex: (male|female)"#
         
         do {
-            if let match = try inputText.regexMatch(pattern_2, [.caseInsensitive]) {
+            if let match = try inputText.regexMatch(pattern_2, regexOptions: [.caseInsensitive]) {
                 
                 assertRegexRangesMatch([match], inputText: inputText)
                 
@@ -91,7 +91,7 @@ class RegexMatchTests: XCTestCase {
             var inputText = "name: Chris Lattner"
             let pattern = "name: ([a-z]+) ([a-z]+)"
             
-            if let match = try inputText.regexMatch(pattern, [.caseInsensitive]) {
+            if let match = try inputText.regexMatch(pattern, regexOptions: [.caseInsensitive]) {
                 print("full match: '\(match.fullMatch)'")
                 XCTAssertEqual(match.fullMatch, "name: Chris Lattner")
                 XCTAssertEqual(match.groups[0]!.match, "Chris")

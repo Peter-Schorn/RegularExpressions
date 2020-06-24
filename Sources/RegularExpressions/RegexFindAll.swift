@@ -1,74 +1,16 @@
 import Foundation
 
 
+
+
+
 public extension String {
-    
-    
-    private func regexGetMatch(
-        nsString: NSString,
-        regexResult: NSTextCheckingResult,
-        groupNames: [String]? = nil
-    ) throws -> RegexMatch {
-        
-        // MARK: Begin dupication
-        let regexFullMatch = nsString.substring(
-            with: regexResult.range(at: 0)
-        )
-        let regexRange = Range(regexResult.range, in: self)!
-        var regexGroups: [RegexGroup?] = []
-        
-        if let groupNames = groupNames {
-            // throw an error if the number of group names
-            // does not match the number of capture groups.
-            if groupNames.count != regexResult.numberOfRanges - 1 {
-                throw RegexError.groupNamesCountDoesntMatch(
-                    captureGroups: regexGroups.count,
-                    groupNames: groupNames.count
-                )
-            }
-        }
-        
-        // for each capture group
-        for match in 1..<regexResult.numberOfRanges {
-            
-            let groupName = groupNames?[match - 1]
-            
-            let nsRange = regexResult.range(at: match)
-            
-            if nsRange.location == NSNotFound {
-                regexGroups.append(nil)
-            }
-            else {
-                let capturedTextRange = Range(nsRange, in: self)!
-                let capturedText = nsString.substring(with: nsRange)
-                
-                regexGroups.append(
-                    RegexGroup(
-                        match: capturedText,
-                        range: capturedTextRange,
-                        name: groupName
-                    )
-                )
-            }
-            
-        }
-        
-        return RegexMatch(
-            fullMatch: regexFullMatch,
-            range: regexRange,
-            groups: regexGroups
-        )
-        
-        // MARK: End duplication
-        
-    }
-    
     
     /**
      Finds all matches for a regular expression pattern in a string.
      
      - Parameters:
-       - nsRegularExpression: An NSRegularExpression.
+       - regex: An NSRegularExpression.
              **Note:** This library defines a
              `typealias Regex = NSRegularExpression`.
        - range: The range of self in which to search for the pattern.
@@ -135,15 +77,17 @@ public extension String {
      // after replacing text: 'new value; season 5, episode 20'
      ```
      */
-    func regexFindAll(
-        _ nsRegularExpression: NSRegularExpression,
+    func regexFindAll<RegularExpression: RegexProtocol>(
+        _ regex: RegularExpression,
         range: Range<String.Index>? = nil
     ) throws -> [RegexMatch] {
         
         let nsString = self as NSString
+        let nsRegex = try regex.asNSRegex()
         
-        let regexResults = nsRegularExpression.matches(
+        let regexResults = nsRegex.matches(
             in: self,
+            options: regex.matchingOptions,
             range: NSRange(
                 range ?? self.startIndex..<self.endIndex, in: self
             )
@@ -153,44 +97,13 @@ public extension String {
         
         // for each full match
         for result in regexResults {
-            
-            // MARK: Begin dupication
-            let regexFullMatch = nsString.substring(
-                with: result.range(at: 0)
-            )
-            let regexRange = Range(result.range, in: self)!
-            var regexGroups: [RegexGroup?] = []
-            
-            
-            // for each capture group
-            for match in 1..<result.numberOfRanges {
-                
-                let nsRange = result.range(at: match)
-                
-                if nsRange.location == NSNotFound {
-                    regexGroups.append(nil)
-                }
-                else {
-                    let capturedTextRange = Range(nsRange, in: self)!
-                    
-                    let capturedText = nsString.substring(with: nsRange)
-                    
-                    regexGroups.append(
-                        RegexGroup(match: capturedText, range: capturedTextRange)
-                    )
-                }
-                
-            }
-            // MARK: End duplication
-            
             allMatches.append(
-                RegexMatch(
-                    fullMatch: regexFullMatch,
-                    range: regexRange,
-                    groups: regexGroups
+                try regexGetMatchWrapper(
+                    nsString: nsString,
+                    regexResult: result,
+                    regex: regex
                 )
             )
-            
         }
         
         return allMatches
@@ -201,7 +114,7 @@ public extension String {
      
      - Parameters:
        - pattern: The regular expression pattern.
-       - options: The regular expression options, such as .caseInsensitive
+       - options: The regular expression options, such as .caseInsensitive.
        - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
      
@@ -266,13 +179,18 @@ public extension String {
      */
     func regexFindAll(
         _ pattern: String,
-        _ options: NSRegularExpression.Options = [],
+        regexOptions: NSRegularExpression.Options = [],
+        matchingOptions: NSRegularExpression.MatchingOptions = [],
+        groupNames: [String]? = nil,
         range: Range<String.Index>? = nil
     ) throws -> [RegexMatch] {
         
         return try self.regexFindAll(
-            NSRegularExpression(
-                pattern: pattern, options: options
+            Regex(
+                pattern: pattern,
+                regexOptions: regexOptions,
+                matchingOptions: matchingOptions,
+                groupNames: groupNames
             ),
             range: range
         )

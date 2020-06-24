@@ -8,7 +8,7 @@ public extension String {
      Splits the string by occurences of a pattern into an array.
      
      - Parameters:
-       - nsRegularExpression: An NSRegularExpression.
+       - regex: An NSRegularExpression.
              **Note:** This library defines a
              `typealias Regex = NSRegularExpression`.
        - ignoreIfEmpty: If true, all empty strings will be
@@ -30,24 +30,26 @@ public extension String {
      // colors = ["red", "orange", "yellow", "blue"]
      ```
      */
-    func regexSplit(
-        _ nsRegularExpression: NSRegularExpression,
+    func regexSplit<RegularExpression: RegexProtocol>(
+        _ regex: RegularExpression,
         ignoreIfEmpty: Bool = false,
         maxLength: Int? = nil
     ) throws -> [String] {
 
+        let nsRegex = try regex.asNSRegex()
     
-        let matches = nsRegularExpression.matches(
+        let matches = nsRegex.matches(
             in: self,
+            options: regex.matchingOptions,
             range: NSRange(
                 self.startIndex..<self.endIndex, in: self
             )
         )
         
         let ranges =
-            [startIndex..<startIndex] +
-            matches.map{ Range($0.range, in: self)! } +
-            [endIndex..<endIndex]
+                [startIndex..<startIndex] +
+                matches.map{ Range($0.range, in: self)! } +
+                [endIndex..<endIndex]
         
         let max: Int
         if let maxLength = maxLength {
@@ -93,14 +95,17 @@ public extension String {
      */
     func regexSplit(
         _ pattern: String,
-        _ options: NSRegularExpression.Options = [],
+        regexOptions: NSRegularExpression.Options = [],
+        matchingOptions: NSRegularExpression.MatchingOptions = [],
         ignoreIfEmpty: Bool = false,
         maxLength: Int? = nil
     ) throws -> [String] {
         
         return try self.regexSplit(
-            NSRegularExpression(
-                pattern: pattern, options: options
+            Regex(
+                pattern: pattern,
+                regexOptions: regexOptions,
+                matchingOptions: matchingOptions
             ),
             ignoreIfEmpty: ignoreIfEmpty,
             maxLength: maxLength

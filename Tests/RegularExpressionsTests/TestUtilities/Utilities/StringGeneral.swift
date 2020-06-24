@@ -5,7 +5,6 @@ import RegularExpressions
 
 /// Adds the ability to throw an error with a custom message
 /// Usage: `throw "There was an error"`
-/// `localizedDescription` returns self.
 extension String: Error, LocalizedError {
     
     public var errorDescription: String? {
@@ -37,12 +36,18 @@ public extension String {
      }
      ```
      */
-    func strip(_ characterSet: CharacterSet = .whitespacesAndNewlines) -> String {
+    func strip(
+        _ characterSet: CharacterSet = .whitespacesAndNewlines
+    ) -> String {
+        
         return self.trimmingCharacters(in: characterSet)
     }
 
     /// See String.strip.
-    mutating func stripInPlace(_ characterSet: CharacterSet = .whitespacesAndNewlines) {
+    mutating func stripInPlace(
+        _ characterSet: CharacterSet = .whitespacesAndNewlines
+    ) {
+    
         self = self.strip(characterSet)
     }
 
@@ -56,6 +61,8 @@ public extension String {
     func split(_ separator: String) -> [String] {
         return self.components(separatedBy: separator)
     }
+    
+    
     
     enum PercentEncodingOptions {
         case query
@@ -94,31 +101,39 @@ public extension String {
     
     
     /// Returns an array of each line in the string.
+    ///
+    /// This function simply calls
+    /// ```
+    /// self.components(separatedBy: .newlines)
+    /// ```
     func lines() -> [String] {
-        
-        return self.split(separator: "\n").map { String($0) }
-        
+        return self.components(separatedBy: .newlines)
     }
     
     /// Returns an array of each word in the string.
+    ///
+    /// A word is defined in terms of this regular expression pattern:
+    /// ```
+    /// \w+
+    /// ```
+    /// Returns an empty array if no words are found.
     func words() -> [String] {
         
-        return try! self.regexFindAll(#"\w+"#).map { match in
-            match.fullMatch
-        }
+        return try! self.regexFindAll(#"\w+"#).map { $0.fullMatch }
+
     }
     
     /// Returns a new string with self repeated the specified number of times.
     /// ```
     /// "a".multiplied(by: 4) == "aaaa"
     /// ```
-    /// - Parameter amount: the number of time to repeat self
+    /// - Parameter amount: The number of time to repeat self.
     func multiplied(by amount: Int) -> String {
         
-        return (1...amount).map { _ in self }.joined()
+        return (1...amount).map { _ in return self }.joined()
     }
     
-    /// See self.multiplied(by:).
+    /// Same as self.multiplied(by:), except the operation is performed in-place.
     mutating func multiply(by amount: Int) {
         self = self.multiplied(by: amount)
     }
@@ -129,25 +144,5 @@ public extension String {
     var fullRange: Range<String.Index> {
         return self.startIndex..<self.endIndex
     }
-        
     
 }
-
-// MARK: - String interpolations
-
-public protocol CustomStringInterpolation {
-    mutating func appendInterpolation(_: String)
-}
-
-public extension CustomStringInterpolation {
-    mutating func appendInterpolation(_ value: Double, numFormat: String) {
-        appendInterpolation(value.format(numFormat))
-    }
-    mutating func appendInterpolation(_ value: Double, numFormat: Double.FormatOption) {
-        appendInterpolation(value.format(numFormat))
-    }
-}
-
-@available(macOS 10.15, iOS 13, *)
-extension LocalizedStringKey.StringInterpolation: CustomStringInterpolation { }
-extension String.StringInterpolation: CustomStringInterpolation { }

@@ -6,7 +6,7 @@ import Foundation
  This protocol allows for extending other protocols
  contingent on one or more of their associated types
  being any optional type.
- 
+
  For example, this extension to Array adds an instance method
  that returns a new array in which each of the elements
  are either unwrapped or removed if nil. Use self.value
@@ -47,7 +47,7 @@ public extension Sequence where Element: AnyOptional {
     /// or not added to the new array if nil.
     func removeIfNil() -> [Element.Wrapped] {
         let result = self.compactMap { $0.value }
-        
+
         return result
     }
 }

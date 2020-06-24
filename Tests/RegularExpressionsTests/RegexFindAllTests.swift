@@ -15,7 +15,7 @@ final class RegexFindAllTests: XCTestCase {
         let pattern = #"season (\d+), Episode (\d+)"#
         
         let results = try! inputText.regexFindAll(
-            pattern, [.caseInsensitive]
+            pattern, regexOptions: [.caseInsensitive]
         )
         
         let result = results[0]
@@ -88,13 +88,13 @@ final class RegexFindAllTests: XCTestCase {
         )
     
         assertNoThrow {
-            let noObject = try inputText.regexFindAll(pattern, [.caseInsensitive])
+            let noObject = try inputText.regexFindAll(pattern, regexOptions: [.caseInsensitive])
             let withObject = try inputText.regexFindAll(regexObject)
             XCTAssertEqual(noObject, withObject)
         }
     
         assertNoThrow {
-            let results = try inputText.regexFindAll(pattern, [.caseInsensitive])
+            let results = try inputText.regexFindAll(pattern, regexOptions: [.caseInsensitive])
             checkRegexMatches(results, input: inputText)
         }
     

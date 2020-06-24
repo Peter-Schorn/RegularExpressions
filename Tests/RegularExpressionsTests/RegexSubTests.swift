@@ -72,7 +72,7 @@ final class RegexSubTests: XCTestCase {
         let regexObject = try Regex(
             pattern: #"\w+"#, regexOptions: [.caseInsensitive], matchingOptions: [.anchored]
         )
-        let replacedText = name.regexSub(regexObject, with: "word")
+        let replacedText = try name.regexSub(regexObject, with: "word")
         // print(replacedText)
         XCTAssertEqual(replacedText, "word Schorn")
         

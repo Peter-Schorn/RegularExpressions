@@ -14,7 +14,7 @@ public extension String {
      Performs a regular expression replacement.
      
      - Parameters:
-       - nsRegularExpression: An NSRegularExpression.
+       - regex: An NSRegularExpression.
              **Note:** This library defines a
              `typealias Regex = NSRegularExpression`.
        - with: The template string to replace matching patterns with.
@@ -43,17 +43,18 @@ public extension String {
      // replacedText = "word Schorn"
      ```
      */
-    func regexSub(
-        _ nsRegularExpression: NSRegularExpression,
+    func regexSub<RegularExpression: RegexProtocol>(
+        _ regex: RegularExpression,
         with template: String = "",
         range: Range<String.Index>? = nil
-    ) -> String {
+    ) throws -> String {
     
         let nsRange = NSRange(range ?? self.startIndex..<self.endIndex, in: self)
+        let nsRegex = try regex.asNSRegex()
         
-        return nsRegularExpression.stringByReplacingMatches(
+        return nsRegex.stringByReplacingMatches(
             in: self,
-            options: nsRegularExpression.matchingOptions,
+            options: regex.matchingOptions,
             range: nsRange,
             withTemplate: template
         )
@@ -106,7 +107,7 @@ public extension String {
     ) throws -> String {
         
         return try regexSub(
-            NSRegularExpression(
+            Regex(
                 pattern: pattern,
                 regexOptions: regexOptions,
                 matchingOptions: matchingOptions
@@ -119,11 +120,42 @@ public extension String {
     }
     
     
+    func regexSub<RegularExpression: RegexProtocol>(
+        _ regex: RegularExpression,
+        range: Range<String.Index>? = nil,
+        replacer: (_ index: Int, RegexMatch) -> String?
+    ) throws -> String {
+        
+        var replacedString = ""
+        var currentRange = self.startIndex..<self.startIndex
+        
+        for (indx, match) in try regexFindAll(
+            regex, range: range
+        ).enumerated() {
+            
+            replacedString += self[currentRange.upperBound..<match.range.lowerBound]
+            if let replacement = replacer(indx, match) {
+                replacedString += replacement
+            }
+            else {
+                replacedString += self[match.range]
+            }
+            currentRange = match.range
+        }
+        
+        replacedString += self[currentRange.upperBound...]
+        return replacedString
+    }
+    
+    
+    
+    // MARK: - Mutating Functions -
+    
     /**
      Performs a regular expression replacement **in place**.
      
      - Parameters:
-       - nsRegularExpression: An NSRegularExpression.
+       - regex: An NSRegularExpression.
              **Note:** This library defines a
              `typealias Regex = NSRegularExpression`.
        - with: The template string to replace matching patterns with.
@@ -133,14 +165,14 @@ public extension String {
              and perform substitutions.
              If nil (default), then the entire string is searched.
      */
-    mutating func regexSubInPlace(
-        _ nsRegularExpression: NSRegularExpression,
+    mutating func regexSubInPlace<RegularExpression: RegexProtocol>(
+        _ regex: RegularExpression,
         with template: String = "",
         range: Range<String.Index>? = nil
-    ) {
+    ) throws {
     
-        self = regexSub(
-            nsRegularExpression,
+        self = try regexSub(
+            regex,
             with: template,
             range: range
         )
@@ -180,7 +212,7 @@ public extension String {
     ) throws {
         
         try regexSubInPlace(
-            NSRegularExpression(
+            Regex(
                 pattern: pattern,
                 regexOptions: regexOptions,
                 matchingOptions: matchingOptions

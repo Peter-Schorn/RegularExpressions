@@ -1,6 +1,5 @@
 import Foundation
 
-
 public extension String {
     
     /**
@@ -60,14 +59,16 @@ public extension String {
     // after replacing text: 'name: Steven Lattner'
     ```
     */
-    func regexMatch(
-        _ nsRegularExpression: NSRegularExpression,
-        range: Range<String.Index>? = nil,
-        groupNames: [String]? = nil
+    func regexMatch<RegularExpression: RegexProtocol>(
+        _ regex: RegularExpression,
+        range: Range<String.Index>? = nil
     ) throws -> RegexMatch? {
         
-        guard let result = nsRegularExpression.firstMatch(
+        let nsRegex = try regex.asNSRegex()
+        
+        guard let result = nsRegex.firstMatch(
             in: self,
+            options: regex.matchingOptions,
             range: NSRange(
                 range ?? self.startIndex..<self.endIndex, in: self
             )
@@ -78,56 +79,10 @@ public extension String {
         
         let nsString = self as NSString
         
-        // MARK: Begin dupication
-        let regexFullMatch = nsString.substring(
-            with: result.range(at: 0)
-        )
-        let regexRange = Range(result.range, in: self)!
-        var regexGroups: [RegexGroup?] = []
-        
-        if let groupNames = groupNames {
-            // throw an error if the number of group names
-            // does not match the number of capture groups.
-            if groupNames.count != result.numberOfRanges - 1 {
-                throw RegexError.groupNamesCountDoesntMatch(
-                    captureGroups: regexGroups.count,
-                    groupNames: groupNames.count
-                )
-            }
-        }
-        
-        // for each of the capture groups.
-        for match in 1..<result.numberOfRanges {
-            
-            let groupName = groupNames?[match - 1]
-            
-            let nsRange = result.range(at: match)
-            
-            // if the capture group is nil because it was not matched.
-            // this can occur if the capture group is declared as optional.
-            if nsRange.location == NSNotFound {
-                regexGroups.append(nil)
-            }
-            else {
-                // append the capture group text and the range thereof
-                let range = Range(nsRange, in: self)!
-                let capturedText = nsString.substring(with: nsRange)
-                regexGroups.append(
-                    RegexGroup(
-                        match: capturedText,
-                        range: range,
-                        name: groupName
-                    )
-                )
-            }
-            
-        }
-        // MARK: End duplication
-        
-        return RegexMatch(
-            fullMatch: regexFullMatch,
-            range: regexRange,
-            groups: regexGroups
+        return try regexGetMatchWrapper(
+            nsString: nsString,
+            regexResult: result,
+            regex: regex
         )
         
     }
@@ -137,7 +92,7 @@ public extension String {
     
     - Parameters:
        - pattern: The regular expression pattern.
-       - options: The regular expression options, such as .caseInsensitive
+       - options: The regular expression options, such as .caseInsensitive.
        - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
     
@@ -184,13 +139,18 @@ public extension String {
     */
     func regexMatch(
         _ pattern: String,
-        _ options: NSRegularExpression.Options = [],
+        regexOptions: NSRegularExpression.Options = [],
+        matchingOptions: NSRegularExpression.MatchingOptions = [],
+        groupNames: [String]? = nil,
         range: Range<String.Index>? = nil
     ) throws -> RegexMatch? {
     
         return try self.regexMatch(
-            NSRegularExpression(
-                pattern: pattern, options: options
+            Regex(
+                pattern: pattern,
+                regexOptions: regexOptions,
+                matchingOptions: matchingOptions,
+                groupNames: groupNames
             ),
             range: range
         )
