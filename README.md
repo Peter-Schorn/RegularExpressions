@@ -71,9 +71,9 @@ Creates a `Regex` object from an `NSRegularExpression`.
 This function will return nil if the name was not found, **OR** if the group was not matched becase it was specified as optional in the regular expression pattern.
 
 The `RegexGroup` struct has the following properties:
-- `name` - The name of the capture group.
-- `match` - The matched capture group.
-- `range` - The range of the capture group in the source string.
+- `name: String?` - The name of the capture group.
+- `match: String` - The matched capture group.
+- `range: Range<String.Index>` - The range of the capture group in the source string.
 
 
 ## Finding the first match for a regular expression
