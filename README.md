@@ -295,3 +295,52 @@ let reversedName = try! name.regexSub(
 )
 // reversedName = "Darwin Charles"
 ```
+
+### Performing regular expression replacedments with a custom closure
+
+If you need to further customize regular expression replacements, you can use the following methods:
+
+```swift
+func regexSub<RegularExpression: RegexProtocol>(
+    _ regex: RegularExpression,
+    range: Range<String.Index>? = nil,
+    replacer: (_ matchIndex: Int, _ match: RegexMatch) -> String?
+) throws -> String {
+```
+```swift
+func regexSub(
+    _ pattern: String,
+    regexOptions: NSRegularExpression.Options = [],
+    matchingOptions: NSRegularExpression.MatchingOptions = [],
+    groupNames: [String]? = nil,
+    range: Range<String.Index>? = nil,
+    replacer: (_ matchIndex: Int, _ match: RegexMatch) -> String?
+) throws -> String {
+```
+- `replacer` - A closure that accepts the index of a regular expression match and a regular expression match and returns a new string to replace it with. Return nil from within the closure to indicate that the match should not be changed.
+
+Examples:
+```swift
+let inputString = """
+Darwin's theory of evolution is the \
+unifying theory of the life sciences.
+"""
+let replacedString = try! inputString.regexSub(inputString) { indx, match in
+    if indx > 5 { return nil }
+    return match.fullMatch.uppercased()
+}
+// replacedString = """
+// DARWIN'S THEORY OF EVOLUTION IS the \
+// unifying theory of the life sciences.
+// """
+```
+
+If you need to perform replacedments for each individual capture group, you can use the `replaceGroups` method of the `RegexMatch` struct:
+```swift
+public func replaceGroups(
+    _ replacer: (
+        _ groupIndex: Int, _ group: RegexGroup
+    ) -> String?
+) -> String {
+```
+- `replacer` - A closure that accepts the index of a capture group and a capture group and returns a new string to replace it with. Return nil from within the closure to indicate that the capture group should not be changed.
