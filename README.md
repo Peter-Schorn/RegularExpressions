@@ -401,7 +401,7 @@ The pattern matching operator `~=` has been overloaded to support checking for m
 ```swift
 let inputString = "age: 21"
 
-switch  inputString {
+switch inputString {
     case try! Regex(#"\d+"#):
         print("found numbers in input string")
     case try? Regex("^[a-z]+$"):
