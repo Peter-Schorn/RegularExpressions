@@ -3,7 +3,7 @@ import Foundation
 public extension String {
     
     /**
-    Finds the first match for a regular expression pattern in a string.
+    Finds the first match for a regular expression in a string.
     
     - Parameters:
        - regex: An object conforming to `RegexProtocol`.
@@ -83,7 +83,7 @@ public extension String {
     }
 
     /**
-    Finds the first match for a regular expression pattern in a string.
+    Finds the first match for a regular expression in a string.
     
     - Parameters:
        - pattern: A regular expression pattern.
