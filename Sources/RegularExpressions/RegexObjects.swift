@@ -28,12 +28,22 @@ public enum RegexError: Error, LocalizedError {
  public let name: String?
  /// The text of the capture group.
  public let match: String
- /// The range of the capture group.
+ /// The range of the capture group in the source string.
  public let range: Range<String.Index>
  ```
  */
 public struct RegexGroup: Equatable, Hashable {
     
+    /**
+     Creates a regular expression capture group.
+     
+     - Parameters:
+       - name: The name of the capture group.
+       - match: The matched capture group.
+       - range: The range of the capture group in the source string.
+     
+     The source string will be converted into a substring to minimize memory usage.
+     */
     public init(
         match: String,
         range: Range<String.Index>,
@@ -48,7 +58,7 @@ public struct RegexGroup: Equatable, Hashable {
     public let name: String?
     /// The matched capture group.
     public let match: String
-    /// The range of the capture group.
+    /// The range of the capture group in the source string.
     public let range: Range<String.Index>
 }
 
@@ -59,9 +69,9 @@ public struct RegexGroup: Equatable, Hashable {
  ```
  /// The string that was matched against.
  public let sourceString: Stringx
- /// The full match of the pattern in the target string.
+ /// The full match of the pattern in the source string.
  public let fullMatch: String
- /// The range of the full match.
+ /// The range of the full match in the source string.
  public let range: Range<String.Index>
  /// The capture groups.
  public let groups: [RegexGroup?]
@@ -78,12 +88,12 @@ public struct RegexMatch: Equatable, Hashable {
     
     
     /**
-     Creates a regular expression match
+     Creates a regular expression match.
      
      - Parameters:
        - sourceString: The string that was matched against.
-       - fullMatch: The full match of the pattern in the target string.
-       - range: The range of the full match.
+       - fullMatch: The full match of the pattern in the source string.
+       - range: The range of the full match in the source string.
        - groups: The capture groups.
      
      The source string will be converted into a substring to minimize memory usage.
@@ -103,9 +113,9 @@ public struct RegexMatch: Equatable, Hashable {
     
     /// The string that was matched against.
     public let sourceString: Substring
-    /// The full match of the pattern in the target string.
+    /// The full match of the pattern in the source string.
     public let fullMatch: String
-    /// The range of the full match.
+    /// The range of the full match in the source string.
     public let range: Range<String.Index>
     /// The capture groups.
     public let groups: [RegexGroup?]
@@ -183,7 +193,7 @@ public struct RegexMatch: Equatable, Hashable {
             
             currentRange = group.range
         }
-        // duplicated string added here.
+
         replacedString += sourceString[currentRange.upperBound..<self.range.upperBound]
         return replacedString
         

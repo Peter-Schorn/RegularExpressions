@@ -6,9 +6,13 @@ final class RegexReplacerTests: XCTestCase {
     
     static var allTests = [
         ("testReplacing", testReplacing),
+        ("testReplacingShort", testReplacingShort),
         ("testCapturreGroupReplacing", testCapturreGroupReplacing),
-        ("testReplacingShort", testReplacingShort)
+        ("testCaptureGroupReplacerDocs", testCaptureGroupReplacerDocs),
+        ("testReplacingDocs", testReplacingDocs)
     ]
+    
+    
     
     func testReplacing() throws {
         
@@ -131,7 +135,6 @@ final class RegexReplacerTests: XCTestCase {
         
     }
     
-    
     func testReplacingShort() throws {
         
         let inputText = """
@@ -248,6 +251,46 @@ final class RegexReplacerTests: XCTestCase {
         
         // print(replacedMatch)
         // replacedMatch = name:
+
+    }
+    
+    func testReplacingDocs() throws {
+        
+        let inputString = """
+        name: sally, id: 26
+        name: alexander, id: 54
+        """
+        
+        let expectedReplacement = """
+        name: sally, id: 26
+        name: ALEXANDER, id: redacted
+        """
+        
+        let regexObject = try Regex(
+            pattern: #"name: (\w+), id: (\d+)"#,
+            groupNames: ["name", "id"]
+        )
+        
+        let replacedText = try inputString.regexSub(regexObject) { indx, match in
+            
+            if indx == 0 { return nil }
+            
+            return match.replaceGroups { indx, group in
+                if group.name == "name" {
+                    return group.match.uppercased()
+                }
+                if group.name == "id" {
+                    return "redacted"
+                }
+                return nil
+            }
+
+        }
+        
+        XCTAssertEqual(replacedText, expectedReplacement)
+    
+            
+        
 
     }
     

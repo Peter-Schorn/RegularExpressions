@@ -16,7 +16,7 @@ public extension String {
            of capture groups. **Never** throws an error
            if no matches are found.
      - Returns: An array of matches, each of which contains the full match,
-           the range of the full match in the original text,
+           the range of the full match in the source string,
            and an array of the capture groups. Returns an empty
            array if no matches were found.
            Each capture group is an optional RegexGroup containing
@@ -33,39 +33,30 @@ public extension String {
      ```
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
      let regex = try! Regex(
-         #"season (\d+), Episode (\d+)"#, regexOptions: [.caseInsensitive]
+         pattern: #"season (\d+), Episode (\d+)"#,
+         regexOptions: [.caseInsensitive]
      )
              
      let results = try! inputText.regexFindAll(regex)
-
      for result in results {
          print("fullMatch: '\(result.fullMatch)'")
-         
-         // each capture group contains the match and the range.
-         let captureGroups = result.groups.map { captureGroup in
-             captureGroup!.match
-         }
-         
-         print("Capture groups:", captureGroups)
+         print("capture groups:", result.groups.map { $0!.match })
          print()
      }
-
      let firstResult = results[0]
-
      inputText.replaceSubrange(
          firstResult.range, with: "new value"
      )
-
      print("after replacing text: '\(inputText)'")
      ```
      Output:
      ```
      // fullMatch: 'season 8, EPISODE 5'
-     // Capture groups: ["8", "5"]
-     
+     // capture groups: ["8", "5"]
+     //
      // fullMatch: 'season 5, episode 20'
-     // Capture groups: ["5", "20"]
-     
+     // capture groups: ["5", "20"]
+     //
      // after replacing text: 'new value; season 5, episode 20'
      ```
      */
@@ -116,7 +107,7 @@ public extension String {
            of capture groups. **Never** throws an error
            if no matches were found.
      - Returns: An array of matches, each of which contains the full match,
-           the range of the full match in the original text,
+           the range of the full match in the source string,
            and an array of the capture groups. Returns an empty
            array if no matches were found.
            Each capture group is an optional RegexGroup containing
@@ -140,13 +131,7 @@ public extension String {
 
      for result in results {
          print("fullMatch: '\(result.fullMatch)'")
-         
-         // each capture group contains the match and the range.
-         let captureGroups = result.groups.map { captureGroup in
-             captureGroup!.match
-         }
-         
-         print("Capture groups:", captureGroups)
+         print("capture groups:", result.groups.map { $0!.match })
          print()
      }
 
@@ -161,11 +146,11 @@ public extension String {
      Output:
      ```
      // fullMatch: 'season 8, EPISODE 5'
-     // Capture groups: ["8", "5"]
-     
+     // capture groups: ["8", "5"]
+     //
      // fullMatch: 'season 5, episode 20'
-     // Capture groups: ["5", "20"]
-     
+     // capture groups: ["5", "20"]
+     //
      // after replacing text: 'new value; season 5, episode 20'
      ```
      */

@@ -115,7 +115,7 @@ public extension String {
         matchingOptions: NSRegularExpression.MatchingOptions = [],
         groupNames: [String]? = nil,
         range: Range<String.Index>? = nil,
-        replacer: (_ matchIndex: Int, RegexMatch) -> String?
+        replacer: (_ matchIndex: Int, _ match: RegexMatch) -> String?
     ) throws -> String {
         
         return try regexSub(

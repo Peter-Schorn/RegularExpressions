@@ -31,7 +31,7 @@ public extension String {
     ```
     var inputText = "name: Chris Lattner"
     let regex = try! Regex(
-        "name: ([a-z]+) ([a-z]+)", regexOptions: [.caseInsensitive]
+        pattern: "name: ([a-z]+) ([a-z]+)", regexOptions: [.caseInsensitive]
     )
      
     if let match = try! inputText.regexMatch(regex) {

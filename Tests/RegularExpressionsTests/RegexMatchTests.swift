@@ -9,7 +9,8 @@ class RegexMatchTests: XCTestCase {
         ("testRegexMatchURL", testRegexMatchURL),
         ("testRegexMatchDetails", testRegexMatchDetails),
         ("testRegexMatchWithRange", testRegexMatchWithRange),
-        ("testRegexMatchAllParameters", testRegexMatchAllParameters)
+        ("testRegexMatchAllParameters", testRegexMatchAllParameters),
+        ("testRegexMatchDocs", testRegexMatchDocs)
     ]
     
     func testRegexMatchWithFuzzing() throws {
@@ -254,7 +255,7 @@ class RegexMatchTests: XCTestCase {
             of: "Man selects only for his own good: Nature"
         )!
         
-        let regex = try Regex(
+        let regex = try! Regex(
             pattern: pattern,
             regexOptions: [.caseInsensitive],
             groupNames: ["word"]
@@ -269,11 +270,42 @@ class RegexMatchTests: XCTestCase {
             XCTFail("should've found match")
         }
         
-        // regex.sea
         
+    }
+    
+    func testRegexMatchDocs() throws {
         
+        let inputText = """
+        Man selects only for his own good: \
+        Nature only for that of the being which she tends.
+        """
         
-        print()
+        let pattern = #"Man selects ONLY FOR HIS OWN (\w+)"#
+        let searchRange =
+                (inputText.startIndex)
+                ..<
+                (inputText.index(inputText.startIndex, offsetBy: 40))
+        
+        let match = try inputText.regexMatch(
+            pattern,
+            regexOptions: [.caseInsensitive],
+            matchingOptions: [.anchored],
+            groupNames: ["word"],
+            range: searchRange
+        )
+        
+        if let match = match {
+            // print("full match:", match.fullMatch)
+            // print("capture group:", match.group(named: "word")!.match)
+            XCTAssertEqual(match.fullMatch, "Man selects only for his own good")
+            XCTAssertEqual(match.group(named: "word")?.match, "good")
+        }
+        else {
+            XCTFail("should've found match")
+        }
+
+
+
     }
     
     

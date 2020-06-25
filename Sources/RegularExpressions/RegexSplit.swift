@@ -15,7 +15,7 @@ public extension String {
        - maxLength: The maximum length of the returned array.
              If nil (default), then the string is split
              on every occurence of the pattern.
-       - range: The range of self in which to search for the delimiters.
+       - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
      - Throws: If the regular expression is invalid.
            or the number of group names does not match the number
@@ -84,7 +84,7 @@ public extension String {
        - maxLength: The maximum length of the returned array.
              If nil (default), then the string is split
              on every occurence of the pattern.
-       - range: The range of self in which to search for the delimiters.
+       - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
      - Throws: If the regular expression is invalid. **Never** throws
            if no matches are found.

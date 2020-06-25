@@ -6,10 +6,11 @@ final class RegexFindAllTests: XCTestCase {
     
     static var allTests = [
         ("testRegexFindAll", testRegexFindAll),
+        ("testRegexFindAll2", testRegexFindAll2),
         ("testRegexFindAllDocs", testRegexFindAllDocs)
     ]
         
-    func testRegexFindAllDocs() throws {
+    func testRegexFindAll() throws {
      
         let inputText = "season 8, EPISODE 5; season 5, episode 20"
         let pattern = #"season (\d+), Episode (\d+)"#
@@ -82,7 +83,7 @@ final class RegexFindAllTests: XCTestCase {
         
     }
     
-    func testRegexFindAll() {
+    func testRegexFindAll2() {
     
         let inputText = "season 8, episode 5; season 5, episode 20"
     
@@ -147,5 +148,28 @@ final class RegexFindAllTests: XCTestCase {
         }
     }
     
+    func testRegexFindAllDocs() throws {
+        
+        var inputText = "season 8, EPISODE 5; season 5, episode 20"
+        let regex = try! Regex(
+            pattern: #"season (\d+), Episode (\d+)"#, regexOptions: [.caseInsensitive]
+        )
+                
+        let results = try! inputText.regexFindAll(regex)
+        for result in results {
+            print("fullMatch: '\(result.fullMatch)'")
+            print("capture groups:", result.groups.map { $0!.match })
+            print()
+        }
+        let firstResult = results[0]
+        inputText.replaceSubrange(
+            firstResult.range, with: "new value"
+        )
+        print("after replacing text: '\(inputText)'")
+
+        
+
+    }
+
     
 }
