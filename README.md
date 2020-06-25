@@ -154,7 +154,7 @@ if let match = match {
 
 ## Finding all matches for a regular expression
 
-`String.regexFindAll` will return all matches for a regular expression in a string, or an empty array if no matches were found. It has the exact same overloads as `String.regexMatch`.
+`String.regexFindAll` will return all matches for a regular expression in a string, or an empty array if no matches were found. It has the exact same overloads as `String.regexMatch`:
 
 ```swift
 func regexFindAll<RegularExpression: RegexProtocol>(
