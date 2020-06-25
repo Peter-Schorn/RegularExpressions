@@ -393,3 +393,22 @@ let replacedText = try inputString.regexSub(regexObject) { indx, match in
 // name: ALEXANDER, id: redacted
 // """
 ```
+
+## Checking for regular expression matches in a switch statement
+
+The pattern matching operator `~=` has been overloaded to support checking for matches to regular expression in a switch statement. For example:
+
+```swift
+let inputString = "age: 21"
+
+switch  inputString {
+    case try! Regex(#"\d+"#):
+        print("found numbers in input string")
+    case try? Regex("^[a-z]+$"):
+        print("the input string consists entirely of letters")
+    case try Regex("height: 21", [.caseInsensitive]):
+        print("found match for 'height: 21' in input string")
+    default:
+        print("no matched found")
+}
+ ```
