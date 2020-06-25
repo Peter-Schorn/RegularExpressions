@@ -36,7 +36,7 @@ Returns true if the regular expression pattern is valid. Else false.
 
 ### Initializing a `Regex` struct
 ```swift
-public init(
+init(
     pattern: String,
     regexOptions: NSRegularExpression.Options = [],
     matchingOptions: NSRegularExpression.MatchingOptions = [],
@@ -45,14 +45,14 @@ public init(
 ```
 Throws if the pattern is invalid.
 ```swift
-public init(
+init(
     _ pattern: String,
     _ regexOptions: NSRegularExpression.Options = []
 ) throws {
 ```
 Throws is the pattern is invalid.
 ```swift
-public init(
+init(
     nsRegularExpression: NSRegularExpression,
     matchingOptions: NSRegularExpression.MatchingOptions = [],
     groupNames: [String]? = nil
@@ -337,10 +337,29 @@ let replacedString = try! inputString.regexSub(inputString) { indx, match in
 
 If you need to perform replacedments for each individual capture group, you can use the `replaceGroups` method of the `RegexMatch` struct:
 ```swift
-public func replaceGroups(
+func replaceGroups(
     _ replacer: (
         _ groupIndex: Int, _ group: RegexGroup
     ) -> String?
 ) -> String {
 ```
 - `replacer` - A closure that accepts the index of a capture group and a capture group and returns a new string to replace it with. Return nil from within the closure to indicate that the capture group should not be changed.
+
+Examples:
+```swift
+let inputText = "name: Peter, id: 35, job: programmer"
+let pattern = #"name: (\w+), id: (\d+)"#
+let groupNames = ["name", "id"]
+
+let match = try! inputText.regexMatch(
+    pattern, groupNames: groupNames
+)!
+let replacedMatch = match.replaceGroups { indx, group in
+    if group.name == "name" { return "Steven" }
+    if group.name == "id" { return "55" }
+    return nil
+}
+
+// match.fullMatch = "name: Peter, id: 35"
+// replacedMatch = "name: Steven, id: 55"
+```
