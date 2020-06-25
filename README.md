@@ -73,9 +73,9 @@ Creates a `Regex` object from an `NSRegularExpression`.
 This function will return nil if the name was not found, **OR** if the group was not matched becase it was specified as optional in the regular expression pattern.
 
 The `RegexGroup` struct, which holds information about the capture groups, has the following properties:
-- `name: String?` - The name of the capture group.
-- `match: String` - The matched capture group.
-- `range: Range<String.Index>` - The range of the capture group in the source string.
+- `let name: String?` - The name of the capture group.
+- `let match: String` - The matched capture group.
+- `let range: Range<String.Index>` - The range of the capture group in the source string.
 
 
 ## Finding the first match for a regular expression
@@ -97,8 +97,9 @@ func regexMatch(
 ) throws -> RegexMatch? {
 ```
 
-`range` represents the range of the string in which to search for the pattern.
-These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.
+`range` represents the range of the string in which to search for the pattern.  
+These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.  
+See [Extracting the match and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups) for information about the `RegexMatch` returned by these functions.  
 
 Examples:
 ```swift
@@ -174,7 +175,9 @@ func regexFindAll(
     range: Range<String.Index>? = nil
 ) throws -> [RegexMatch] {
 ```
-As with `String.regexMatch`, `range` represents the range of the string in which to search for the pattern. These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.
+As with `String.regexMatch`, `range` represents the range of the string in which to search for the pattern.  
+These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.  
+See [Extracting the match and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups) for information about the `RegexMatch` returned by these functions.  
 
 Examples:
 ```swift
@@ -229,7 +232,7 @@ func regexSplit<RegularExpression: RegexProtocol>(
 ```
 - `ignoreIfEmpty` - If true, all empty strings will be removed from the array. If false (default), they will be included.
 - `maxLength` - The maximum length of the returned array. If nil (default), then the string is split on every occurence of the pattern.
-- **Returns** An array of strings split on each occurence of the pattern. If no occurences of the pattern are found, then a single-element array containing the entire string will be returned.
+- **Returns** An array of strings split on each occurence of the pattern. If no occurences of the pattern are found, then a single-element array containing the entire string will be returned.  
 
 Examples:
 ```swift
@@ -242,4 +245,53 @@ let colors = "red and orange ANDyellow and    blue"
 let regex = try! Regex(#"\s*and\s*"#, regexOptions: [.caseInsensitive])
 let array = try! colors.regexSplit(regex)
 // array = ["red", "orange", "yellow", "blue"]
+```
+
+## Performing regular expression replacements
+
+`String.regexSub` and `String.regexSubInPlace` will perform regular expression replacements. They have the exact same arguments and overloads.
+
+```swift
+func regexSub(
+    _ pattern: String,
+    with template: String = "",
+    regexOptions: NSRegularExpression.Options = [],
+    matchingOptions: NSRegularExpression.MatchingOptions = [],
+    range: Range<String.Index>? = nil
+) throws -> String {
+```
+```swift
+func regexSub<RegularExpression: RegexProtocol>(
+    _ regex: RegularExpression,
+    with template: String = "",
+    range: Range<String.Index>? = nil
+) throws -> String {
+```
+- `with` - The template string to replace matching patterns with. See [Template Matching Format](https://apple.co/3fWBknv) for how to format the template. Defaults to an empty string.
+- **Returns** The new string after the subsitutions have been made. If no matches are found, the string is returned unchanged.
+
+Examples:
+```swift
+let name = "Peter Schorn"
+// The .anchored matching option only looks for matches
+// at the beginning of the string.
+// Consequently, only the first word will be matched.
+let regexObject = try! Regex(
+    pattern: #"\w+"#,
+    regexOptions: [.caseInsensitive],
+    matchingOptions: [.anchored]
+)
+let replacedText = name.regexSub(regexObject, with: "word")
+// replacedText = "word Schorn"
+```
+```swift
+let name = "Charles Darwin"
+let reversedName = try! name.regexSub(
+    #"(\w+) (\w+)"#,
+    with: "$2 $1"
+    // $1 and $2 represent the
+    // first and second capture group, respectively.
+    // $0 represents the entire match.
+)
+// reversedName = "Darwin Charles"
 ```
