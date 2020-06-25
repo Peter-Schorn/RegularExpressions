@@ -298,7 +298,7 @@ public extension RegexProtocol {
  var groupNames: [String]? { get }
  ```
  */
-public struct Regex: RegexProtocol {
+public struct Regex: RegexProtocol, Equatable {
     
     public var pattern: String
     public var regexOptions: NSRegularExpression.Options
