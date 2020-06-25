@@ -33,7 +33,7 @@ Returns true if the regular expression pattern is valid. Else false.
 `NSRegularExpression` has been extended to conform to `RegexProtocol`, but it **ALWAYS** returns `[]` and `nil` for the `matchingOptions` and `groupNames` properties, respectively. Use `Regex` or another type that conforms to `RegexProtocol` to customize these options.
 
 ### Initializing a `Regex` struct
-```
+```swift
 public init(
     pattern: String,
     regexOptions: NSRegularExpression.Options = [],
@@ -42,14 +42,14 @@ public init(
 ) throws {
 ```
 Throws if the pattern is invalid.
-```
+```swift
 public init(
     _ pattern: String,
     _ regexOptions: NSRegularExpression.Options = []
 ) throws {
 ```
 Throws is the pattern is invalid.
-```
+```swift
 public init(
     nsRegularExpression: NSRegularExpression,
     matchingOptions: NSRegularExpression.MatchingOptions = [],
@@ -57,3 +57,79 @@ public init(
 ) {
 ```
 Creates a `Regex` object from an `NSRegularExpression`.
+
+## Finding the first match for a regular expression
+
+`String.regexMatch` will return the first match for a regular expression in a string, or nil if no match was found. It has two overloads:
+```swift
+func regexMatch<RegularExpression: RegexProtocol>(
+    _ regex: RegularExpression,
+    range: Range<String.Index>? = nil
+) throws -> RegexMatch? {
+```
+```swift
+func regexMatch(
+    _ pattern: String,
+    regexOptions: NSRegularExpression.Options = [],
+    matchingOptions: NSRegularExpression.MatchingOptions = [],
+    groupNames: [String]? = nil,
+    range: Range<String.Index>? = nil
+) throws -> RegexMatch? {
+```
+
+`range` represents the range of the string in which to search for the pattern.
+These methods with throw if the pattern is invalid, or if the or the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.
+
+Examples:
+```swift
+var inputText = "name: Chris Lattner"
+// create the regular expression object
+let regex = try! Regex(
+    "name: ([a-z]+) ([a-z]+)", regexOptions: [.caseInsensitive]
+)
+ 
+if let match = try! inputText.regexMatch(regex) {
+    print("full match: '\(match.fullMatch)'")
+    print("first capture group: '\(match.groups[0]!.match)'")
+    print("second capture group: '\(match.groups[1]!.match)'")
+    
+    // perform a replacement on the first capture group
+    inputText.replaceSubrange(
+        match.groups[0]!.range, with: "Steven"
+    )
+    
+    print("after replacing text: '\(inputText)'")
+}
+
+// full match: 'name: Chris Lattner'
+// first capture group: 'Chris'
+// second capture group: 'Lattner'
+// after replacing text: 'name: Steven Lattner'
+```
+```swift
+let inputText = """
+Man selects only for his own good: \
+Nature only for that of the being which she tends.
+"""
+let pattern = #"Man selects ONLY FOR HIS OWN (\w+)"#
+
+let searchRange =
+        (inputText.startIndex)
+        ..<
+        (inputText.index(inputText.startIndex, offsetBy: 40))
+        
+let match = try inputText.regexMatch(
+    pattern,
+    regexOptions: [.caseInsensitive],
+    matchingOptions: [.anchored],
+    groupNames: ["word"],
+    range: searchRange
+)
+if let match = match {
+    print("full match:", match.fullMatch)
+    print("capture group:", match.group(named: "word")!.match)
+}
+
+// full match: Man selects only for his own good
+// capture group: good
+```
