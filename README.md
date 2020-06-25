@@ -204,3 +204,42 @@ print("after replacing text: '\(inputText)'")
 //
 // after replacing text: 'new value; season 5, episode 20'
 ```
+
+## Splitting a string by occurences of a pattern
+
+`String.regexSplit` will split a string by occurences of a pattern.
+
+```swift
+func regexSplit(
+    _ pattern: String,
+    regexOptions: NSRegularExpression.Options = [],
+    matchingOptions: NSRegularExpression.MatchingOptions = [],
+    ignoreIfEmpty: Bool = false,
+    maxLength: Int? = nil,
+    range: Range<String.Index>? = nil
+) throws -> [String] {
+```
+```swift
+func regexSplit<RegularExpression: RegexProtocol>(
+    _ regex: RegularExpression,
+    ignoreIfEmpty: Bool = false,
+    maxLength: Int? = nil,
+    range: Range<String.Index>? = nil
+) throws -> [String] {
+```
+- `ignoreIfEmpty` - If true, all empty strings will be removed from the array. If false (default), they will be included.
+- `maxLength` - The maximum length of the returned array. If nil (default), then the string is split on every occurence of the pattern.
+- **Returns** An array of strings split on each occurence of the pattern. If no occurences of the pattern are found, then a single-element array containing the entire string will be returned.
+
+Examples:
+```swift
+let colors = "red,orange,yellow,blue"
+let array = try! colors.regexSplit(",")
+// array = ["red", "orange", "yellow", "blue"]
+```
+```swift
+let colors = "red and orange ANDyellow and    blue"
+let regex = try! Regex(#"\s*and\s*"#, regexOptions: [.caseInsensitive])
+let array = try! colors.regexSplit(regex)
+// array = ["red", "orange", "yellow", "blue"]
+```
