@@ -1,30 +1,5 @@
 import Foundation
 
-
-// MARK: $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-// MARK: $$$$$$$$$$$$$$$$$$$$$$$$$$$ - NOTES - $$$$$$$$$$$$$$$$$$$$$$$$$$$$
-// MARK: $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-// MARK: ------------------------------------------------------------------
-// MARK: Add matching options to regexMatch, regexFindAll, and
-// MARK: regexSplit.
-// MARK:
-// MARK: OR:
-// MARK: The above functions can construct their own NSRegularExpression
-// MARK: with try
-// MARK:
-// MARK: Note that the RegexProtocol does not enfore 
-// MARK: that the pattern will remain valid.
-// MARK:
-// MARK:
-// MARK: ------------------------------------------------------------------
-
-
-
-
-
-// public typealias Regex = NSRegularExpression
-
-
 public enum RegexError: Error, LocalizedError {
     case groupNamesCountDoesntMatch(
         captureGroups: Int, groupNames: Int
@@ -47,6 +22,7 @@ public enum RegexError: Error, LocalizedError {
 
 /**
  A regular expression capture group.
+ 
  ```
  /// The name of the capture group
  public let name: String?
@@ -68,9 +44,9 @@ public struct RegexGroup: Equatable, Hashable {
         self.range = range
     }
     
-    /// The name of the capture group
+    /// The name of the capture group.
     public let name: String?
-    /// The text of the capture group.
+    /// The matched capture group.
     public let match: String
     /// The range of the capture group.
     public let range: Range<String.Index>
@@ -79,7 +55,10 @@ public struct RegexGroup: Equatable, Hashable {
 
 /**
  A regular expression match.
+ 
  ```
+ /// The string that was matched against.
+ public let sourceString: Stringx
  /// The full match of the pattern in the target string.
  public let fullMatch: String
  /// The range of the full match.
@@ -89,27 +68,47 @@ public struct RegexGroup: Equatable, Hashable {
  
  /// Returns a `RegexGroup` by name.
  public func group(named name: String) -> RegexGroup?
+ 
+ /// Performs a subsitution for each capture group
+ /// using the provided closure.
+ public func replaceGroups(_:) -> String
  ```
  */
 public struct RegexMatch: Equatable, Hashable {
     
+    
+    /**
+     Creates a regular expression match
+     
+     - Parameters:
+       - sourceString: The string that was matched against.
+       - fullMatch: The full match of the pattern in the target string.
+       - range: The range of the full match.
+       - groups: The capture groups.
+     
+     The source string will be converted into a substring to minimize memory usage.
+     */
     public init(
+        sourceString: String,
         fullMatch: String,
         range: Range<String.Index>,
         groups: [RegexGroup?]
     ) {
+        self.sourceString = sourceString[...]
         self.fullMatch = fullMatch
         self.range = range
         self.groups = groups
     }
     
+    
+    /// The string that was matched against.
+    public let sourceString: Substring
     /// The full match of the pattern in the target string.
     public let fullMatch: String
     /// The range of the full match.
     public let range: Range<String.Index>
     /// The capture groups.
     public let groups: [RegexGroup?]
-    
     
     /**
      Returns a `RegexGroup` by name.
@@ -128,35 +127,177 @@ public struct RegexMatch: Equatable, Hashable {
         // to a single-layer optional.
     }
     
+    /**
+     Performs a subsitution for each capture group
+     using the provided closure.
+     
+     - Parameters:
+       - replacer: A closure that accepts
+           the index of a capture group and a capture group
+           and returns a new string to replace it with.
+           Return nil from within the closure to indicate
+           that the capture group should not be changed.
+       - groupIndex: The index of the capture group in the regular expression match.
+       - group: The regular expression capture group.
+     - Returns: The new match after performing the subsitutions for
+           each capture group.
+     
+     Example usage:
+     ```
+     let inputText = "name: Peter, id: 35, job: programmer"
+     let pattern = #"name: (\w+), id: (\d+)"#
+     let groupNames = ["name", "id"]
+     
+     let match = try! inputText.regexMatch(
+         pattern, groupNames: groupNames
+     )!
+     
+     let replacedMatch = match.replaceGroups { indx, group in
+         if group.name == "name" { return "Steven" }
+         if group.name == "id" { return "55" }
+         return nil
+     }
+     // match.fullMatch = "name: Peter, id: 35"
+     // replacedMatch = "name: Steven, id: 55"
+     ```
+     */
+    public func replaceGroups(
+        _ replacer: (
+            _ groupIndex: Int, _ group: RegexGroup
+        ) -> String?
+    ) -> String {
+        
+        var replacedString = ""
+        var currentRange = (self.range.lowerBound)..<(self.range.lowerBound)
+        for (indx, group) in self.groups.enumerated() {
+            guard let group = group else { continue }
+            
+            replacedString += sourceString[currentRange.upperBound..<group.range.lowerBound]
+            
+            if let replacement = replacer(indx, group) {
+                replacedString += replacement
+            }
+            else {
+                replacedString += sourceString[group.range]
+            }
+            
+            currentRange = group.range
+        }
+        // duplicated string added here.
+        replacedString += sourceString[currentRange.upperBound..<self.range.upperBound]
+        return replacedString
+        
+    }
+    
     
 }
 
 
 
-
+/**
+ A type that encapsulate information about a regular expression.
+ 
+ An object conforming to this protocol can be passed into all of the
+ regular expression methods in this library, including
+ regexMatch, regexFindAll, regexSub, and regexSplit.
+ 
+ ```
+ /// The regular expression pattern.
+ var pattern: String { get }
+ /// The regular expression options.
+ var regexOptions: NSRegularExpression.Options { get }
+ /// See NSRegularExpression.MatchingOptions
+ var matchingOptions: NSRegularExpression.MatchingOptions { get }
+ /// The names of the capture groups.
+ var groupNames: [String]? { get }
+ ```
+ */
 public protocol RegexProtocol {
     
+    /// The regular expression pattern.
     var pattern: String { get }
+    
+    /// The regular expression options.
     var regexOptions: NSRegularExpression.Options { get }
+    
+    /// See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
     var matchingOptions: NSRegularExpression.MatchingOptions { get }
+    
+    /// The names of the capture groups.
     var groupNames: [String]? { get }
-
+    
 }
 
 public extension RegexProtocol {
     
     /// Converts self to an NSRegularExpression.
+    ///
+    /// - Warning: The returned object will **NOT** have
+    ///       the `groupNames` or `matchingOptions`.
+    ///
     /// - Throws: If the pattern is invalid.
     func asNSRegex() throws -> NSRegularExpression {
+        
+        if let nsRegex = self as? NSRegularExpression {
+            return nsRegex
+        }
+        
         return try NSRegularExpression(
             pattern: pattern, options: regexOptions
         )
     }
     
+    /// Returns the number of capture groups in the regular expression.
+    ///
+    /// Calls through to [NSRegularExpression.numberOfCaptureGroups](https://developer.apple.com/documentation/foundation/nsregularexpression/1415052-numberofcapturegroups)
+    func numberOfCaptureGroups() throws -> Int {
+        if let nsRegex = self as? NSRegularExpression {
+            return nsRegex.numberOfCaptureGroups
+        }
+        return try NSRegularExpression(
+            pattern: pattern, options: regexOptions
+        ).numberOfCaptureGroups
+    }
+    
+    /// Returns true if the regular expression pattern is valid. Else false.
+    ///
+    /// Takes into consideration the regular expression options, such as
+    /// `.ignoreMetacharacters`.
+    func patternIsValid() -> Bool {
+        return (try? self.asNSRegex()) != nil
+    }
+    
+    /// Returns true if the regular expression pattern is valid. Else false.
+    ///
+    /// Takes into consideration the regular expression options, such as
+    /// `.ignoreMetacharacters`.
+    static func patternIsValid(
+        pattern: String,
+        options: NSRegularExpression.Options = []
+    ) -> Bool {
+        return (try? NSRegularExpression(pattern: pattern, options: options)) != nil
+    }
+    
 }
 
-
-
+/**
+ Encapsulates information about a regular expression.
+ 
+ An instance of this struct can be passed into all of the
+ regular expression methods in this library, including
+ regexMatch, regexFindAll, regexSub, and regexSplit.
+ 
+ ```
+ /// The regular expression pattern.
+ var pattern: String { get }
+ /// The regular expression options.
+ var regexOptions: NSRegularExpression.Options { get }
+ /// See NSRegularExpression.MatchingOptions
+ var matchingOptions: NSRegularExpression.MatchingOptions { get }
+ /// The names of the capture groups.
+ var groupNames: [String]? { get }
+ ```
+ */
 public struct Regex: RegexProtocol {
     
     public var pattern: String
@@ -164,16 +305,14 @@ public struct Regex: RegexProtocol {
     public var matchingOptions: NSRegularExpression.MatchingOptions
     public var groupNames: [String]?
     
-    
     /**
      Creates a regular expression object.
     
      - Parameters:
-       - pattern: The regular expression pattern.
+       - pattern: A regular expression pattern.
        - regexOptions: The options for the regular expression,
              such as `.caseInsensitive`.
-       - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions).
-             These are used for String.regexSub.
+       - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
        - groupNames: The names of the capture groups.
      - Throws: If the regular expression pattern is invalid.
      */
@@ -184,7 +323,7 @@ public struct Regex: RegexProtocol {
         groupNames: [String]? = nil
     ) throws {
         
-        // validate the regular expression pattern
+        // validate the regular expression
         _ = try NSRegularExpression(
             pattern: pattern, options: regexOptions
         )
@@ -193,6 +332,7 @@ public struct Regex: RegexProtocol {
         self.regexOptions = regexOptions
         self.matchingOptions = matchingOptions
         self.groupNames = groupNames
+        
     }
     
     /**
@@ -200,7 +340,7 @@ public struct Regex: RegexProtocol {
      the pattern and regular expression options.
      
      - Parameters:
-       - pattern: The regular expression pattern.
+       - pattern: A regular expression pattern.
        - regexOptions: The options for the regular expression,
              such as `.caseInsensitive`.
      - Throws: If the regular expression pattern is invalid.
@@ -222,8 +362,7 @@ public struct Regex: RegexProtocol {
      
      - Parameters:
       - nsRegularExpression: An `NSRegularExpression`
-      - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions).
-            These are used for String.regexSub.
+      - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
       - groupNames: The names of the capture groups.
      */
     public init(
@@ -245,29 +384,26 @@ public struct Regex: RegexProtocol {
 
 
 
+
+
 extension NSRegularExpression: RegexProtocol {
     
-    /// Exists only to satisfy the requirements of
-    /// `RegularExpressionProtocol`. it will **ALWAYS** return `[]`
-    /// Use the `Regex` struct,
-    /// which also conforms to this protocol if you want to customize
-    /// `regexOptions`.
-    public var regexOptions: Options { return [] }
+    /// Alias for self.[options](https://developer.apple.com/documentation/foundation/nsregularexpression/options)
+    /// Exists to satsify a requirement
+    /// of `RegexProtocol`.
+    public var regexOptions: Options { self.options }
     
     /// Exists only to satisfy the requirements of
-    /// `RegularExpressionProtocol`. it will **ALWAYS** return `[]`
-    /// Use the `Regex` struct,
-    /// which also conforms to this protocol if you want to customize
-    /// `matchingOptions`.
-    public var matchingOptions: MatchingOptions { return [] }
+    /// `RegexProtocol`. it will **ALWAYS** return `[]`.
+    /// Use the `Regex` struct or another struct that conforms to this
+    /// protocol to customize these options.
+    public var matchingOptions: MatchingOptions { [] }
     
     /// Exists only to satisfy the requirements of
-    /// `RegularExpressionProtocol`. it will **ALWAYS** return `nil`
-    /// Use the `Regex` struct,
-    /// which also conforms to this protocol if you want to customize
-    /// `groupNames`.
-    public var groupNames: [String]? { return nil }
-    
+    /// `RegexProtocol`. it will **ALWAYS** return `nil`.
+    /// Use the `Regex` struct or another struct that conforms to this
+    /// protocol to customize the group names.
+    public var groupNames: [String]? { nil }
     
 }
 
@@ -279,7 +415,7 @@ extension NSRegularExpression: RegexProtocol {
  for matches to different regular expressions in each case.
 
  - Parameters:
-   - regex: An optional NSRegularExpression.
+   - regex: An optional type conforming to `RegexProtocol`.
    - value: The input string that is being switched on.
  - Returns: true if the regex matched the input string.
  
@@ -289,6 +425,9 @@ extension NSRegularExpression: RegexProtocol {
  Initializing the regular expression only throws an error
  if the pattern in invalid (e.g., mismatched parentheses),
  **NOT** if no match was found.
+ 
+ Unfortunately, there is no way to bind the match of the
+ regular expression pattern to a variable.
  
  For example:
  ```

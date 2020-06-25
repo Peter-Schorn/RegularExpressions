@@ -1,33 +1,27 @@
 import Foundation
 
 
-
-
-
 public extension String {
     
     /**
      Finds all matches for a regular expression pattern in a string.
      
      - Parameters:
-       - regex: An NSRegularExpression.
-             **Note:** This library defines a
-             `typealias Regex = NSRegularExpression`.
+       - regex: An object conforming to `RegexProtocol`.
+             It encapsulates information about a regular expression.
        - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
-     
      - Throws: If the regular expression pattern is invalid
-           (e.g., unbalanced parentheses). **Never** throws an error
+           or the number of group names does not match the number
+           of capture groups. **Never** throws an error
            if no matches are found.
-     
      - Returns: An array of matches, each of which contains the full match,
            the range of the full match in the original text,
            and an array of the capture groups. Returns an empty
            array if no matches were found.
-     
-     Each capture group is an optional RegexGroup containing
-     the matched text and the range of the matched text,
-     or nil if the group was not matched.
+           Each capture group is an optional RegexGroup containing
+           the matched text and the range of the matched text,
+           or nil if the group was not matched.
      
      The ranges returned by this function can be used in the subscript
      for the original text, or for self.replacingCharacters(in:with:)
@@ -37,11 +31,9 @@ public extension String {
      
      Example usage:
      ```
-     // Remember, there is a
-     // `public typealias Regex = NSRegularExpression`.
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
      let regex = try! Regex(
-         #"season (\d+), Episode (\d+)"#, [.caseInsensitive]
+         #"season (\d+), Episode (\d+)"#, regexOptions: [.caseInsensitive]
      )
              
      let results = try! inputText.regexFindAll(regex)
@@ -113,23 +105,23 @@ public extension String {
      Finds all matches for a regular expression pattern in a string.
      
      - Parameters:
-       - pattern: The regular expression pattern.
-       - options: The regular expression options, such as .caseInsensitive.
+       - pattern: A regular expression pattern.
+       - regexOptions: The regular expression options, such as .caseInsensitive.
+       - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
+       - groupNames: The names of the capture groups.
        - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
-     
      - Throws: If the regular expression pattern is invalid
-           (e.g., unbalanced parentheses). **Never** throws an error
-           if no matches are found.
-     
+           or the number of group names does not match the number
+           of capture groups. **Never** throws an error
+           if no matches were found.
      - Returns: An array of matches, each of which contains the full match,
            the range of the full match in the original text,
            and an array of the capture groups. Returns an empty
            array if no matches were found.
-     
-     Each capture group is an optional RegexGroup containing
-     the matched text and the range of the matched text,
-     or nil if the group was not matched.
+           Each capture group is an optional RegexGroup containing
+           the matched text and the range of the matched text,
+           or nil if the group was not matched.
      
      The ranges returned by this function can be used in the subscript
      for the original text, or for self.replacingCharacters(in:with:)
@@ -143,7 +135,7 @@ public extension String {
      let pattern = #"season (\d+), Episode (\d+)"#
 
      let results = try! inputText.regexFindAll(
-         pattern, [.caseInsensitive]
+         pattern, regexOptions: [.caseInsensitive]
      )
 
      for result in results {

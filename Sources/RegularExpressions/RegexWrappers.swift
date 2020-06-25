@@ -50,11 +50,10 @@ extension String {
                     name: groupName
                 )
             )
-            
-            
         }
         
         return RegexMatch(
+            sourceString: self,
             fullMatch: regexFullMatch,
             range: regexRange,
             groups: regexGroups

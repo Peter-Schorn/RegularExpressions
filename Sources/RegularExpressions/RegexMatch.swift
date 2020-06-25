@@ -6,23 +6,20 @@ public extension String {
     Finds the first match for a regular expression pattern in a string.
     
     - Parameters:
-       - nsRegularExpression: An NSRegularExpression.
-             **Note:** This library defines a
-             `typealias Regex = NSRegularExpression`.
+       - regex: An object conforming to `RegexProtocol`.
+             It encapsulates information about a regular expression.
        - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
-    
     - Throws: If the regular expression pattern is invalid
-              (e.g., unbalanced paraentheses). **Never** throws an error
-              if no matches were found.
-    
+           or the number of group names does not match the number
+           of capture groups. **Never** throws an error
+           if no matches were found.
     - Returns: The regular expression match or nil if no match was found.
-       
-    The match contains the matched text and the range of the matched text,
-    and an array of capture groups.
-    Each capture group is an optional RegexGroup containing
-    the matched text and the range of the matched text,
-    or nil if the group was not matched.
+          The match contains the matched text and the range of the matched text,
+          and an array of capture groups.
+          Each capture group is an optional RegexGroup containing
+          the matched text and the range of the matched text,
+          or nil if the group was not matched.
     
     The ranges returned by this function can be used in the subscript
     for the original text, or for self.replacingCharacters(in:with:)
@@ -32,11 +29,9 @@ public extension String {
     
     Example usage:
     ```
-    // Remember, there is a
-    // `public typealias Regex = NSRegularExpression`.
     var inputText = "name: Chris Lattner"
     let regex = try! Regex(
-        "name: ([a-z]+) ([a-z]+)", [.caseInsensitive]
+        "name: ([a-z]+) ([a-z]+)", regexOptions: [.caseInsensitive]
     )
      
     if let match = try! inputText.regexMatch(regex) {
@@ -91,22 +86,22 @@ public extension String {
     Finds the first match for a regular expression pattern in a string.
     
     - Parameters:
-       - pattern: The regular expression pattern.
-       - options: The regular expression options, such as .caseInsensitive.
+       - pattern: A regular expression pattern.
+       - regexOptions: The regular expression options, such as .caseInsensitive.
+       - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
+       - groupNames: The names of the capture groups.
        - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
-    
     - Throws: If the regular expression pattern is invalid
-              (e.g., unbalanced paraentheses). **Never** throws an error
-              if no matches were found.
-    
+           or the number of group names does not match the number
+           of capture groups. **Never** throws an error
+           if no matches were found.
     - Returns: The regular expression match or nil if no match was found.
-       
-    The match contains the matched text and the range of the matched text,
-    and an array of capture groups.
-    Each capture group is an optional RegexGroup containing
-    the matched text and the range of the matched text,
-    or nil if the group was not matched.
+          The match contains the matched text and the range of the matched text,
+          and an array of capture groups.
+          Each capture group is an optional RegexGroup containing
+          the matched text and the range of the matched text,
+          or nil if the group was not matched.
     
     The ranges returned by this function can be used in the subscript
     for the original text, or for self.replacingCharacters(in:with:)
@@ -119,7 +114,9 @@ public extension String {
     var inputText = "name: Chris Lattner"
     let pattern = "name: ([a-z]+) ([a-z]+)"
     
-    if let match = try! inputText.regexMatch(pattern, [.caseInsensitive]) {
+    if let match = try! inputText.regexMatch(
+        pattern, regexOptions: [.caseInsensitive]
+    ) {
         print("full match: '\(match.fullMatch)'")
         print("first capture group: '\(match.groups[0]!.match)'")
         print("second capture group: '\(match.groups[1]!.match)'")

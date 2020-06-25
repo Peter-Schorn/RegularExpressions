@@ -8,16 +8,18 @@ public extension String {
      Splits the string by occurences of a pattern into an array.
      
      - Parameters:
-       - regex: An NSRegularExpression.
-             **Note:** This library defines a
-             `typealias Regex = NSRegularExpression`.
+       - regex: An object conforming to `RegexProtocol`.
+             It encapsulates information about a regular expression.
        - ignoreIfEmpty: If true, all empty strings will be
              removed from the array. If false (default), they will be included.
        - maxLength: The maximum length of the returned array.
              If nil (default), then the string is split
              on every occurence of the pattern.
-     - Throws: If the regular expression is invalid. **Never** throws
-           if no matches are found.
+       - range: The range of self in which to search for the delimiters.
+             If nil (default), then the entire string is searched.
+     - Throws: If the regular expression is invalid.
+           or the number of group names does not match the number
+           of capture groups. **Never** throws if no matches are found.
      - Returns: An array of strings split on each occurence of the pattern.
            If no occurences of the pattern are found, then a single-element
            array containing the entire string will be returned.
@@ -25,15 +27,16 @@ public extension String {
      Example usage:
      ```
      let colors = "red and orange ANDyellow and    blue"
-     let regex = try! Regex(#"\s*and\s*"#, [.caseInsensitive])
+     let regex = try! Regex(#"\s*and\s*"#, regexOptions: [.caseInsensitive])
      let array = try! colors.regexSplit(regex)
-     // colors = ["red", "orange", "yellow", "blue"]
+     // array = ["red", "orange", "yellow", "blue"]
      ```
      */
     func regexSplit<RegularExpression: RegexProtocol>(
         _ regex: RegularExpression,
         ignoreIfEmpty: Bool = false,
-        maxLength: Int? = nil
+        maxLength: Int? = nil,
+        range: Range<String.Index>? = nil
     ) throws -> [String] {
 
         let nsRegex = try regex.asNSRegex()
@@ -42,7 +45,7 @@ public extension String {
             in: self,
             options: regex.matchingOptions,
             range: NSRange(
-                self.startIndex..<self.endIndex, in: self
+                range ?? self.startIndex..<self.endIndex, in: self
             )
         )
         
@@ -74,12 +77,15 @@ public extension String {
      
      - Parameters:
        - pattern: A regular expression pattern.
-       - options: Regular expression options.
+       - regexOptions: The regular expression options, such as .caseInsensitive.
+       - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
        - ignoreIfEmpty: If true, all empty strings will be
              removed from the array. If false (default), they will be included.
        - maxLength: The maximum length of the returned array.
              If nil (default), then the string is split
              on every occurence of the pattern.
+       - range: The range of self in which to search for the delimiters.
+             If nil (default), then the entire string is searched.
      - Throws: If the regular expression is invalid. **Never** throws
            if no matches are found.
      - Returns: An array of strings split on each occurence of the pattern.
@@ -90,7 +96,7 @@ public extension String {
      ```
      let colors = "red,orange,yellow,blue"
      let array = try! colors.regexSplit(",")
-     // colors = ["red", "orange", "yellow", "blue"]
+     // array = ["red", "orange", "yellow", "blue"]
      ```
      */
     func regexSplit(
@@ -98,7 +104,8 @@ public extension String {
         regexOptions: NSRegularExpression.Options = [],
         matchingOptions: NSRegularExpression.MatchingOptions = [],
         ignoreIfEmpty: Bool = false,
-        maxLength: Int? = nil
+        maxLength: Int? = nil,
+        range: Range<String.Index>? = nil
     ) throws -> [String] {
         
         return try self.regexSplit(
@@ -108,7 +115,8 @@ public extension String {
                 matchingOptions: matchingOptions
             ),
             ignoreIfEmpty: ignoreIfEmpty,
-            maxLength: maxLength
+            maxLength: maxLength,
+            range: range
         )
 
     }

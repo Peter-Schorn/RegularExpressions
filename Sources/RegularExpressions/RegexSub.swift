@@ -14,18 +14,19 @@ public extension String {
      Performs a regular expression replacement.
      
      - Parameters:
-       - regex: An NSRegularExpression.
-             **Note:** This library defines a
-             `typealias Regex = NSRegularExpression`.
+       - regex: An object conforming to `RegexProtocol`.
+             It encapsulates information about a regular expression.
        - with: The template string to replace matching patterns with.
-             See [Template Matching Format](https://developer.apple.com/documentation/foundation/nsregularexpression#1661112:~:text=Template%20Matching%20Format,matching.%20Table%203%20describes%20the%20syntax.) for how to format the template.
-             Defaults to an empty string.
+             See [Template Matching Format](https://apple.co/3fWBknv)
+             for how to format the template. Defaults to an empty string.
        - range: The range of self in which to search for the pattern
              and perform substitutions.
              If nil (default), then the entire string is searched.
-     - Returns: The new string after the substitutions are made.
+     - Returns: The new string after the substitutions have been made.
            If no matches are found, the string is returned unchanged.
-     
+     - Throws: If the regular expression pattern is invalid
+           or the number of group names does not match the number
+           of capture groups.
      Example usage:
      ```
      let name = "Peter Schorn"
@@ -67,15 +68,17 @@ public extension String {
      - Parameters:
        - pattern: A regular expression pattern.
        - with: The template string to replace matching patterns with.
-             See [Template Matching Format](https://developer.apple.com/documentation/foundation/nsregularexpression#1661112:~:text=Template%20Matching%20Format,matching.%20Table%203%20describes%20the%20syntax.) for how to format the template.
-             Defaults to an empty string.
-             
+             See [Template Matching Format](https://apple.co/3fWBknv)
+             for how to format the template. Defaults to an empty string.
        - regexOptions: The options for the regular expression.
        - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
        - range: The range of self in which to search for the pattern
              and perform substitutions.
              If nil (default), then the entire string is searched.
-     - Returns: The new string after the substitutions are made.
+     - Throws: If the regular expression pattern is invalid
+           or the number of group names does not match the number
+           of capture groups.
+     - Returns: The new string after the substitutions have been made.
            If no matches are found, the string is returned unchanged.
      
      Example usage:
@@ -119,51 +122,23 @@ public extension String {
         
     }
     
-    
-    func regexSub<RegularExpression: RegexProtocol>(
-        _ regex: RegularExpression,
-        range: Range<String.Index>? = nil,
-        replacer: (_ index: Int, RegexMatch) -> String?
-    ) throws -> String {
-        
-        var replacedString = ""
-        var currentRange = self.startIndex..<self.startIndex
-        
-        for (indx, match) in try regexFindAll(
-            regex, range: range
-        ).enumerated() {
-            
-            replacedString += self[currentRange.upperBound..<match.range.lowerBound]
-            if let replacement = replacer(indx, match) {
-                replacedString += replacement
-            }
-            else {
-                replacedString += self[match.range]
-            }
-            currentRange = match.range
-        }
-        
-        replacedString += self[currentRange.upperBound...]
-        return replacedString
-    }
-    
-    
-    
-    // MARK: - Mutating Functions -
+    // MARK: - Mutating overloads -
     
     /**
      Performs a regular expression replacement **in place**.
      
      - Parameters:
-       - regex: An NSRegularExpression.
-             **Note:** This library defines a
-             `typealias Regex = NSRegularExpression`.
+       - regex: An object conforming to `RegexProtocol`.
+             It encapsulates information about a regular expression.
        - with: The template string to replace matching patterns with.
-             See [Template Matching Format](https://developer.apple.com/documentation/foundation/nsregularexpression#1661112:~:text=Template%20Matching%20Format,matching.%20Table%203%20describes%20the%20syntax.) for how to format the template.
-       Defaults to an empty string.
+             See [Template Matching Format](https://apple.co/3fWBknv)
+             for how to format the template. Defaults to an empty string.
        - range: The range of self in which to search for the pattern
              and perform substitutions.
              If nil (default), then the entire string is searched.
+     - Throws: If the regular expression pattern is invalid
+           or the number of group names does not match the number
+           of capture groups.
      */
     mutating func regexSubInPlace<RegularExpression: RegexProtocol>(
         _ regex: RegularExpression,
@@ -178,23 +153,22 @@ public extension String {
         )
     }
     
-    
     /**
      Performs a regular expression replacement **in place**.
     
      - Parameters:
        - pattern: A regular expression pattern.
        - with: The template string to replace matching patterns with.
-             See [Template Matching Format](https://developer.apple.com/documentation/foundation/nsregularexpression#1661112:~:text=Template%20Matching%20Format,matching.%20Table%203%20describes%20the%20syntax.) for how to format the template.
-             Defaults to an empty string.
+             See [Template Matching Format](https://apple.co/3fWBknv)
+             for how to format the template. Defaults to an empty string.
        - regexOptions: The options for the regular expression.
        - matchingOptions: See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions)
        - range: The range of self in which to search for the pattern
              and perform substitutions.
              If nil (default), then the entire string is searched.
-
-     - Warning: If the regular expression pattern is invalid, then the
-          string will not be changed.
+     - Throws: If the regular expression pattern is invalid
+           or the number of group names does not match the number
+           of capture groups.
     
      Example usage:
      ```
@@ -221,5 +195,6 @@ public extension String {
             range: range
         )
     }
+    
 
 }

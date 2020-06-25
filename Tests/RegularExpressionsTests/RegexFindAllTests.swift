@@ -9,10 +9,11 @@ final class RegexFindAllTests: XCTestCase {
         ("testRegexFindAllDocs", testRegexFindAllDocs)
     ]
         
-    func testRegexFindAllDocs() {
+    func testRegexFindAllDocs() throws {
      
-        var inputText = "season 8, EPISODE 5; season 5, episode 20"
+        let inputText = "season 8, EPISODE 5; season 5, episode 20"
         let pattern = #"season (\d+), Episode (\d+)"#
+        let groupNames = ["SEASON", "EPISODE"]
         
         let results = try! inputText.regexFindAll(
             pattern, regexOptions: [.caseInsensitive]
@@ -32,10 +33,52 @@ final class RegexFindAllTests: XCTestCase {
         
         let firstResult = results[0]
         
-        inputText.replaceSubrange(firstResult.range, with: "new value")
+        var copy = inputText
+        copy.replaceSubrange(firstResult.range, with: "new value")
         
         // print("after replacing text: '\(inputText)'")
-        XCTAssertEqual(inputText, "new value; season 5, episode 20")
+        XCTAssertEqual(copy, "new value; season 5, episode 20")
+        
+        try regexFindAllFuzz(
+            inputText: inputText,
+            pattern: pattern,
+            regexOptions: [.caseInsensitive],
+            matchingOptions: [],
+            groupNames: groupNames,
+            range: nil
+        ) { results in
+            
+           
+            let result1 = results[0]
+            // print("fullMatch: '\(result.fullMatch)'")
+            XCTAssertEqual(result1.fullMatch, "season 8, EPISODE 5")
+            
+            let captureGroups1 = result1.groups.compactMap { captureGroup in
+                captureGroup?.match
+            }
+            XCTAssertEqual(result1.groupNames, groupNames)
+            
+            // print("Capture groups:", captureGroups)
+            // print()
+            XCTAssertEqual(captureGroups1, ["8", "5"])
+            
+            var copy = inputText
+            copy.replaceSubrange(result1.range, with: "new value")
+            
+            // print("after replacing text: '\(inputText)'")
+            XCTAssertEqual(copy, "new value; season 5, episode 20")
+            
+            let result2 = results[1]
+            XCTAssertEqual(result2.fullMatch, "season 5, episode 20")
+            let captureGroups2 = result2.groups.compactMap { captureGroup in
+                captureGroup?.match
+            }
+            XCTAssertEqual(result2.groupNames, groupNames)
+            XCTAssertEqual(captureGroups2, ["5", "20"])
+            
+                
+        }
+        
         
     }
     
@@ -44,7 +87,7 @@ final class RegexFindAllTests: XCTestCase {
         let inputText = "season 8, episode 5; season 5, episode 20"
     
     
-        func checkRegexMatches(_ results: [RegularExpressions.RegexMatch], input: String) {
+        func checkRegexMatches(_ results: [RegexMatch], input: String) {
     
             assertRegexRangesMatch(results, inputText: inputText)
     
