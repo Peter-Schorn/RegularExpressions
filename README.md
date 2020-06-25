@@ -58,6 +58,24 @@ public init(
 ```
 Creates a `Regex` object from an `NSRegularExpression`.
 
+## Extracting the match and capture groups
+
+`String.regexMatch` and `String.regexFindAll` both use the `RegexMatch` struct to hold the information about a regular expression match. It contains the following properties:
+- `let sourceString: Substring` - The string that was matched against. A substring is used to reduce memory usage. Note that `SubString` presents the same interface as `String`
+- `let fullMatch: String` - The full match of the pattern in the source string.
+- `let range: Range<String.Index>` - The range of the full match in the source string.
+- `let groups: [RegexGroup?]` - The capture groups.
+
+`RegexMatch` also has a method to retrieve a group by name:  
+`func group(named name: String) -> RegexGroup?`  
+This function will return nil if the name was not found, **OR** if the group was not matched becase it was specified as optional in the regular expression pattern.
+
+The `RegexGroup` struct has the following properties:
+- `name` - The name of the capture group.
+- `match` - The matched capture group.
+- `range` - The range of the capture group in the source string.
+
+
 ## Finding the first match for a regular expression
 
 `String.regexMatch` will return the first match for a regular expression in a string, or nil if no match was found. It has two overloads:
@@ -132,4 +150,24 @@ if let match = match {
 
 // full match: Man selects only for his own good
 // capture group: good
+```
+
+## Finding all matches for a regular expression
+
+`String.regexFindAll` will return all matches for a regular expression in a string, or an empty array if no matches were found. It has the exact same overloads as `String.regexMatch`.
+
+```swift
+func regexFindAll<RegularExpression: RegexProtocol>(
+    _ regex: RegularExpression,
+    range: Range<String.Index>? = nil
+) throws -> [RegexMatch] {
+```
+```swift
+func regexFindAll(
+    _ pattern: String,
+    regexOptions: NSRegularExpression.Options = [],
+    matchingOptions: NSRegularExpression.MatchingOptions = [],
+    groupNames: [String]? = nil,
+    range: Range<String.Index>? = nil
+) throws -> [RegexMatch] {
 ```
