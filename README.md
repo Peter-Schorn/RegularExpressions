@@ -32,6 +32,8 @@ Returns true if the regular expression pattern is valid. Else false.
 
 `NSRegularExpression` has been extended to conform to `RegexProtocol`, but it **ALWAYS** returns `[]` and `nil` for the `matchingOptions` and `groupNames` properties, respectively. Use `Regex` or another type that conforms to `RegexProtocol` to customize these options.
 
+**The `Regex` struct conforms to `RegexProtocol` and is the simplest way to create a regular expression object.**
+
 ### Initializing a `Regex` struct
 ```swift
 public init(
@@ -70,7 +72,7 @@ Creates a `Regex` object from an `NSRegularExpression`.
 `func group(named name: String) -> RegexGroup?`  
 This function will return nil if the name was not found, **OR** if the group was not matched becase it was specified as optional in the regular expression pattern.
 
-The `RegexGroup` struct has the following properties:
+The `RegexGroup` struct, which holds information about the capture groups, has the following properties:
 - `name: String?` - The name of the capture group.
 - `match: String` - The matched capture group.
 - `range: Range<String.Index>` - The range of the capture group in the source string.
@@ -96,14 +98,15 @@ func regexMatch(
 ```
 
 `range` represents the range of the string in which to search for the pattern.
-These methods with throw if the pattern is invalid, or if the or the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.
+These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.
 
 Examples:
 ```swift
 var inputText = "name: Chris Lattner"
 // create the regular expression object
 let regex = try! Regex(
-    "name: ([a-z]+) ([a-z]+)", regexOptions: [.caseInsensitive]
+    pattern: "name: ([a-z]+) ([a-z]+)",
+    regexOptions: [.caseInsensitive]
 )
  
 if let match = try! inputText.regexMatch(regex) {
@@ -170,4 +173,34 @@ func regexFindAll(
     groupNames: [String]? = nil,
     range: Range<String.Index>? = nil
 ) throws -> [RegexMatch] {
+```
+As with `String.regexMatch`, `range` represents the range of the string in which to search for the pattern. These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.
+
+Examples:
+```swift
+var inputText = "season 8, EPISODE 5; season 5, episode 20"
+let regex = try! Regex(
+    pattern: #"season (\d+), Episode (\d+)"#,
+    regexOptions: [.caseInsensitive]
+)
+        
+let results = try! inputText.regexFindAll(regex)
+for result in results {
+    print("fullMatch: '\(result.fullMatch)'")
+    print("capture groups:", result.groups.map { $0!.match })
+    print()
+}
+let firstResult = results[0]
+inputText.replaceSubrange(
+    firstResult.range, with: "new value"
+)
+print("after replacing text: '\(inputText)'")
+
+// fullMatch: 'season 8, EPISODE 5'
+// capture groups: ["8", "5"]
+//
+// fullMatch: 'season 5, episode 20'
+// capture groups: ["5", "20"]
+//
+// after replacing text: 'new value; season 5, episode 20'
 ```
