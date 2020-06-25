@@ -363,3 +363,33 @@ let replacedMatch = match.replaceGroups { indx, group in
 // match.fullMatch = "name: Peter, id: 35"
 // replacedMatch = "name: Steven, id: 55"
 ```
+
+Use can compose together the above methods in the following manner:
+```swift
+let inputString = """
+name: sally, id: 26
+name: alexander, id: 54
+"""
+let regexObject = try Regex(
+    pattern: #"name: (\w+), id: (\d+)"#,
+    groupNames: ["name", "id"]
+)
+let replacedText = try inputString.regexSub(regexObject) { indx, match in
+    
+    if indx == 0 { return nil }
+    
+    return match.replaceGroups { indx, group in
+        if group.name == "name" {
+            return group.match.uppercased()
+        }
+        if group.name == "id" {
+            return "redacted"
+        }
+        return nil
+    }
+}
+// replacedText = """
+// name: sally, id: 26
+// name: ALEXANDER, id: redacted
+// """
+```
