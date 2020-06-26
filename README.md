@@ -351,7 +351,7 @@ func regexSub(
     replacer: (_ matchIndex: Int, _ match: RegexMatch) -> String?
 ) throws -> String {
 ```
-The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of `RegexProtocol`.  
+The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 - `replacer` - A closure that accepts the index of a regular expression match and a regular expression match and returns a new string to replace it with. Return nil from within the closure to indicate that the match should not be changed.
 
 Examples:
