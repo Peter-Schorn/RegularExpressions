@@ -11,6 +11,18 @@
 - `protocol RegexProtocol` - A type that encapsulates information about a regular expression.
 - `struct Regex` - Encapsulates information about a regular expression. Conforms to `RegexProtocol`.
 
+## Table of Contents
+- #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation)
+- #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object)
+  - [Initializing a Regex struct](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#initializing-a-regex-struct)
+- #### [Extracting the matches and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups)
+- #### [Finding the first match for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-the-first-match-for-a-regular-expression)
+- #### [Finding all matches for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-all-matches-for-a-regular-expression)
+- #### [Splitting a string by occurences of a pattern](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#splitting-a-string-by-occurences-of-a-pattern)
+- #### [Performing regular expression replacements](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements)
+  - [Performing regular expression replacedments with a custom closure](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacedments-with-a-custom-closure)
+- #### [Checking for regular expression matches in a switch statement](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#checking-for-regular-expression-matches-in-a-switch-statement)
+
 ## Installation
 
 1. In Xcode, open the project that you want to add this package to.
@@ -67,7 +79,7 @@ init(
 ```
 Creates a `Regex` object from an `NSRegularExpression`.
 
-## Extracting the match and capture groups
+## Extracting the matches and capture groups
 
 `String.regexMatch` and `String.regexFindAll` both use the `RegexMatch` struct to hold the information about a regular expression match. It contains the following properties:
 - `let sourceString: Substring` - The string that was matched against. A substring is used to reduce memory usage. Note that `SubString` presents the same interface as `String`
