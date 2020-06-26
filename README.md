@@ -12,15 +12,15 @@
 - `struct Regex` - Encapsulates information about a regular expression. Conforms to `RegexProtocol`.
 
 ## Table of Contents
-- #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation)
-- #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object)
-  - [Initializing a Regex struct](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#initializing-a-regex-struct)
-- #### [Extracting the matches and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups)
-- #### [Finding the first match for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-the-first-match-for-a-regular-expression)
+- #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation-1)
+- #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1)
+  - [Initializing a Regex struct](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#initializing-a-regex-struct-1)
+- #### [Extracting the matches and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups-1)
+- #### [Finding the first match for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-the-first-match-for-a-regular-expression-1)
 - #### [Finding all matches for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-all-matches-for-a-regular-expression-1)
 - #### [Splitting a string by occurences of a pattern](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#splitting-a-string-by-occurences-of-a-pattern-1)
 - #### [Performing regular expression replacements](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1)
-  - [Performing regular expression replacedments with a custom closure](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-with-a-custom-closure)
+  - [Performing regular expression replacements with a custom closure](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-with-a-custom-closure-1)
 - #### [Checking for regular expression matches in a switch statement](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#checking-for-regular-expression-matches-in-a-switch-statement-1)
 
 ## Installation
