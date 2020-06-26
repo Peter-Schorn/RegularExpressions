@@ -182,6 +182,7 @@ See [Extracting the match and capture groups](https://github.com/Peter-Schorn/Re
 Examples:
 ```swift
 var inputText = "season 8, EPISODE 5; season 5, episode 20"
+
 let regex = try! Regex(
     pattern: #"season (\d+), Episode (\d+)"#,
     regexOptions: [.caseInsensitive],
@@ -197,10 +198,12 @@ for result in results {
     }
     print()
 }
+
 let firstResult = results[0]
 inputText.replaceSubrange(
     firstResult.range, with: "new value"
 )
+
 print("after replacing text: '\(inputText)'")
 
 // fullMatch: 'season 8, EPISODE 5'
