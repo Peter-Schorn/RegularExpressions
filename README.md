@@ -330,7 +330,7 @@ let reversedName = try name.regexSub(
 // reversedName = "Darwin Charles"
 ```
 
-### Performing regular expression replacedments with a custom closure
+### Performing regular expression replacements with a custom closure
 
 If you need to further customize regular expression replacements, you can use the following methods:
 
