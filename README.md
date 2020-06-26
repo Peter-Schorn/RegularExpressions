@@ -418,7 +418,7 @@ let replacedText = try inputString.regexSub(regexObject) { indx, match in
 
 ## Checking for regular expression matches in a switch statement
 
-The pattern matching operator `~=` has been overloaded to support checking for matches to regular expression in a switch statement. For example:
+The pattern matching operator `~=` has been overloaded to support checking for matches to a regular expression in a switch statement. For example:
 
 ```swift
 let inputStrig = #"user_id: "asjhjcb""#
