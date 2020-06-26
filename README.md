@@ -4,6 +4,7 @@
 
 ## Table of Contents
 - #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation-1)
+- #### (Introduction)(https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#introduction)
 - #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1)
   - [Initializing a Regex struct](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#initializing-a-regex-struct)
 - #### [Extracting the matches and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-matches-and-capture-groups-1)
@@ -111,7 +112,7 @@ func regexMatch(
     range: Range<String.Index>? = nil
 ) throws -> RegexMatch? {
 ```
-The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of `RegexProtocol`.  
+The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 `range` represents the range of the string in which to search for the pattern.  
 These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.  
 See [Extracting the match and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups) for information about the `RegexMatch` returned by these functions.  
@@ -190,7 +191,7 @@ func regexFindAll(
     range: Range<String.Index>? = nil
 ) throws -> [RegexMatch] {
 ```
-The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of `RegexProtocol`.  
+The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 As with `String.regexMatch`, `range` represents the range of the string in which to search for the pattern.  
 These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.  
 See [Extracting the match and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups) for information about the `RegexMatch` returned by these functions.  
@@ -258,7 +259,7 @@ func regexSplit<RegularExpression: RegexProtocol>(
     range: Range<String.Index>? = nil
 ) throws -> [String] {
 ```
-The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of `RegexProtocol`.  
+The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 - `ignoreIfEmpty` - If true, all empty strings will be removed from the array. If false (default), they will be included.
 - `maxLength` - The maximum length of the returned array. If nil (default), then the string is split on every occurence of the pattern.
 - **Returns** An array of strings split on each occurence of the pattern. If no occurences of the pattern are found, then a single-element array containing the entire string will be returned.  
@@ -299,7 +300,7 @@ func regexSub<RegularExpression: RegexProtocol>(
     range: Range<String.Index>? = nil
 ) throws -> String {
 ```
-The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of `RegexProtocol`.  
+The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 - `with` - The template string to replace matching patterns with. See [Template Matching Format](https://apple.co/3fWBknv) for how to format the template. Defaults to an empty string.
 - **Returns** The new string after the subsitutions have been made. If no matches are found, the string is returned unchanged.
 
