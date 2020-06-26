@@ -4,7 +4,7 @@
 
 ## Table of Contents
 - #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation-1)
-- #### (Introduction)(https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#introduction)
+- #### [Introduction](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#introduction)
 - #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1)
   - [Initializing a Regex struct](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#initializing-a-regex-struct)
 - #### [Extracting the matches and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-matches-and-capture-groups-1)
