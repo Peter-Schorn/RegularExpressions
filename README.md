@@ -17,10 +17,10 @@
   - [Initializing a Regex struct](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#initializing-a-regex-struct)
 - #### [Extracting the matches and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups)
 - #### [Finding the first match for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-the-first-match-for-a-regular-expression)
-- #### [Finding all matches for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-all-matches-for-a-regular-expression)
-- #### [Splitting a string by occurences of a pattern](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#splitting-a-string-by-occurences-of-a-pattern)
-- #### [Performing regular expression replacements](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements)
-  - [Performing regular expression replacedments with a custom closure](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacedments-with-a-custom-closure)
+- #### [Finding all matches for a regular expression](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#finding-all-matches-for-a-regular-expression-1)
+- #### [Splitting a string by occurences of a pattern](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#splitting-a-string-by-occurences-of-a-pattern-1)
+- #### [Performing regular expression replacements](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1)
+  - [Performing regular expression replacedments with a custom closure](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-with-a-custom-closure)
 - #### [Checking for regular expression matches in a switch statement](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#checking-for-regular-expression-matches-in-a-switch-statement-1)
 
 ## Installation
