@@ -2,15 +2,6 @@
 
 **A regular expressions library for Swift**
 
-## Features
-
-- `func String.regexFindall` - Finds all matches for a regular expression.
-- `func String.regexMatch` - Finds the first match for a regular expression.
-- `func String.regexSplit`- Splits a string by occurences of a pattern into an array.
-- `func String.regexSub` - Performs a regular expression replacement.
-- `protocol RegexProtocol` - A type that encapsulates information about a regular expression.
-- `struct Regex` - Encapsulates information about a regular expression. Conforms to `RegexProtocol`.
-
 ## Table of Contents
 - #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation-1)
 - #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1)
