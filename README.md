@@ -150,8 +150,8 @@ let searchRange =
 let match = try inputText.regexMatch(
     pattern,
     regexOptions: [.caseInsensitive],
-    matchingOptions: [.anchored],
-    groupNames: ["word"],
+    matchingOptions: [.anchored],  // anchor matches to the beginning of the string
+    groupNames: ["word"],  // the names of the capture groups
     range: searchRange
 )
 if let match = match {
