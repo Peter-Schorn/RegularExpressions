@@ -184,13 +184,17 @@ Examples:
 var inputText = "season 8, EPISODE 5; season 5, episode 20"
 let regex = try! Regex(
     pattern: #"season (\d+), Episode (\d+)"#,
-    regexOptions: [.caseInsensitive]
+    regexOptions: [.caseInsensitive],
+    groupNames: ["season", "episode"]
 )
         
 let results = try! inputText.regexFindAll(regex)
 for result in results {
     print("fullMatch: '\(result.fullMatch)'")
-    print("capture groups:", result.groups.map { $0!.match })
+    print("capture groups:")
+    for captureGroup in result.groups {
+        print("    \(captureGroup!.name!): '\(captureGroup!.match)'")
+    }
     print()
 }
 let firstResult = results[0]
@@ -200,11 +204,15 @@ inputText.replaceSubrange(
 print("after replacing text: '\(inputText)'")
 
 // fullMatch: 'season 8, EPISODE 5'
-// capture groups: ["8", "5"]
-//
+// capture groups:
+//     season: '8'
+//     episode: '5'
+// 
 // fullMatch: 'season 5, episode 20'
-// capture groups: ["5", "20"]
-//
+// capture groups:
+//     season: '5'
+//     episode: '20'
+// 
 // after replacing text: 'new value; season 5, episode 20'
 ```
 
