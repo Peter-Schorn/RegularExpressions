@@ -442,21 +442,20 @@ extension NSRegularExpression: RegexProtocol {
  
  For example:
  ```
- let inputString = "age: 21"
+ let inputStrig = #"user_id: "asjhjcb""#
 
- switch  inputString {
+ switch inputStrig {
+     case try Regex(#"USER_ID: "[a-z]+""#, [.caseInsensitive]):
+         print("valid user id")
+     case try? Regex(#"[!@#$%^&]+"#):
+         print("invalid character in user id")
      case try! Regex(#"\d+"#):
-         print("found numbers in input string")
-
-     case try? Regex("^[a-z]+$"):
-         print("the input string consists entirely of letters")
-
-     case try Regex("height: 21", [.caseInsensitive]):
-         print("found match for 'height: 21' in input string")
-
+         print("user id cannot contain numbers")
      default:
-         print("no matched found")
+         print("no match")
  }
+
+ // prints "valid user id"
  ```
  */
 public func ~= <RegularExpression: RegexProtocol>(
