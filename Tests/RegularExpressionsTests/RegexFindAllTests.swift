@@ -149,25 +149,34 @@ final class RegexFindAllTests: XCTestCase {
     }
     
     func testRegexFindAllDocs() throws {
+        print()
         
         var inputText = "season 8, EPISODE 5; season 5, episode 20"
         let regex = try! Regex(
-            pattern: #"season (\d+), Episode (\d+)"#, regexOptions: [.caseInsensitive]
+            pattern: #"season (\d+), Episode (\d+)"#,
+            regexOptions: [.caseInsensitive],
+            groupNames: ["season", "episode"]
         )
                 
         let results = try! inputText.regexFindAll(regex)
         for result in results {
-            print("fullMatch: '\(result.fullMatch)'")
-            print("capture groups:", result.groups.map { $0!.match })
-            print()
+            XCTAssertEqual(result.groupNames, ["season", "episode"])
+            // print("fullMatch: '\(result.fullMatch)'")
+            // print("capture groups:")
+            // for captureGroup in result.groups {
+            //     print("    \(captureGroup!.name!): '\(captureGroup!.match)'")
+            // }
+            // print()
         }
         let firstResult = results[0]
         inputText.replaceSubrange(
             firstResult.range, with: "new value"
         )
-        print("after replacing text: '\(inputText)'")
+        // print("after replacing text: '\(inputText)'")
+        XCTAssertEqual(inputText, "new value; season 5, episode 20")
 
-        
+        // print()
+
 
     }
 

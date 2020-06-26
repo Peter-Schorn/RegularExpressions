@@ -27,9 +27,12 @@ public extension String {
      Example usage:
      ```
      let colors = "red and orange ANDyellow and    blue"
-     let regex = try! Regex(#"\s*and\s*"#, regexOptions: [.caseInsensitive])
-     let array = try! colors.regexSplit(regex)
-     // array = ["red", "orange", "yellow", "blue"]
+     let regex = try Regex(#"\s*and\s*"#, [.caseInsensitive])
+     let array = try colors.regexSplit(regex, maxLength: 3)
+     
+     // array = ["red", "orange", "yellow"]
+     // note that "blue" is not returned because the length of the
+     // array was limited to 3 items.
      ```
      */
     func regexSplit<RegularExpression: RegexProtocol>(
@@ -39,20 +42,20 @@ public extension String {
         range: Range<String.Index>? = nil
     ) throws -> [String] {
 
+        let searchRange = range ?? self.startIndex..<self.endIndex
+        
         let nsRegex = try regex.asNSRegex()
     
         let matches = nsRegex.matches(
             in: self,
             options: regex.matchingOptions,
-            range: NSRange(
-                range ?? self.startIndex..<self.endIndex, in: self
-            )
+            range: NSRange(searchRange, in: self)
         )
         
         let ranges =
-                [startIndex..<startIndex] +
+                [searchRange.lowerBound..<searchRange.lowerBound] +
                 matches.map{ Range($0.range, in: self)! } +
-                [endIndex..<endIndex]
+                [searchRange.upperBound..<searchRange.upperBound]
         
         let max: Int
         if let maxLength = maxLength {
@@ -95,7 +98,7 @@ public extension String {
      Example usage:
      ```
      let colors = "red,orange,yellow,blue"
-     let array = try! colors.regexSplit(",")
+     let array = try colors.regexSplit(",")
      // array = ["red", "orange", "yellow", "blue"]
      ```
      */

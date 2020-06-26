@@ -29,11 +29,11 @@ public extension String {
      unifying theory of the life sciences.
      """
      
-     let regex = try! Regex(
+     let regex = try Regex(
          pattern: #"\w+"#, regexOptions: [.caseInsensitive]
      )
      
-     let replacedString = try! inputString.regexSub(regex) { indx, match in
+     let replacedString = try inputString.regexSub(regex) { indx, match in
          if indx > 5 { return nil }
          return match.fullMatch.uppercased()
      }
@@ -98,7 +98,7 @@ public extension String {
      unifying theory of the life sciences.
      """
      
-     let replacedString = try! inputString.regexSub(inputString) { indx, match in
+     let replacedString = try inputString.regexSub(inputString) { indx, match in
          if indx > 5 { return nil }
          return match.fullMatch.uppercased()
      }

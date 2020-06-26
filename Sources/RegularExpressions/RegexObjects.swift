@@ -158,7 +158,7 @@ public struct RegexMatch: Equatable, Hashable {
      let pattern = #"name: (\w+), id: (\d+)"#
      let groupNames = ["name", "id"]
      
-     let match = try! inputText.regexMatch(
+     let match = try inputText.regexMatch(
          pattern, groupNames: groupNames
      )!
      
@@ -260,6 +260,7 @@ public extension RegexProtocol {
     /// Returns the number of capture groups in the regular expression.
     ///
     /// Calls through to [NSRegularExpression.numberOfCaptureGroups](https://developer.apple.com/documentation/foundation/nsregularexpression/1415052-numberofcapturegroups)
+    /// - Throws: If the pattern is invalid.
     func numberOfCaptureGroups() throws -> Int {
         if let nsRegex = self as? NSRegularExpression {
             return nsRegex.numberOfCaptureGroups

@@ -20,8 +20,8 @@ public extension String {
            and an array of the capture groups. Returns an empty
            array if no matches were found.
            Each capture group is an optional RegexGroup containing
-           the matched text and the range of the matched text,
-           or nil if the group was not matched.
+           the matched tex, the range of the matched text and the name of
+           the capture group, or nil if it was not named.
      
      The ranges returned by this function can be used in the subscript
      for the original text, or for self.replacingCharacters(in:with:)
@@ -32,12 +32,12 @@ public extension String {
      Example usage:
      ```
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
-     let regex = try! Regex(
+     let regex = try Regex(
          pattern: #"season (\d+), Episode (\d+)"#,
          regexOptions: [.caseInsensitive]
      )
              
-     let results = try! inputText.regexFindAll(regex)
+     let results = try inputText.regexFindAll(regex)
      for result in results {
          print("fullMatch: '\(result.fullMatch)'")
          print("capture groups:", result.groups.map { $0!.match })
@@ -111,8 +111,8 @@ public extension String {
            and an array of the capture groups. Returns an empty
            array if no matches were found.
            Each capture group is an optional RegexGroup containing
-           the matched text and the range of the matched text,
-           or nil if the group was not matched.
+           the matched tex, the range of the matched text and the name of
+           the capture group, or nil if it was not named.
      
      The ranges returned by this function can be used in the subscript
      for the original text, or for self.replacingCharacters(in:with:)
@@ -125,7 +125,7 @@ public extension String {
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
      let pattern = #"season (\d+), Episode (\d+)"#
 
-     let results = try! inputText.regexFindAll(
+     let results = try inputText.regexFindAll(
          pattern, regexOptions: [.caseInsensitive]
      )
 

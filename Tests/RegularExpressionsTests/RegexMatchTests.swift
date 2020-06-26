@@ -10,7 +10,8 @@ class RegexMatchTests: XCTestCase {
         ("testRegexMatchDetails", testRegexMatchDetails),
         ("testRegexMatchWithRange", testRegexMatchWithRange),
         ("testRegexMatchAllParameters", testRegexMatchAllParameters),
-        ("testRegexMatchDocs", testRegexMatchDocs)
+        ("testRegexMatchDocs", testRegexMatchDocs),
+        ("testRegexMatchDocs2", testRegexMatchDocs2)
     ]
     
     func testRegexMatchWithFuzzing() throws {
@@ -196,22 +197,32 @@ class RegexMatchTests: XCTestCase {
             let pattern = "name: ([a-z]+) ([a-z]+)"
             
             let match1 = try inputText.regexMatch(
-                pattern, regexOptions: [.caseInsensitive]
+                pattern,
+                regexOptions: [.caseInsensitive],
+                groupNames: ["first name", "last name"]
             )
             
             let (nsRegex, regex) = try makeBothRegexObjects(pattern, [.caseInsensitive])
             let match2 = try inputText.regexMatch(regex)
             let match3 = try inputText.regexMatch(nsRegex)
             
-            for match in [match1, match2, match3] {
+            for (i, match) in [match1, match2, match3].enumerated() {
                 
                 guard let match = match else {
                     XCTFail("should've found match")
                     continue
                 }
                 
+                if i == 0 {
+                    XCTAssertEqual(match.groupNames, ["first name", "last name"])
+                    XCTAssertEqual(match.group(named: "first name")?.match, "Chris")
+                    XCTAssertEqual(match.group(named: "last name")?.match, "Lattner")
+                }
+                
+                
                 print("full match: '\(match.fullMatch)'")
                 XCTAssertEqual(match.fullMatch, "name: Chris Lattner")
+                
                 XCTAssertEqual(match.groups[0]!.match, "Chris")
                 XCTAssertEqual(match.groups[1]!.match, "Lattner")
                 
@@ -308,7 +319,33 @@ class RegexMatchTests: XCTestCase {
 
     }
     
-    
+    func testRegexMatchDocs2() throws {
+        
+        var inputText = "name: Chris Lattner"
+        let regex = try! Regex(
+            pattern: "name: ([a-z]+) ([a-z]+)",
+            regexOptions: [.caseInsensitive],
+            groupNames: ["first name", "last name"]
+        )
+         
+        if let match = try! inputText.regexMatch(regex) {
+            print("full match: '\(match.fullMatch)'")
+            print("first capture group: '\(match.group(named: "first name")!.match)'")
+            print("second capture group: '\(match.group(named: "last name")!.match)'")
+            
+            inputText.replaceSubrange(
+                match.groups[0]!.range, with: "Steven"
+            )
+            
+            print("after replacing text: '\(inputText)'")
+        }
+        
+        // full match: 'name: Chris Lattner'
+        // first capture group: 'Chris'
+        // second capture group: 'Lattner'
+        // after replacing text: 'name: Steven Lattner'
+
+    }
     
     
 }

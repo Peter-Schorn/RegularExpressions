@@ -18,8 +18,8 @@ public extension String {
           The match contains the matched text and the range of the matched text,
           and an array of capture groups.
           Each capture group is an optional RegexGroup containing
-          the matched text and the range of the matched text,
-          or nil if the group was not matched.
+          the matched tex, the range of the matched text and the name of
+          the capture group, or nil if it was not named.
     
     The ranges returned by this function can be used in the subscript
     for the original text, or for self.replacingCharacters(in:with:)
@@ -30,15 +30,18 @@ public extension String {
     Example usage:
     ```
     var inputText = "name: Chris Lattner"
-    let regex = try! Regex(
-        pattern: "name: ([a-z]+) ([a-z]+)", regexOptions: [.caseInsensitive]
+    let regex = try Regex(
+        pattern: "name: ([a-z]+) ([a-z]+)",
+        regexOptions: [.caseInsensitive],
+        groupNames: ["first name", "last name"]
     )
      
-    if let match = try! inputText.regexMatch(regex) {
+    if let match = try inputText.regexMatch(regex) {
         print("full match: '\(match.fullMatch)'")
-        print("first capture group: '\(match.groups[0]!.match)'")
-        print("second capture group: '\(match.groups[1]!.match)'")
+        print("first capture group:",  match.group(named: "first name")!.match)
+        print("second capture group:", match.group(named: "last name")!.match)
         
+        // replace the first capture group
         inputText.replaceSubrange(
             match.groups[0]!.range, with: "Steven"
         )
@@ -49,8 +52,8 @@ public extension String {
     Output:
     ```
     // full match: 'name: Chris Lattner'
-    // first capture group: 'Chris'
-    // second capture group: 'Lattner'
+    // first capture group: Chris
+    // second capture group: Lattner
     // after replacing text: 'name: Steven Lattner'
     ```
     */
@@ -100,8 +103,8 @@ public extension String {
           The match contains the matched text and the range of the matched text,
           and an array of capture groups.
           Each capture group is an optional RegexGroup containing
-          the matched text and the range of the matched text,
-          or nil if the group was not matched.
+          the matched tex, the range of the matched text and the name of
+          the capture group, or nil if it was not named.
     
     The ranges returned by this function can be used in the subscript
     for the original text, or for self.replacingCharacters(in:with:)
@@ -111,27 +114,33 @@ public extension String {
     
     Example usage:
     ```
-    var inputText = "name: Chris Lattner"
-    let pattern = "name: ([a-z]+) ([a-z]+)"
-    
-    if let match = try! inputText.regexMatch(
-        pattern, regexOptions: [.caseInsensitive]
-    ) {
-        print("full match: '\(match.fullMatch)'")
-        print("first capture group: '\(match.groups[0]!.match)'")
-        print("second capture group: '\(match.groups[1]!.match)'")
-        
-        inputText.replaceSubrange(match.groups[0]!.range, with: "Steven")
-        
-        print("after replacing text: '\(inputText)'")
+    let inputText = """
+    Man selects only for his own good: \
+    Nature only for that of the being which she tends.
+    """
+    let pattern = #"Man selects ONLY FOR HIS OWN (\w+)"#
+
+    let searchRange =
+            (inputText.startIndex)
+            ..<
+            (inputText.index(inputText.startIndex, offsetBy: 40))
+            
+    let match = try inputText.regexMatch(
+        pattern,
+        regexOptions: [.caseInsensitive],
+        matchingOptions: [.anchored],
+        groupNames: ["word"],
+        range: searchRange
+    )
+    if let match = match {
+        print("full match:", match.fullMatch)
+        print("capture group:", match.group(named: "word")!.match)
     }
     ```
     Output:
     ```
-    // full match: 'name: Chris Lattner'
-    // first capture group: 'Chris'
-    // second capture group: 'Lattner'
-    // after replacing text: 'name: Steven Lattner'
+    // full match: Man selects only for his own good
+    // capture group: good
     ```
     */
     func regexMatch(

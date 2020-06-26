@@ -34,13 +34,13 @@ public extension String {
      // The .anchored matching option only looks for matches
      // at the beginning of the string.
      // Consequently, only the first word will be matched.
-     let regexObject = try! Regex(
+     let regexObject = try Regex(
          pattern: #"\w+"#,
          regexOptions: [.caseInsensitive],
          matchingOptions: [.anchored]
      )
 
-     let replacedText = name.regexSub(regexObject, with: "word")
+     let replacedText = try name.regexSub(regexObject, with: "word")
      // replacedText = "word Schorn"
      ```
      */
@@ -84,13 +84,13 @@ public extension String {
      Example usage:
      ```
      let text = "123 John Doe, age 21"
-     let newText = text.regexSub(#"\d+$"#, with: "unknown")
+     let newText = try text.regexSub(#"\d+$"#, with: "unknown")
      // newText = "123 John Doe, age unknown"
      ```
      ```
      let name = "Charles Darwin"
      
-     let reversedName = try! name.regexSub(
+     let reversedName = try name.regexSub(
          #"(\w+) (\w+)"#,
          with: "$2 $1"
          // $1 and $2 represent the
@@ -173,7 +173,7 @@ public extension String {
      Example usage:
      ```
      var text = "Have a terrible day"
-     text.regexSubInPlace("terrible", with: "nice")
+     try text.regexSubInPlace("terrible", with: "nice")
      // text = "Have a nice day"
      ```
     */

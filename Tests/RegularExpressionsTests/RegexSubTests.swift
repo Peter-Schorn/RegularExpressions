@@ -8,8 +8,40 @@ final class RegexSubTests: XCTestCase {
         ("testRegexSub", testRegexSub),
         ("testRegexSubInPlace", testRegexSubInPlace),
         ("testRegexSubTemplates", testRegexSubTemplates),
-        ("testRegexSubMatchOptions", testRegexSubMatchOptions)
+        ("testRegexSubMatchOptions", testRegexSubMatchOptions),
+        ("testRegexSubSearchRange", testRegexSubSearchRange)
     ]
+    
+    func testRegexSubSearchRange() throws {
+        
+        let inputText = "David Buss evolutionary Psychology"
+        let searchRange = inputText.range(of: "David Buss evolutionary")
+        let pattern = #"([A-Z])(\w+)"#
+        let groupNames = ["first letter", "rest"]
+        
+        let regexObjects = try makeAllRegexObjects(
+            pattern: pattern,
+            groupNames: groupNames
+        )
+        for object in regexObjects {
+            let replacedText = try inputText.regexSub(object, with: "$2$1", range: searchRange)
+            XCTAssertEqual(replacedText, "avidD ussB evolutionary Psychology")
+        }
+        
+        let anchoredObjects = try makeAllRegexObjects(
+            pattern: pattern,
+            matchingOptions: [.anchored],
+            groupNames: groupNames
+        )
+        
+        for object in anchoredObjects {
+            let replacedText = try inputText.regexSub(object, with: "$2$1", range: searchRange)
+            XCTAssertEqual(replacedText, "avidD Buss evolutionary Psychology")
+            
+        }
+
+    }
+    
     
     func testRegexSub() throws {
     
@@ -70,7 +102,9 @@ final class RegexSubTests: XCTestCase {
         
         let name = "Peter Schorn"
         let regexObject = try Regex(
-            pattern: #"\w+"#, regexOptions: [.caseInsensitive], matchingOptions: [.anchored]
+            pattern: #"\w+"#,
+            regexOptions: [.caseInsensitive],
+            matchingOptions: [.anchored]
         )
         let replacedText = try name.regexSub(regexObject, with: "word")
         // print(replacedText)
