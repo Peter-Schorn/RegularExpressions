@@ -21,7 +21,7 @@
 - #### [Splitting a string by occurences of a pattern](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#splitting-a-string-by-occurences-of-a-pattern)
 - #### [Performing regular expression replacements](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements)
   - [Performing regular expression replacedments with a custom closure](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacedments-with-a-custom-closure)
-- #### [Checking for regular expression matches in a switch statement](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#checking-for-regular-expression-matches-in-a-switch-statement)
+- #### [Checking for regular expression matches in a switch statement](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#checking-for-regular-expression-matches-in-a-switch-statement-1)
 
 ## Installation
 
