@@ -428,7 +428,7 @@ switch inputStrig {
         print("valid user id")
     case try? Regex(#"[!@#$%^&]+"#):
         print("invalid character in user id")
-    case try! Regex(#"^\d+$"#):
+    case try! Regex(#"\d+"#):
         print("user id cannot contain numbers")
     default:
         print("no match")
