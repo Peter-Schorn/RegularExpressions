@@ -18,7 +18,7 @@
 
 1. In Xcode, open the project that you want to add this package to.
 2. From the menu bar, select File > Swift Packages > Add Package Dependency...
-3. Paste the [url](https://github.com/Peter-Schorn/RegularExpressions.git) for this repository.
+3. Paste the [url](https://github.com/Peter-Schorn/RegularExpressions.git) for this repository into the search field.
 4. Follow the prompts for adding the package.
 
 ## Using a regular expression object
