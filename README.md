@@ -421,16 +421,21 @@ let replacedText = try inputString.regexSub(regexObject) { indx, match in
 The pattern matching operator `~=` has been overloaded to support checking for matches to regular expression in a switch statement. For example:
 
 ```swift
-let inputString = "age: 21"
+let inputStrig = #"user_id: "asjhjcb""#
 
-switch inputString {
-    case try! Regex(#"\d+"#):
-        print("found numbers in input string")
-    case try? Regex("^[a-z]+$"):
-        print("the input string consists entirely of letters")
-    case try Regex("height: 21", [.caseInsensitive]):
-        print("found match for 'height: 21' in input string")
+switch inputStrig {
+    case try Regex(#"USER_ID: "[a-z]+""#, [.caseInsensitive]):
+        print("valid user id")
+    case try? Regex(#"[!@#$%^&]+"#):
+        print("invalid character in user id")
+    case try! Regex(#"^\d+$"#):
+        print("user id cannot contain numbers")
     default:
-        print("no matched found")
+        print("no match")
 }
+
+// prints "valid user id"
  ```
+
+`try`, `try?`, and `try!` can all be used to determined the best way to handle an error arising from an invalid regular expression pattern.
+Unfortunately, there is no way to bind the match of the regular expression pattern to a variable.
