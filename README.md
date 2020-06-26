@@ -386,7 +386,7 @@ let replacedMatch = match.replaceGroups { indx, group in
 // replacedMatch = "name: Steven, id: 55"
 ```
 
-Use can compose together the above methods in the following manner:
+You can compose together the above methods in the following manner:
 ```swift
 let inputString = """
 name: sally, id: 26
