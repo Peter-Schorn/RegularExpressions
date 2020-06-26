@@ -29,7 +29,7 @@ However, it presents a much cleaner interface and was expliticty designed to tak
 
 ## Using a regular expression object
 
-All of the above methods accept an object conforming to `RegexProtocol`. This object holds information about a regular expression, including:
+`Strin.regexMatch`, `String.regexFindAll`, `String.regexSub`, and `String.regexSplit` all accept an object that conforms to `RegexProtocol`. This object holds information about a regular expression, including:
 - `var pattern: String { get }` - The regular expression pattern.
 - `var regexOptions: NSRegularExpression.Options { get }` - The regular expression options (see [NSRegularExpression.Options](https://developer.apple.com/documentation/foundation/nsregularexpression/options)).
 - `var matchingOptions: NSRegularExpression.MatchingOptions { get }` - See [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions).
