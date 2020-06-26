@@ -105,12 +105,12 @@ Examples:
 ```swift
 var inputText = "name: Chris Lattner"
 // create the regular expression object
-let regex = try! Regex(
+let regex = try Regex(
     pattern: "name: ([a-z]+) ([a-z]+)",
     regexOptions: [.caseInsensitive]
 )
  
-if let match = try! inputText.regexMatch(regex) {
+if let match = try inputText.regexMatch(regex) {
     print("full match: '\(match.fullMatch)'")
     print("first capture group: '\(match.groups[0]!.match)'")
     print("second capture group: '\(match.groups[1]!.match)'")
@@ -183,13 +183,13 @@ Examples:
 ```swift
 var inputText = "season 8, EPISODE 5; season 5, episode 20"
 
-let regex = try! Regex(
+let regex = try Regex(
     pattern: #"season (\d+), Episode (\d+)"#,
     regexOptions: [.caseInsensitive],
     groupNames: ["season", "episode"]
 )
         
-let results = try! inputText.regexFindAll(regex)
+let results = try inputText.regexFindAll(regex)
 for result in results {
     print("fullMatch: '\(result.fullMatch)'")
     print("capture groups:")
@@ -200,6 +200,7 @@ for result in results {
 }
 
 let firstResult = results[0]
+// replace the first full match
 inputText.replaceSubrange(
     firstResult.range, with: "new value"
 )
@@ -248,14 +249,17 @@ func regexSplit<RegularExpression: RegexProtocol>(
 Examples:
 ```swift
 let colors = "red,orange,yellow,blue"
-let array = try! colors.regexSplit(",")
+let array = try colors.regexSplit(",")
 // array = ["red", "orange", "yellow", "blue"]
 ```
 ```swift
 let colors = "red and orange ANDyellow and    blue"
-let regex = try! Regex(#"\s*and\s*"#, regexOptions: [.caseInsensitive])
-let array = try! colors.regexSplit(regex)
-// array = ["red", "orange", "yellow", "blue"]
+let regex = try Regex(#"\s*and\s*"#, [.caseInsensitive])
+let array = try colors.regexSplit(regex, maxLength: 3)
+
+// array = ["red", "orange", "yellow"]
+// note that "blue" is not returned because the length of the
+// array was limited to 3 items.
 ```
 
 ## Performing regular expression replacements
@@ -287,17 +291,17 @@ let name = "Peter Schorn"
 // The .anchored matching option only looks for matches
 // at the beginning of the string.
 // Consequently, only the first word will be matched.
-let regexObject = try! Regex(
+let regexObject = try Regex(
     pattern: #"\w+"#,
     regexOptions: [.caseInsensitive],
     matchingOptions: [.anchored]
 )
-let replacedText = name.regexSub(regexObject, with: "word")
+let replacedText = try name.regexSub(regexObject, with: "word")
 // replacedText = "word Schorn"
 ```
 ```swift
 let name = "Charles Darwin"
-let reversedName = try! name.regexSub(
+let reversedName = try name.regexSub(
     #"(\w+) (\w+)"#,
     with: "$2 $1"
     // $1 and $2 represent the
@@ -336,7 +340,7 @@ let inputString = """
 Darwin's theory of evolution is the \
 unifying theory of the life sciences.
 """
-let replacedString = try! inputString.regexSub(inputString) { indx, match in
+let replacedString = try inputString.regexSub(inputString) { indx, match in
     if indx > 5 { return nil }
     return match.fullMatch.uppercased()
 }
@@ -362,7 +366,7 @@ let inputText = "name: Peter, id: 35, job: programmer"
 let pattern = #"name: (\w+), id: (\d+)"#
 let groupNames = ["name", "id"]
 
-let match = try! inputText.regexMatch(
+let match = try inputText.regexMatch(
     pattern, groupNames: groupNames
 )!
 let replacedMatch = match.replaceGroups { indx, group in
