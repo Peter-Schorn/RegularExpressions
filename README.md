@@ -120,6 +120,7 @@ See [Extracting the match and capture groups](https://github.com/Peter-Schorn/Re
 Examples:
 ```swift
 var inputText = "name: Chris Lattner"
+
 // create the regular expression object
 let regex = try Regex(
     pattern: "name: ([a-z]+) ([a-z]+)",
@@ -161,7 +162,7 @@ let match = try inputText.regexMatch(
     regexOptions: [.caseInsensitive],
     matchingOptions: [.anchored],  // anchor matches to the beginning of the string
     groupNames: ["word"],  // the names of the capture groups
-    range: searchRange
+    range: searchRange  // the range of the string in which to search for the pattern
 )
 if let match = match {
     print("full match:", match.fullMatch)
@@ -200,10 +201,12 @@ Examples:
 ```swift
 var inputText = "season 8, EPISODE 5; season 5, episode 20"
 
+// create the regular expression object
 let regex = try Regex(
     pattern: #"season (\d+), Episode (\d+)"#,
     regexOptions: [.caseInsensitive],
-    groupNames: ["season", "episode"]
+    groupNames: ["season number", "episode number"]
+    // the names of the capture groups
 )
         
 let results = try inputText.regexFindAll(regex)
@@ -215,25 +218,23 @@ for result in results {
     }
     print()
 }
-
 let firstResult = results[0]
-// replace the first full match
+// perform a replacement on the first full match
 inputText.replaceSubrange(
     firstResult.range, with: "new value"
 )
-
 print("after replacing text: '\(inputText)'")
 
 // fullMatch: 'season 8, EPISODE 5'
 // capture groups:
-//     season: '8'
-//     episode: '5'
-// 
+//     'season number': '8'
+//     'episode number': '5'
+//
 // fullMatch: 'season 5, episode 20'
 // capture groups:
-//     season: '5'
-//     episode: '20'
-// 
+//     'season number': '5'
+//     'episode number': '20'
+//
 // after replacing text: 'new value; season 5, episode 20'
 ```
 
@@ -272,7 +273,10 @@ let array = try colors.regexSplit(",")
 ```
 ```swift
 let colors = "red and orange ANDyellow and    blue"
+
+// create the regular expression object
 let regex = try Regex(#"\s*and\s*"#, [.caseInsensitive])
+
 let array = try colors.regexSplit(regex, maxLength: 3)
 
 // array = ["red", "orange", "yellow"]
