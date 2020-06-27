@@ -27,7 +27,10 @@ public extension String {
      Example usage:
      ```
      let colors = "red and orange ANDyellow and    blue"
+     
+     // create the regular expression object
      let regex = try Regex(#"\s*and\s*"#, [.caseInsensitive])
+     
      let array = try colors.regexSplit(regex, maxLength: 3)
      
      // array = ["red", "orange", "yellow"]

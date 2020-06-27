@@ -30,10 +30,13 @@ public extension String {
     Example usage:
     ```
     var inputText = "name: Chris Lattner"
+     
+    // create the regular expression object
     let regex = try Regex(
         pattern: "name: ([a-z]+) ([a-z]+)",
         regexOptions: [.caseInsensitive],
         groupNames: ["first name", "last name"]
+        // the names of the capture groups
     )
      
     if let match = try inputText.regexMatch(regex) {
@@ -41,7 +44,7 @@ public extension String {
         print("first capture group:",  match.group(named: "first name")!.match)
         print("second capture group:", match.group(named: "last name")!.match)
         
-        // replace the first capture group
+        // perform a replacement on the first capture group
         inputText.replaceSubrange(
             match.groups[0]!.range, with: "Steven"
         )
@@ -128,9 +131,9 @@ public extension String {
     let match = try inputText.regexMatch(
         pattern,
         regexOptions: [.caseInsensitive],
-        matchingOptions: [.anchored],
-        groupNames: ["word"],
-        range: searchRange
+        matchingOptions: [.anchored],  // anchor matches to the beginning of the string
+        groupNames: ["word"],  // the names of the capture groups
+        range: searchRange  // the range of the string in which to search for the pattern
     )
     if let match = match {
         print("full match:", match.fullMatch)

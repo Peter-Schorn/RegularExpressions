@@ -10,7 +10,7 @@ class RegexMatchTests: XCTestCase {
         ("testRegexMatchDetails", testRegexMatchDetails),
         ("testRegexMatchWithRange", testRegexMatchWithRange),
         ("testRegexMatchAllParameters", testRegexMatchAllParameters),
-        ("testRegexMatchDocs", testRegexMatchDocs),
+        ("testRegexMatchDocs1", testRegexMatchDocs1),
         ("testRegexMatchDocs2", testRegexMatchDocs2)
     ]
     
@@ -56,7 +56,6 @@ class RegexMatchTests: XCTestCase {
     
     
     }
-    
     
     func testRegexMatchURL() {
         
@@ -284,7 +283,7 @@ class RegexMatchTests: XCTestCase {
         
     }
     
-    func testRegexMatchDocs() throws {
+    func testRegexMatchDocs1() throws {
         
         let inputText = """
         Man selects only for his own good: \
@@ -308,6 +307,7 @@ class RegexMatchTests: XCTestCase {
         if let match = match {
             // print("full match:", match.fullMatch)
             // print("capture group:", match.group(named: "word")!.match)
+            assertRegexRangesMatch([match], inputText: inputText)
             XCTAssertEqual(match.fullMatch, "Man selects only for his own good")
             XCTAssertEqual(match.group(named: "word")?.match, "good")
         }
@@ -328,16 +328,30 @@ class RegexMatchTests: XCTestCase {
             groupNames: ["first name", "last name"]
         )
          
-        if let match = try! inputText.regexMatch(regex) {
-            print("full match: '\(match.fullMatch)'")
-            print("first capture group: '\(match.group(named: "first name")!.match)'")
-            print("second capture group: '\(match.group(named: "last name")!.match)'")
+        if let match = try inputText.regexMatch(regex) {
+            assertRegexRangesMatch([match], inputText: inputText)
+            XCTAssertEqual(match.fullMatch, "name: Chris Lattner")
+            XCTAssertEqual(
+                match.group(named: "first name")!.match,
+                "Chris"
+            )
+            XCTAssertEqual(
+                match.group(named: "last name")!.match,
+                "Lattner"
+            )
+            // print("full match: '\(match.fullMatch)'")
+            // print("first capture group: '\(match.group(named: "first name")!.match)'")
+            // print("second capture group: '\(match.group(named: "last name")!.match)'")
             
             inputText.replaceSubrange(
                 match.groups[0]!.range, with: "Steven"
             )
             
-            print("after replacing text: '\(inputText)'")
+            // print("after replacing text: '\(inputText)'")
+            XCTAssertEqual(inputText, "name: Steven Lattner")
+        }
+        else {
+            XCTFail("should've found matches")
         }
         
         // full match: 'name: Chris Lattner'

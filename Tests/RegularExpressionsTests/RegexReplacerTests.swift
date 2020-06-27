@@ -9,10 +9,9 @@ final class RegexReplacerTests: XCTestCase {
         ("testReplacingShort", testReplacingShort),
         ("testCapturreGroupReplacing", testCapturreGroupReplacing),
         ("testCaptureGroupReplacerDocs", testCaptureGroupReplacerDocs),
-        ("testReplacingDocs", testReplacingDocs)
+        ("testReplacingMatchAndCaptureGroupsDocs", testReplacingMatchAndCaptureGroupsDocs),
+        ("testReplacingDocs2", testReplacingDocs2)
     ]
-    
-    
     
     func testReplacing() throws {
         
@@ -254,7 +253,7 @@ final class RegexReplacerTests: XCTestCase {
 
     }
     
-    func testReplacingDocs() throws {
+    func testReplacingMatchAndCaptureGroupsDocs() throws {
         
         let inputString = """
         name: sally, id: 26
@@ -293,5 +292,60 @@ final class RegexReplacerTests: XCTestCase {
         
 
     }
+
+    func testReplacingDocs2() throws {
+        
+        let inputString = """
+        Darwin's theory of evolution is the \
+        unifying theory of the life sciences.
+        """
+        
+        let expectedReplacement = """
+        DARWIN'S THEORY OF EVOLUTION IS the \
+        unifying theory of the life sciences.
+        """
+        
+        let pattern = #"\w+"#
+        
+        let replacedString = try inputString.regexSub(pattern) { indx, match in
+            if indx > 5 { return nil }
+            return match.fullMatch.uppercased()
+        }
+        
+        XCTAssertEqual(replacedString, expectedReplacement)
+        
+    }
+    
+    func testReplacingDocs3() throws {
+    
+        let inputString = """
+        Darwin's theory of evolution is the \
+        unifying theory of the life sciences.
+        """
+        
+        // create the regular expression object
+        let regex = try Regex(
+            pattern: #"\w+"#  // match each word in the input string
+        )
+        
+        let replacedString = try inputString.regexSub(regex) { indx, match in
+            if indx > 5 { return nil }  // only replace the first 5 matches
+            return match.fullMatch.uppercased()  // uppercase the full match
+        }
+        
+        let expectedReplacement = """
+        DARWIN'S THEORY OF EVOLUTION IS the \
+        unifying theory of the life sciences.
+        """
+        
+        XCTAssertEqual(replacedString, expectedReplacement)
+        // replacedString = """
+        // DARWIN'S THEORY OF EVOLUTION IS the \
+        // unifying theory of the life sciences.
+        // """
+        
+    }
     
 }
+
+

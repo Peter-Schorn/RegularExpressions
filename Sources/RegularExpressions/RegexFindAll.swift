@@ -32,30 +32,44 @@ public extension String {
      Example usage:
      ```
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
+
+     // create the regular expression object
      let regex = try Regex(
          pattern: #"season (\d+), Episode (\d+)"#,
-         regexOptions: [.caseInsensitive]
+         regexOptions: [.caseInsensitive],
+         groupNames: ["season number", "episode number"]
+         // the names of the capture groups
      )
              
      let results = try inputText.regexFindAll(regex)
      for result in results {
          print("fullMatch: '\(result.fullMatch)'")
-         print("capture groups:", result.groups.map { $0!.match })
+         print("capture groups:")
+         for captureGroup in result.groups {
+             print("    \(captureGroup!.name!): '\(captureGroup!.match)'")
+         }
          print()
      }
+
      let firstResult = results[0]
+     // perform a replacement on the first full match
      inputText.replaceSubrange(
          firstResult.range, with: "new value"
      )
+
      print("after replacing text: '\(inputText)'")
      ```
      Output:
      ```
      // fullMatch: 'season 8, EPISODE 5'
-     // capture groups: ["8", "5"]
+     // capture groups:
+     //     'season number': '8'
+     //     'episode number': '5'
      //
      // fullMatch: 'season 5, episode 20'
-     // capture groups: ["5", "20"]
+     // capture groups:
+     //     'season number': '5'
+     //     'episode number': '20'
      //
      // after replacing text: 'new value; season 5, episode 20'
      ```
@@ -123,36 +137,43 @@ public extension String {
      Example usage:
      ```
      var inputText = "season 8, EPISODE 5; season 5, episode 20"
-     let pattern = #"season (\d+), Episode (\d+)"#
 
      let results = try inputText.regexFindAll(
-         pattern, regexOptions: [.caseInsensitive]
+         #"season (\d+), Episode (\d+)"#,
+         regexOptions: [.caseInsensitive],
+         groupNames: ["season number", "episode number"]
+         // the names of the capture groups
      )
-
      for result in results {
          print("fullMatch: '\(result.fullMatch)'")
-         print("capture groups:", result.groups.map { $0!.match })
+         print("capture groups:")
+         for captureGroup in result.groups {
+             print("    '\(captureGroup!.name!)': '\(captureGroup!.match)'")
+         }
          print()
      }
 
      let firstResult = results[0]
-
+     // perform a replacement on the first full match
      inputText.replaceSubrange(
          firstResult.range, with: "new value"
      )
-     
+
      print("after replacing text: '\(inputText)'")
      ```
      Output:
      ```
      // fullMatch: 'season 8, EPISODE 5'
-     // capture groups: ["8", "5"]
+     // capture groups:
+     //     'season number': '8'
+     //     'episode number': '5'
      //
      // fullMatch: 'season 5, episode 20'
-     // capture groups: ["5", "20"]
+     // capture groups:
+     //     'season number': '5'
+     //     'episode number': '20'
      //
      // after replacing text: 'new value; season 5, episode 20'
-     ```
      */
     func regexFindAll(
         _ pattern: String,

@@ -8,9 +8,10 @@ final class RegexSubTests: XCTestCase {
         ("testRegexSub", testRegexSub),
         ("testRegexSubInPlace", testRegexSubInPlace),
         ("testRegexSubTemplates", testRegexSubTemplates),
-        ("testRegexSubMatchOptions", testRegexSubMatchOptions),
+        ("testRegexSubMatchOptionsDocs", testRegexSubMatchOptionsDocs),
         ("testRegexSubSearchRange", testRegexSubSearchRange)
     ]
+
     
     func testRegexSubSearchRange() throws {
         
@@ -41,7 +42,6 @@ final class RegexSubTests: XCTestCase {
         }
 
     }
-    
     
     func testRegexSub() throws {
     
@@ -98,7 +98,7 @@ final class RegexSubTests: XCTestCase {
 
     }
     
-    func testRegexSubMatchOptions() throws {
+    func testRegexSubMatchOptionsDocs() throws {
         
         let name = "Peter Schorn"
         let regexObject = try Regex(
@@ -110,6 +110,28 @@ final class RegexSubTests: XCTestCase {
         // print(replacedText)
         XCTAssertEqual(replacedText, "word Schorn")
         
+    }
+    
+    func testRegexSubDocs() throws {
+        
+        let text = "123 John Doe, age 21"
+        let newText = try text.regexSub(#"\d+$"#, with: "unknown")
+        XCTAssertEqual(newText, "123 John Doe, age unknown")
+        // newText = "123 John Doe, age unknown"
+
+        let name = "Charles Darwin"
+        let reversedName = try name.regexSub(
+            #"(\w+) (\w+)"#,
+            with: "$2 $1"
+            // $1 and $2 represent the
+            // first and second capture group, respectively.
+            // $0 represents the entire match.
+        )
+        
+        // reversedName = "Darwin Charles"
+        XCTAssertEqual(reversedName, "Darwin Charles")
+        
+
     }
     
 }

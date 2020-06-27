@@ -5,10 +5,14 @@ import XCTest
 final class RegexObjectsTests: XCTestCase {
     
     static var allTests = [
-        ("testPatternIsValid", testPatternIsValid)
+        (
+            "testPatternIsValidAndNumberOfCaptureGroups",
+            testPatternIsValidAndNumberOfCaptureGroups
+        ),
+        ("testReplaceCaptureGroups", testReplaceCaptureGroups)
     ]
     
-    func testPatternIsValid() throws {
+    func testPatternIsValidAndNumberOfCaptureGroups() throws {
         
         let invalidPattern = #"(\w+"#
         XCTAssertFalse(Regex.patternIsValid(pattern: invalidPattern))
@@ -31,6 +35,31 @@ final class RegexObjectsTests: XCTestCase {
         XCTAssertEqual(try regexObject.numberOfCaptureGroups(), 1)
         XCTAssert(regexObject.patternIsValid())
         
+    }
+    
+    func testReplaceCaptureGroups() throws {
+        
+        let inputText = "name: Peter, id: 35, job: programmer"
+        let pattern = #"name: (\w+), id: (\d+)"#
+        let groupNames = ["name", "id"]
+        
+        guard let match = try inputText.regexMatch(
+            pattern, groupNames: groupNames
+        ) else {
+            XCTFail("should've found match")
+            return
+        }
+        
+        let replacedMatch = match.replaceGroups { indx, group in
+            if group.name == "name" { return "Steven" }
+            if group.name == "id" { return "55" }
+            return nil
+        }
+        XCTAssertEqual(match.fullMatch, "name: Peter, id: 35")
+        XCTAssertEqual(replacedMatch, "name: Steven, id: 55")
+        // match.fullMatch = "name: Peter, id: 35"
+        // replacedMatch = "name: Steven, id: 55"
+
     }
     
     

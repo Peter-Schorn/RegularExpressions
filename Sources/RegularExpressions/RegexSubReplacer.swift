@@ -29,13 +29,14 @@ public extension String {
      unifying theory of the life sciences.
      """
      
+     // create the regular expression object
      let regex = try Regex(
-         pattern: #"\w+"#, regexOptions: [.caseInsensitive]
+         pattern: #"\w+"#  // match each word in the input string
      )
      
      let replacedString = try inputString.regexSub(regex) { indx, match in
-         if indx > 5 { return nil }
-         return match.fullMatch.uppercased()
+         if indx > 5 { return nil }  // only replace the first 5 matches
+         return match.fullMatch.uppercased()  // uppercase the full match
      }
      
      // replacedString = """
@@ -97,12 +98,13 @@ public extension String {
      Darwin's theory of evolution is the \
      unifying theory of the life sciences.
      """
-     
-     let replacedString = try inputString.regexSub(inputString) { indx, match in
-         if indx > 5 { return nil }
-         return match.fullMatch.uppercased()
+
+     let pattern = #"\w+"#  // match each word in the input string
+     let replacedString = try inputString.regexSub(pattern) { indx, match in
+         if indx > 5 { return nil }  // only replace the first 5 matches
+         return match.fullMatch.uppercased() // uppercase the full match
      }
-     
+
      // replacedString = """
      // DARWIN'S THEORY OF EVOLUTION IS the \
      // unifying theory of the life sciences.
