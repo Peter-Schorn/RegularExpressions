@@ -234,22 +234,21 @@ class RegexMatchTests: XCTestCase {
         }
     }
  
-    func testRegexMatchWithRange() {
-        assertNoThrow {
+    func testRegexMatchWithRange() throws {
             
-            let inputText = "Peter Schorn"
-            let stringRange = inputText.range(of: "Peter")!
-            let match = try inputText.regexMatch("Schorn", range: stringRange)
-            XCTAssert(match == nil)
-            
-            if let match2 = try inputText.regexMatch("Peter", range: stringRange) {
-                XCTAssert(match2.fullMatch == "Peter")
-                assertRegexRangesMatch([match2], inputText: inputText)
-            }
-            else {
-                XCTFail("Should've found match")
-            }
+        let inputText = "Peter Schorn"
+        let stringRange = inputText.range(of: "Peter")!
+        let match = try inputText.regexMatch("Schorn", range: stringRange)
+        XCTAssert(match == nil)
+        
+        if let match2 = try inputText.regexMatch("Peter", range: stringRange) {
+            XCTAssert(match2.fullMatch == "Peter")
+            assertRegexRangesMatch([match2], inputText: inputText)
         }
+        else {
+            XCTFail("Should've found match")
+        }
+        
     }
     
     func testRegexMatchAllParameters() throws {
