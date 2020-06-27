@@ -2,7 +2,6 @@
 
 **A regular expressions library for Swift**
 
-## Table of Contents
 - #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation-1)
 - #### [Introduction](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#introduction)
 - #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1)
