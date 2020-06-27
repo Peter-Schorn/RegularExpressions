@@ -117,6 +117,8 @@ The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters co
 These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.  
 See [Extracting the match and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-match-and-capture-groups) for information about the `RegexMatch` returned by these functions.  
 
+**Warning**: The ranges of the matches and capture groups may be invalidated if you mutate the source string. Use [String.regexsub](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1) to perform multiple replacements.
+           
 Examples:
 ```swift
 var inputText = "name: Chris Lattner"
@@ -192,6 +194,8 @@ func regexFindAll(
     range: Range<String.Index>? = nil
 ) throws -> [RegexMatch] {
 ```
+**Warning**: The ranges of the matches and capture groups may be invalidated if you mutate the source string. Use [String.regexsub](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1) to perform multiple replacements.  
+
 The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 As with `String.regexMatch`, `range` represents the range of the string in which to search for the pattern.  
 These methods with throw if the pattern is invalid, or if the number of group names does not match the number of capture groups (See [RegexError](https://github.com/Peter-Schorn/RegularExpressions/blob/d72d877857aba02c24865b7cf5f365c05265b686/Sources/RegularExpressions/RegexObjects.swift#L3)). They will **Never** throw an error if no matches are found.  
