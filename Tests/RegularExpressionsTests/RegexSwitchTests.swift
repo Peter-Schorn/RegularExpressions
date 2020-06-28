@@ -1,3 +1,5 @@
+#if canImport(XCTest)
+
 import Foundation
 import RegularExpressions
 import XCTest
@@ -57,3 +59,7 @@ class RegexSwitchTests: XCTestCase {
 
     
 }
+
+
+#endif
+

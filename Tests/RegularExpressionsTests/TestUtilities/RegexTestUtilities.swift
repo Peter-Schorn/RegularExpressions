@@ -1,3 +1,5 @@
+#if canImport(XCTest)
+
 import Foundation
 import RegularExpressions
 import XCTest
@@ -298,6 +300,7 @@ func regexReplacerFuzz(
     }
     
     
-    
-    
 }
+
+
+#endif

@@ -1,3 +1,5 @@
+#if canImport(XCTest)
+
 import Foundation
 import RegularExpressions
 import XCTest
@@ -276,3 +278,6 @@ final class RegexFindAllTests: XCTestCase {
 
     
 }
+
+
+#endif

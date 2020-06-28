@@ -1,3 +1,5 @@
+#if canImport(XCTest)
+
 import Foundation
 import RegularExpressions
 import XCTest
@@ -71,3 +73,6 @@ class RegexSplitTests: XCTestCase {
     
     
 }
+
+
+#endif
