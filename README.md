@@ -47,7 +47,7 @@ Returns true if the regular expression pattern is valid. Else false.
 
 `NSRegularExpression` has been extended to conform to `RegexProtocol`, but it **ALWAYS** returns `[]` and `nil` for the `matchingOptions` and `groupNames` properties, respectively. Use `Regex` or another type that conforms to `RegexProtocol` to customize these options.
 
-**The `Regex` struct conforms to `RegexProtocol` and is the simplest way to create a regular expression object.**
+**The `Regex` struct provided by this library conforms to `RegexProtocol` and is the simplest way to create a regular expression object.**
 
 ### Initializing a `Regex` struct
 ```swift
