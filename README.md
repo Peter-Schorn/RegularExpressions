@@ -78,7 +78,7 @@ Creates a `Regex` object from an `NSRegularExpression`.
 ## Extracting the matches and capture groups
 
 `String.regexMatch` and `String.regexFindAll` both use the `RegexMatch` struct to hold the information about a regular expression match. It contains the following properties:
-- `let sourceString: Substring` - The string that was matched against. A substring is used to reduce memory usage. Note that `SubString` presents the same interface as `String`
+- `let sourceString: Substring` - The string that was matched against. A substring is used to reduce memory usage. Note that `SubString` presents the same interface as `String`.
 - `let fullMatch: String` - The full match of the pattern in the source string.
 - `let range: Range<String.Index>` - The range of the full match in the source string.
 - `let groups: [RegexGroup?]` - The capture groups.
