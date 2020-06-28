@@ -68,7 +68,7 @@ public struct RegexGroup: Equatable, Hashable {
  
  ```
  /// The string that was matched against.
- public let sourceString: Stringx
+ public let sourceString: Substring
  /// The full match of the pattern in the source string.
  public let fullMatch: String
  /// The range of the full match in the source string.
