@@ -21,10 +21,19 @@ However, it presents a much cleaner interface and was expliticty designed to tak
 
 ## Installation
 
+#### Swift Package Manager (recommended)
+
 1. In Xcode, open the project that you want to add this package to.
 2. From the menu bar, select File > Swift Packages > Add Package Dependency...
 3. Paste the [url](https://github.com/Peter-Schorn/RegularExpressions.git) for this repository into the search field.
 4. Follow the prompts for adding the package.
+
+#### Cocoa Pods
+
+Add this to your `Podfile`:
+```
+pod 'RegularExpressions', :git => 'https://github.com/Peter-Schorn/RegularExpressions.git'
+```
 
 ## Using a regular expression object
 
@@ -272,6 +281,8 @@ Examples:
 ```swift
 let colors = "red,orange,yellow,blue"
 let array = try colors.regexSplit(",")
+print(array)
+
 // array = ["red", "orange", "yellow", "blue"]
 ```
 ```swift
@@ -281,6 +292,7 @@ let colors = "red and orange ANDyellow and    blue"
 let regex = try Regex(#"\s*and\s*"#, [.caseInsensitive])
 
 let array = try colors.regexSplit(regex, maxLength: 3)
+print(array)
 
 // array = ["red", "orange", "yellow"]
 // note that "blue" is not returned because the length of the
@@ -323,6 +335,8 @@ let regexObject = try Regex(
     matchingOptions: [.anchored]
 )
 let replacedText = try name.regexSub(regexObject, with: "word")
+print(replacedText)
+
 // replacedText = "word Schorn"
 ```
 ```swift
@@ -334,6 +348,8 @@ let reversedName = try name.regexSub(
     // first and second capture group, respectively.
     // $0 represents the entire match.
 )
+print(reversedName)
+
 // reversedName = "Darwin Charles"
 ```
 
@@ -373,6 +389,7 @@ let replacedString = try inputString.regexSub(pattern) { indx, match in
     if indx > 5 { return nil }  // only replace the first 5 matches
     return match.fullMatch.uppercased() // uppercase the full match
 }
+print(replacedString)
 
 // replacedString = """
 // DARWIN'S THEORY OF EVOLUTION IS the \
@@ -404,6 +421,7 @@ let replacedMatch = match.replaceGroups { indx, group in
     if group.name == "id" { return "55" }
     return nil
 }
+print(replacedMatch)
 
 // match.fullMatch = "name: Peter, id: 35"
 // replacedMatch = "name: Steven, id: 55"
@@ -433,6 +451,8 @@ let replacedText = try inputString.regexSub(regexObject) { indx, match in
         return nil
     }
 }
+print(replacedText)
+
 // replacedText = """
 // name: sally, id: 26
 // name: ALEXANDER, id: redacted
