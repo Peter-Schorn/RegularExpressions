@@ -11,7 +11,9 @@ final class RegexSubTests: XCTestCase {
         ("testRegexSubInPlace", testRegexSubInPlace),
         ("testRegexSubTemplates", testRegexSubTemplates),
         ("testRegexSubMatchOptionsDocs", testRegexSubMatchOptionsDocs),
-        ("testRegexSubSearchRange", testRegexSubSearchRange)
+        ("testRegexSubSearchRange", testRegexSubSearchRange),
+        ("testRegexSubDocs", testRegexSubDocs),
+        ("testRegexSubDocs2", testRegexSubDocs2)
     ]
 
     
@@ -135,6 +137,16 @@ final class RegexSubTests: XCTestCase {
         
 
     }
+    
+    func testRegexSubDocs2() throws {
+        
+        var text = "Have a terrible day"
+        let regexObject = try Regex(pattern: "terrible")
+        try text.regexSubInPlace(regexObject, with: "nice")
+        print(text)
+
+    }
+    
     
 }
 

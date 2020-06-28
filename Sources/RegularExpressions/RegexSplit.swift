@@ -32,6 +32,7 @@ public extension String {
      let regex = try Regex(#"\s*and\s*"#, [.caseInsensitive])
      
      let array = try colors.regexSplit(regex, maxLength: 3)
+     print(array)
      
      // array = ["red", "orange", "yellow"]
      // note that "blue" is not returned because the length of the
@@ -102,6 +103,8 @@ public extension String {
      ```
      let colors = "red,orange,yellow,blue"
      let array = try colors.regexSplit(",")
+     print(array)
+     
      // array = ["red", "orange", "yellow", "blue"]
      ```
      */
