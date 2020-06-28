@@ -2,8 +2,8 @@
 
 **A regular expressions library for Swift**
 
-- #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation-1)
 - #### [Introduction](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#introduction)
+- #### [Installation](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#installation-1)
 - #### [Using a regular expression object](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1)
   - [Initializing a Regex struct](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#initializing-a-regex-struct)
 - #### [Extracting the matches and capture groups](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#extracting-the-matches-and-capture-groups-1)
@@ -14,17 +14,17 @@
   - [Performing regular expression replacements with a custom closure](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-with-a-custom-closure)
 - #### [Checking for regular expression matches in a switch statement](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#checking-for-regular-expression-matches-in-a-switch-statement-1)
 
+## Introduction
+
+This library uses [NSRegularExpression](https://developer.apple.com/documentation/foundation/nsregularexpression) to perform the actual logic of regular expression pattern matching.
+However, it presents a much cleaner interface and was expliticty designed to take full advantage of swift. The supported syntax for the regular expressions can be found [here](http://userguide.icu-project.org/strings/regexp). You should also see [NSRegularExpression.Options](https://developer.apple.com/documentation/foundation/nsregularexpression/options) and [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions). I reccomend using https://regex101.com/ for testing your regular expression patterns.
+
 ## Installation
 
 1. In Xcode, open the project that you want to add this package to.
 2. From the menu bar, select File > Swift Packages > Add Package Dependency...
 3. Paste the [url](https://github.com/Peter-Schorn/RegularExpressions.git) for this repository into the search field.
 4. Follow the prompts for adding the package.
-
-## Introduction
-
-This library uses [NSRegularExpression](https://developer.apple.com/documentation/foundation/nsregularexpression) to perform the actual logic of regular expression pattern matching.
-However, it presents a much cleaner interface and was expliticty designed to take full advantage of swift. The supported syntax for the regular expressions can be found [here](http://userguide.icu-project.org/strings/regexp). You should also see [NSRegularExpression.Options](https://developer.apple.com/documentation/foundation/nsregularexpression/options) and [NSRegularExpression.MatchingOptions](https://developer.apple.com/documentation/foundation/nsregularexpression/matchingoptions). I reccomend using https://regex101.com/ for testing your regular expression patterns.
 
 ## Using a regular expression object
 
