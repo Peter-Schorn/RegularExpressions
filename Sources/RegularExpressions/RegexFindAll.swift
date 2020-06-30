@@ -28,9 +28,7 @@ public extension String {
      
      The ranges returned by this function can be used in the subscript
      for the original text, or for self.replacingCharacters(in:with:)
-     to modify the text. Note that after the original text has been
-     modified, the ranges may be invalid because characters may have
-     shifted to difference indices.
+     to modify the text.
      
      Example usage:
      ```
@@ -136,9 +134,7 @@ public extension String {
      
      The ranges returned by this function can be used in the subscript
      for the original text, or for self.replacingCharacters(in:with:)
-     to modify the text. Note that after the original text has been
-     modified, the ranges may be invalid because characters may have
-     shifted to difference indices.
+     to modify the text.
      
      Example usage:
      ```

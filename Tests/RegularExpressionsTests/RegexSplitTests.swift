@@ -9,7 +9,8 @@ class RegexSplitTests: XCTestCase {
     static var allTests = [
         ("testRegexSplit", testRegexSplit),
         ("testRegexSplitsComma", testRegexSplitsComma),
-        ("testRegexSplitWithOptions", testRegexSplitWithOptions)
+        ("testRegexSplitWithOptions", testRegexSplitWithOptions),
+        ("testRegexSplitWithEmpty", testRegexSplitWithEmpty)
     ]
     
     func testRegexSplit() {
@@ -70,6 +71,32 @@ class RegexSplitTests: XCTestCase {
         XCTAssertEqual(numbers2, ["one", "two", "three", "four"])
 
     }
+    
+    func testRegexSplitWithEmpty() throws {
+        // print("\n\n\n")
+        
+        let list = "one ,, two, three, four,,five, six,, seven"
+        
+        let numbers = try list.regexSplit(#"\s*,\s*"#, ignoreIfEmpty: true)
+        XCTAssertEqual(numbers, ["one", "two", "three", "four", "five", "six", "seven"])
+        
+        let regexObject = try Regex(
+            pattern: #"""
+            \s* # zero or more spaces
+            ,   # a comma
+            \s* # zero or more spaces
+            """#,
+            regexOptions: [.allowCommentsAndWhitespace]
+        )
+        
+        
+        let numbersWithEmpty = try list.regexSplit(regexObject)
+        XCTAssertEqual(
+            numbersWithEmpty,
+            ["one", "", "two", "three", "four", "", "five", "six", "", "seven"]
+        )
+    }
+    
     
     
 }

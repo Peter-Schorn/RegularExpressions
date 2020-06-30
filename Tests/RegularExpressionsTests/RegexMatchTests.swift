@@ -323,9 +323,18 @@ class RegexMatchTests: XCTestCase {
     func testRegexMatchDocs2() throws {
         
         var inputText = "name: Chris Lattner"
+        
+        let pattern = #"""
+        name:     # the literal string 'name'
+        \s+       # one more more whitespace characters
+        ([a-z]+)  # one or more lowercase letters
+        \s+       # one more more whitespace characters
+        ([a-z]+)  # one or more lowercase letters
+        """#
+        
         let regex = try! Regex(
-            pattern: "name: ([a-z]+) ([a-z]+)",
-            regexOptions: [.caseInsensitive],
+            pattern: pattern,
+            regexOptions: [.caseInsensitive, .allowCommentsAndWhitespace],
             groupNames: ["first name", "last name"]
         )
          
