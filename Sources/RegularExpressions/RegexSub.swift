@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Peter Schorn on 6/4/20.
-//
-
 import Foundation
 
 
@@ -41,6 +34,8 @@ public extension String {
      )
 
      let replacedText = try name.regexSub(regexObject, with: "word")
+     print(replacedText)
+     
      // replacedText = "word Schorn"
      ```
      */
@@ -97,6 +92,7 @@ public extension String {
          // first and second capture group, respectively.
          // $0 represents the entire match.
      )
+     print(reversedName)
      
      // reversedName = "Darwin Charles"
      ```
@@ -139,6 +135,16 @@ public extension String {
      - Throws: If the regular expression pattern is invalid
            or the number of group names does not match the number
            of capture groups.
+     
+     Example usage:
+     ```
+     var text = "Have a terrible day"
+     let regexObject = try Regex(pattern: "terrible")
+     try text.regexSubInPlace(regexObject, with: "nice")
+     print(text)
+     
+     // text = "Have a nice day"
+     ```
      */
     mutating func regexSubInPlace<RegularExpression: RegexProtocol>(
         _ regex: RegularExpression,
@@ -174,6 +180,8 @@ public extension String {
      ```
      var text = "Have a terrible day"
      try text.regexSubInPlace("terrible", with: "nice")
+     print(text)
+     
      // text = "Have a nice day"
      ```
     */
