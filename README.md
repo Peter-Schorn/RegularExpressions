@@ -131,10 +131,22 @@ Examples:
 ```swift
 var inputText = "name: Chris Lattner"
 
+// If you use comments in the pattern, 
+// you MUST use `.allowCommentsAndWhitespace` for the `regexOptions`
+let pattern = #"""
+name:     # the literal string 'name'
+\s+       # one more more whitespace characters
+([a-z]+)  # one or more lowercase letters
+\s+       # one more more whitespace characters
+([a-z]+)  # one or more lowercase letters
+"""#
+
 // create the regular expression object
-let regex = try Regex(
-    pattern: "name: ([a-z]+) ([a-z]+)",
-    regexOptions: [.caseInsensitive]
+let regex = try! Regex(
+    pattern: pattern,
+    regexOptions: [.caseInsensitive, .allowCommentsAndWhitespace],
+    groupNames: ["first name", "last name"]
+    // the names of the capture groups
 )
  
 if let match = try inputText.regexMatch(regex) {
