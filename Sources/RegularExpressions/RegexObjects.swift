@@ -405,13 +405,13 @@ extension NSRegularExpression: RegexProtocol {
     public var regexOptions: Options { self.options }
     
     /// Exists only to satisfy the requirements of
-    /// `RegexProtocol`. it will **ALWAYS** return `[]`.
+    /// `RegexProtocol`. It will **ALWAYS** return `[]`.
     /// Use the `Regex` struct or another struct that conforms to this
     /// protocol to customize these options.
     public var matchingOptions: MatchingOptions { [] }
     
     /// Exists only to satisfy the requirements of
-    /// `RegexProtocol`. it will **ALWAYS** return `nil`.
+    /// `RegexProtocol`. It will **ALWAYS** return `nil`.
     /// Use the `Regex` struct or another struct that conforms to this
     /// protocol to customize the group names.
     public var groupNames: [String]? { nil }
