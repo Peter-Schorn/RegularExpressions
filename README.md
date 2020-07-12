@@ -65,14 +65,14 @@ init(
     regexOptions: NSRegularExpression.Options = [],
     matchingOptions: NSRegularExpression.MatchingOptions = [],
     groupNames: [String]? = nil
-) throws {
+) throws
 ```
 Throws if the pattern is invalid.
 ```swift
 init(
     _ pattern: String,
     _ regexOptions: NSRegularExpression.Options = []
-) throws {
+) throws
 ```
 Throws is the pattern is invalid.
 ```swift
@@ -80,7 +80,7 @@ init(
     nsRegularExpression: NSRegularExpression,
     matchingOptions: NSRegularExpression.MatchingOptions = [],
     groupNames: [String]? = nil
-) {
+)
 ```
 Creates a `Regex` object from an `NSRegularExpression`.
 
@@ -109,7 +109,7 @@ The `RegexGroup` struct, which holds information about the capture groups, has t
 func regexMatch<RegularExpression: RegexProtocol>(
     _ regex: RegularExpression,
     range: Range<String.Index>? = nil
-) throws -> RegexMatch? {
+) throws -> RegexMatch?
 ```
 ```swift
 func regexMatch(
@@ -118,7 +118,7 @@ func regexMatch(
     matchingOptions: NSRegularExpression.MatchingOptions = [],
     groupNames: [String]? = nil,
     range: Range<String.Index>? = nil
-) throws -> RegexMatch? {
+) throws -> RegexMatch?
 ```
 The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 `range` represents the range of the string in which to search for the pattern.  
@@ -203,7 +203,7 @@ if let match = match {
 func regexFindAll<RegularExpression: RegexProtocol>(
     _ regex: RegularExpression,
     range: Range<String.Index>? = nil
-) throws -> [RegexMatch] {
+) throws -> [RegexMatch]
 ```
 ```swift
 func regexFindAll(
@@ -212,7 +212,7 @@ func regexFindAll(
     matchingOptions: NSRegularExpression.MatchingOptions = [],
     groupNames: [String]? = nil,
     range: Range<String.Index>? = nil
-) throws -> [RegexMatch] {
+) throws -> [RegexMatch]
 ```
 **Warning**: The ranges of the matches and capture groups may be invalidated if you mutate the source string. Use [String.regexsub](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1) to perform multiple replacements.  
 
@@ -274,7 +274,7 @@ func regexSplit(
     ignoreIfEmpty: Bool = false,
     maxLength: Int? = nil,
     range: Range<String.Index>? = nil
-) throws -> [String] {
+) throws -> [String]
 ```
 ```swift
 func regexSplit<RegularExpression: RegexProtocol>(
@@ -282,7 +282,7 @@ func regexSplit<RegularExpression: RegexProtocol>(
     ignoreIfEmpty: Bool = false,
     maxLength: Int? = nil,
     range: Range<String.Index>? = nil
-) throws -> [String] {
+) throws -> [String]
 ```
 The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 - `ignoreIfEmpty` - If true, all empty strings will be removed from the array. If false (default), they will be included.
@@ -322,14 +322,14 @@ func regexSub(
     regexOptions: NSRegularExpression.Options = [],
     matchingOptions: NSRegularExpression.MatchingOptions = [],
     range: Range<String.Index>? = nil
-) throws -> String {
+) throws -> String
 ```
 ```swift
 func regexSub<RegularExpression: RegexProtocol>(
     _ regex: RegularExpression,
     with template: String = "",
     range: Range<String.Index>? = nil
-) throws -> String {
+) throws -> String
 ```
 The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 - `with` - The template string to replace matching patterns with. See [Template Matching Format](https://apple.co/3fWBknv) for how to format the template. Defaults to an empty string.
@@ -374,7 +374,7 @@ func regexSub<RegularExpression: RegexProtocol>(
     _ regex: RegularExpression,
     range: Range<String.Index>? = nil,
     replacer: (_ matchIndex: Int, _ match: RegexMatch) -> String?
-) throws -> String {
+) throws -> String
 ```
 ```swift
 func regexSub(
@@ -384,7 +384,7 @@ func regexSub(
     groupNames: [String]? = nil,
     range: Range<String.Index>? = nil,
     replacer: (_ matchIndex: Int, _ match: RegexMatch) -> String?
-) throws -> String {
+) throws -> String
 ```
 The `pattern`, `regexOptions`, `matchingOptions`, and `groupNames` parameters correspond to the instance properties of [RegexProtocol](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#using-a-regular-expression-object-1).  
 - `replacer` - A closure that accepts the index of a regular expression match and a regular expression match and returns a new string to replace it with. Return nil from within the closure to indicate that the match should not be changed.
@@ -409,7 +409,7 @@ print(replacedString)
 // """
 ```
 
-If you need to perform replacedments for each individual capture group, you can use the `replaceGroups` method of the `RegexMatch` struct:
+If you need to perform replacements for each individual capture group, you can use the `replaceGroups` method of the `RegexMatch` struct:
 ```swift
 func replaceGroups(
     _ replacer: (
