@@ -415,7 +415,7 @@ func replaceGroups(
     _ replacer: (
         _ groupIndex: Int, _ group: RegexGroup
     ) -> String?
-) -> String {
+) -> String
 ```
 - `replacer` - A closure that accepts the index of a capture group and a capture group and returns a new string to replace it with. Return nil from within the closure to indicate that the capture group should not be changed.
 
