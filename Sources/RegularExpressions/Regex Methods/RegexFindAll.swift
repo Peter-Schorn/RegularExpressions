@@ -20,15 +20,15 @@ public extension String {
            and an array of the capture groups. Returns an empty
            array if no matches were found.
            Each capture group is an optional RegexGroup containing
-           the matched tex, the range of the matched text and the name of
+           the matched string, the range of the matched string and the name of
            the capture group, or nil if it was not named.
      - Warning: The ranges of the matches and capture groups may be
            invalidated if you mutate the source string. Use [String.regexsub](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1)
            to perform multiple replacements.
      
      The ranges returned by this function can be used in the subscript
-     for the original text, or for self.replacingCharacters(in:with:)
-     to modify the text.
+     for the original string, or for self.replacingCharacters(in:with:)
+     to modify the string.
      
      Example usage:
      ```
@@ -126,15 +126,15 @@ public extension String {
            and an array of the capture groups. Returns an empty
            array if no matches were found.
            Each capture group is an optional RegexGroup containing
-           the matched tex, the range of the matched text and the name of
+           the matched string, the range of the matched string and the name of
            the capture group, or nil if it was not named.
      - Warning: The ranges of the matches and capture groups may be
            invalidated if you mutate the source string. Use [String.regexsub](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1)
            to perform multiple replacements.
      
      The ranges returned by this function can be used in the subscript
-     for the original text, or for self.replacingCharacters(in:with:)
-     to modify the text.
+     for the original string, or for self.replacingCharacters(in:with:)
+     to modify the string.
      
      Example usage:
      ```

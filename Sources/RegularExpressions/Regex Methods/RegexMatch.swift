@@ -11,10 +11,10 @@ public extension String {
        - range: The range of self in which to search for the pattern.
              If nil (default), then the entire string is searched.
      - Returns: The regular expression match or nil if no match was found.
-           The match contains the matched text and the range of the matched text,
+           The match contains the matched string and the range of the matched string,
            and an array of capture groups.
            Each capture group is an optional RegexGroup containing
-           the matched text, the range of the matched text and the name of
+           the matched string, the range of the matched string and the name of
            the capture group, or nil if it was not named.
      - Throws: If the regular expression pattern is invalid
            or the number of group names does not match the number
@@ -25,8 +25,8 @@ public extension String {
            to perform multiple replacements.
     
      The ranges returned by this function can be used in the subscript
-     for the original text, or for self.replacingCharacters(in:with:)
-     to modify the text.
+     for the original string, or for self.replacingCharacters(in:with:)
+     to modify the string.
     
      Example usage:
      ```
@@ -116,18 +116,18 @@ public extension String {
            of capture groups. **Never** throws an error
            if no matches were found.
      - Returns: The regular expression match or nil if no match was found.
-           The match contains the matched text and the range of the matched text,
+           The match contains the matched string and the range of the matched string,
            and an array of capture groups.
            Each capture group is an optional RegexGroup containing
-           the matched tex, the range of the matched text and the name of
+           the matched string, the range of the matched string and the name of
            the capture group, or nil if it was not named.
      - Warning: The ranges of the matches and capture groups may be
            invalidated if you mutate the source string. Use [String.regexsub](https://github.com/Peter-Schorn/RegularExpressions/blob/master/README.md#performing-regular-expression-replacements-1)
            to perform multiple replacements.
     
      The ranges returned by this function can be used in the subscript
-     for the original text, or for self.replacingCharacters(in:with:)
-     to modify the text.
+     for the original string, or for self.replacingCharacters(in:with:)
+     to modify the string.
      
      Example usage:
      ```

@@ -5,7 +5,7 @@ import RegularExpressions
 import XCTest
 
 
-/// Assert that the reported ranges of the matches in the original text
+/// Assert that the reported ranges of the matches in the original string
 /// are correct.
 func assertRegexRangesMatch(
     _ regexMatches: [RegularExpressions.RegexMatch],

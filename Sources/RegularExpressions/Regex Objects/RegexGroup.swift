@@ -13,7 +13,7 @@ import Foundation
  ```
  /// The name of the capture group
  public let name: String?
- /// The text of the capture group.
+ /// The capture group match.
  public let match: String
  /// The range of the capture group in the source string.
  public let range: Range<String.Index>
@@ -28,8 +28,6 @@ public struct RegexGroup: Equatable, Hashable {
        - name: The name of the capture group.
        - match: The matched capture group.
        - range: The range of the capture group in the source string.
-     
-     The source string will be converted into a substring to minimize memory usage.
      */
     public init(
         match: String,

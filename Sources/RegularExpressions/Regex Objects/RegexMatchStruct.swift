@@ -119,6 +119,9 @@ public struct RegexMatch: Equatable, Hashable {
         for (indx, group) in self.groups.enumerated() {
             guard let group = group else { continue }
             
+            // The range from the end of the last capture group
+            // (or the beginning of the string on the first iteration)
+            // the the beginning of the next capture group, exclusive.
             replacedString += sourceString[
                 currentRange.upperBound..<group.range.lowerBound
             ]
