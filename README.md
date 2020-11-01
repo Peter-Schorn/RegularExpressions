@@ -492,5 +492,5 @@ switch inputStrig {
 // prints "valid user id"
  ```
 
-`try`, `try?`, and `try!` can all be used to determined the best way to handle an error arising from an invalid regular expression pattern.
+`try`, `try?`, and `try!` can all be used depending on how you want to handle an error arising from an invalid regular expression pattern.
 Unfortunately, there is no way to bind the match of the regular expression pattern to a variable.
