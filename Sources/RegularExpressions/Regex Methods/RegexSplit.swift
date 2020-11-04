@@ -3,7 +3,6 @@ import Foundation
 
 public extension String {
     
-    
     /**
      Splits the string by occurences of a pattern into an array.
      
