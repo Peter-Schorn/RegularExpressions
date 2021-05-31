@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+
 
 import Foundation
 import RegularExpressions
@@ -25,9 +25,9 @@ final class RegexNamedGroupsTests: XCTestCase {
             
             assertRegexRangesMatch([match], inputText: inputText)
             
-            XCTAssertEqual(match.group(named: "first")?.match, Opt("one"))
-            XCTAssertEqual(match.group(named: "second")?.match, Opt("two"))
-            XCTAssertEqual(match.group(named: "third")?.match, Opt("three"))
+            XCTAssertEqual(match.group(named: "first")?.match, Optional("one"))
+            XCTAssertEqual(match.group(named: "second")?.match, Optional("two"))
+            XCTAssertEqual(match.group(named: "third")?.match, Optional("three"))
         }
         
     }
@@ -57,4 +57,4 @@ final class RegexNamedGroupsTests: XCTestCase {
 }
 
 
-#endif
+

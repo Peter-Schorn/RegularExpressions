@@ -56,7 +56,7 @@ extension RegexReplacerTests {
     // to regenerate.
     static let __allTests__RegexReplacerTests = [
         ("testCaptureGroupReplacerDocs", testCaptureGroupReplacerDocs),
-        ("testCapturreGroupReplacing", testCapturreGroupReplacing),
+        ("testCaptureGroupReplacing", testCaptureGroupReplacing),
         ("testReplacing", testReplacing),
         ("testReplacingDocs2", testReplacingDocs2),
         ("testReplacingDocs3", testReplacingDocs3),

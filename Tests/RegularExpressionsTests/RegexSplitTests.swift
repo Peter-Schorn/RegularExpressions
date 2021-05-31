@@ -1,4 +1,3 @@
-#if canImport(XCTest)
 
 import Foundation
 import RegularExpressions
@@ -13,21 +12,21 @@ class RegexSplitTests: XCTestCase {
         ("testRegexSplitWithEmpty", testRegexSplitWithEmpty)
     ]
     
-    func testRegexSplit() {
+    func testRegexSplit() throws {
         
-        assertNoThrow {
+        do {
             let fruits = "apples|oranges|bannanas"
             let array = try fruits.regexSplit(#"\|"#)
             XCTAssertEqual(array, ["apples", "oranges", "bannanas"])
-            
         }
-        assertNoThrow {
+
+        do {
             let list = "1. milk 2. bread 30. eggs"
             let array = try list.regexSplit(#"\d+\.\s+"#)
             XCTAssertEqual(array, ["", "milk ", "bread ", "eggs"])
-            
         }
-        assertNoThrow {
+
+        do {
             let url = "https://github.com/apple/swift-numerics/blob/master/Package.swift"
             let array = try url.regexSplit(#"(/|\.)"#, ignoreIfEmpty: true)
             XCTAssertEqual(
@@ -41,14 +40,15 @@ class RegexSplitTests: XCTestCase {
         
     }
     
-    func testRegexSplitsComma() {
+    func testRegexSplitsComma() throws {
         
-        assertNoThrow {
+        do {
             let colors = "red,orange,yellow,blue"
             let array = try colors.regexSplit(",")
             XCTAssertEqual(array, ["red", "orange", "yellow", "blue"])
         }
-        assertNoThrow {
+
+        do {
             let colors = "red and orange ANDyellow and    blue"
             let regex = try Regex(#"\s*and\s*"#, [.caseInsensitive])
             let array = try colors.regexSplit(regex, maxLength: 3)
@@ -102,4 +102,4 @@ class RegexSplitTests: XCTestCase {
 }
 
 
-#endif
+

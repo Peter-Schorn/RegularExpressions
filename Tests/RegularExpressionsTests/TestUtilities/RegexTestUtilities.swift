@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+
 
 import Foundation
 import RegularExpressions
@@ -19,7 +19,7 @@ func assertRegexRangesMatch(
             file: file, line: line
         )
         
-        for group in match.groups.removeIfNil() {
+        for group in match.groups.compactMap({ $0 }) {
             XCTAssertEqual(
                 group.match, String(inputText[group.range]),
                 file: file, line: line
@@ -188,7 +188,7 @@ func regexMatchFuzz(
     // use regexFindAll, but only return the first match.
     // should be equivalent to regexMatch.
     let findAllFirsts = try regexObjects.compactMap { object -> RegexMatch? in
-        if let match = try inputText.regexFindAll(object, range: range)[safe: 0] {
+        if let match = try inputText.regexFindAll(object, range: range).first {
             return match
         }
         XCTFail("failed to find match")
@@ -226,7 +226,7 @@ func regexMatchFuzz(
             matchingOptions: matchingOptions,
             groupNames: groupNames,
             range: range
-        )[safe: 0] {
+        ).first {
             return match
         }
         XCTFail("failed to find match")
@@ -303,4 +303,19 @@ func regexReplacerFuzz(
 }
 
 
-#endif
+public extension String {
+    
+    /// Returns an array of each word in the string.
+    ///
+    /// A word is defined in terms of this regular expression pattern:
+    /// ```
+    /// \w+
+    /// ```
+    /// Returns an empty array if no words are found.
+    func words() -> [String] {
+        
+        return try! self.regexFindAll(#"\w+"#).map { $0.fullMatch }
+        
+    }
+    
+}

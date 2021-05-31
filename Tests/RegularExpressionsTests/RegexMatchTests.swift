@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+
 
 import Foundation
 import RegularExpressions
@@ -42,16 +42,16 @@ class RegexMatchTests: XCTestCase {
             XCTAssertEqual(
                 match.stringMatches,
                 [
-                    Opt("https"),
-                    Opt("www.sitepoint.com"),
-                    Opt(nil),
-                    Opt("demystifying-regex-with-practical-examples/")
+                    Optional("https"),
+                    Optional("www.sitepoint.com"),
+                    Optional(nil),
+                    Optional("demystifying-regex-with-practical-examples/")
                 ]
             )
             XCTAssertEqual(match.groups.count, 4)
             XCTAssertEqual(
                 match.groupNames,
-                [Opt("protocol"), Opt("host"), nil, Opt("path")]
+                [Optional("protocol"), Optional("host"), nil, Optional("path")]
             )
 
         }
@@ -59,13 +59,13 @@ class RegexMatchTests: XCTestCase {
     
     }
     
-    func testRegexMatchURL() {
+    func testRegexMatchURL() throws {
         
         let url = "https://www.sitepoint.com/demystifying-regex-with-practical-examples/"
         let pattern =
         #"^(http|https|ftp):[\/]{2}([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,4})(:[0-9]+)?\/?([a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)"#
         
-        assertNoThrow {
+        do {
             let nsRegexObject = try NSRegularExpression(pattern: pattern)
             XCTAssertEqual(nsRegexObject.numberOfCaptureGroups, 4)
             let regex = try Regex(pattern)
@@ -80,7 +80,7 @@ class RegexMatchTests: XCTestCase {
             
         }
         
-        assertNoThrow {
+        do {
             
             let match1 = try url.regexMatch(pattern)
             
@@ -108,10 +108,10 @@ class RegexMatchTests: XCTestCase {
                 XCTAssertEqual(
                     match.stringMatches,
                     [
-                        Opt("https"),
-                        Opt("www.sitepoint.com"),
-                        Opt(nil),
-                        Opt("demystifying-regex-with-practical-examples/")
+                        Optional("https"),
+                        Optional("www.sitepoint.com"),
+                        Optional(nil),
+                        Optional("demystifying-regex-with-practical-examples/")
                     ]
                 )
                 
@@ -175,7 +175,7 @@ class RegexMatchTests: XCTestCase {
             
             XCTAssertEqual(
                 match.stringMatches,
-                [Opt("Peter"), Opt("21"), Opt("Male")]
+                [Optional("Peter"), Optional("21"), Optional("Male")]
             )
             
             let replaced = inputText.replacingCharacters(in: match.range, with: "null")
@@ -191,49 +191,47 @@ class RegexMatchTests: XCTestCase {
         
     }
     
-    func testRegexMatchName() {
-        assertNoThrow {
+    func testRegexMatchName() throws {
+        
+        let inputText = "name: Chris Lattner"
+        let pattern = "name: ([a-z]+) ([a-z]+)"
+        
+        let match1 = try inputText.regexMatch(
+            pattern,
+            regexOptions: [.caseInsensitive],
+            groupNames: ["first name", "last name"]
+        )
+        
+        let (nsRegex, regex) = try makeBothRegexObjects(pattern, [.caseInsensitive])
+        let match2 = try inputText.regexMatch(regex)
+        let match3 = try inputText.regexMatch(nsRegex)
+        
+        for (i, match) in [match1, match2, match3].enumerated() {
             
-            let inputText = "name: Chris Lattner"
-            let pattern = "name: ([a-z]+) ([a-z]+)"
-            
-            let match1 = try inputText.regexMatch(
-                pattern,
-                regexOptions: [.caseInsensitive],
-                groupNames: ["first name", "last name"]
-            )
-            
-            let (nsRegex, regex) = try makeBothRegexObjects(pattern, [.caseInsensitive])
-            let match2 = try inputText.regexMatch(regex)
-            let match3 = try inputText.regexMatch(nsRegex)
-            
-            for (i, match) in [match1, match2, match3].enumerated() {
-                
-                guard let match = match else {
-                    XCTFail("should've found match")
-                    continue
-                }
-                
-                if i == 0 {
-                    XCTAssertEqual(match.groupNames, ["first name", "last name"])
-                    XCTAssertEqual(match.group(named: "first name")?.match, "Chris")
-                    XCTAssertEqual(match.group(named: "last name")?.match, "Lattner")
-                }
-                
-                
-                print("full match: '\(match.fullMatch)'")
-                XCTAssertEqual(match.fullMatch, "name: Chris Lattner")
-                
-                XCTAssertEqual(match.groups[0]!.match, "Chris")
-                XCTAssertEqual(match.groups[1]!.match, "Lattner")
-                
-                var copy = inputText
-                copy.replaceSubrange(match.groups[0]!.range, with: "Steven")
-                XCTAssertEqual(copy, "name: Steven Lattner")
-                
-                
+            guard let match = match else {
+                XCTFail("should've found match")
+                continue
             }
+            
+            if i == 0 {
+                XCTAssertEqual(match.groupNames, ["first name", "last name"])
+                XCTAssertEqual(match.group(named: "first name")?.match, "Chris")
+                XCTAssertEqual(match.group(named: "last name")?.match, "Lattner")
+            }
+            
+            
+            print("full match: '\(match.fullMatch)'")
+            XCTAssertEqual(match.fullMatch, "name: Chris Lattner")
+            
+            XCTAssertEqual(match.groups[0]!.match, "Chris")
+            XCTAssertEqual(match.groups[1]!.match, "Lattner")
+            
+            var copy = inputText
+            copy.replaceSubrange(match.groups[0]!.range, with: "Steven")
+            XCTAssertEqual(copy, "name: Steven Lattner")
+            
         }
+        
     }
  
     func testRegexMatchWithRange() throws {
@@ -275,7 +273,7 @@ class RegexMatchTests: XCTestCase {
         if let match = try inputText.regexMatch(regex, range: searchRange) {
             assertRegexRangesMatch([match], inputText: inputText)
             XCTAssertEqual(match.fullMatch, "only for his own good:")
-            XCTAssertEqual(match.group(named: "word")?.match, Opt("good"))
+            XCTAssertEqual(match.group(named: "word")?.match, Optional("good"))
         }
         else {
             XCTFail("should've found match")
@@ -375,4 +373,4 @@ class RegexMatchTests: XCTestCase {
 }
 
 
-#endif
+

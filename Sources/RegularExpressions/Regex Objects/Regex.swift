@@ -194,21 +194,21 @@ public struct Regex: RegexProtocol, Equatable {
 extension NSRegularExpression: RegexProtocol {
     
     /// Alias for self.[options](https://developer.apple.com/documentation/foundation/nsregularexpression/options)
-    /// Exists to satsify a requirement
+    /// Exists to satisfy a requirement
     /// of `RegexProtocol`.
-    public var regexOptions: Options { self.options }
+    public var regexOptions: Options { return self.options }
     
     /// Exists only to satisfy the requirements of
     /// `RegexProtocol`. It will **ALWAYS** return `[]`.
     /// Use the `Regex` struct or another struct that conforms to this
     /// protocol to customize these options.
-    public var matchingOptions: MatchingOptions { [] }
+    public var matchingOptions: MatchingOptions { return [] }
     
     /// Exists only to satisfy the requirements of
     /// `RegexProtocol`. It will **ALWAYS** return `nil`.
     /// Use the `Regex` struct or another struct that conforms to this
     /// protocol to customize the group names.
-    public var groupNames: [String]? { nil }
+    public var groupNames: [String]? { return nil }
     
 }
 

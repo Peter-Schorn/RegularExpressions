@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+
 
 import Foundation
 import RegularExpressions
@@ -76,9 +76,9 @@ final class RegexSubTests: XCTestCase {
 
     }
 
-    func testRegexSubTemplates() {
+    func testRegexSubTemplates() throws {
         
-        assertNoThrow {
+        do {
             let inputText = "(512) 721-8706"
             
             let newText = try inputText.regexSub(
@@ -88,7 +88,8 @@ final class RegexSubTests: XCTestCase {
             
             XCTAssertEqual(newText, "5127218706")
         }
-        assertNoThrow {
+        
+        do {
             let inputText = "Charles Darwin"
             
             let newText = try! inputText.regexSub(
@@ -150,4 +151,4 @@ final class RegexSubTests: XCTestCase {
     
 }
 
-#endif
+

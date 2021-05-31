@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+
 
 import Foundation
 import RegularExpressions
@@ -68,4 +68,4 @@ final class RegexObjectsTests: XCTestCase {
 }
 
 
-#endif
+

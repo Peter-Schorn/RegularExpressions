@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+
 
 import Foundation
 import RegularExpressions
@@ -108,12 +108,12 @@ final class RegexFindAllTests: XCTestCase {
         
     }
     
-    func testRegexFindAll3() {
+    func testRegexFindAll3() throws {
     
         let inputText = "season 8, episode 5; season 5, episode 20"
     
     
-        func checkRegexMatches(_ results: [RegexMatch], input: String) {
+        func checkRegexMatches(_ results: [RegexMatch], input: String) throws {
     
             assertRegexRangesMatch(results, inputText: inputText)
     
@@ -156,20 +156,24 @@ final class RegexFindAllTests: XCTestCase {
             pattern: pattern, options: [.caseInsensitive]
         )
     
-        assertNoThrow {
-            let noObject = try inputText.regexFindAll(pattern, regexOptions: [.caseInsensitive])
+        do {
+            let noObject = try inputText.regexFindAll(
+                pattern, regexOptions: [.caseInsensitive]
+            )
             let withObject = try inputText.regexFindAll(regexObject)
             XCTAssertEqual(noObject, withObject)
         }
     
-        assertNoThrow {
-            let results = try inputText.regexFindAll(pattern, regexOptions: [.caseInsensitive])
-            checkRegexMatches(results, input: inputText)
+        do {
+            let results = try inputText.regexFindAll(
+                pattern, regexOptions: [.caseInsensitive]
+            )
+            try checkRegexMatches(results, input: inputText)
         }
     
-        assertNoThrow {
+        do {
             let results = try inputText.regexFindAll(regexObject)
-            checkRegexMatches(results, input: inputText)
+            try checkRegexMatches(results, input: inputText)
         }
     }
     
@@ -280,4 +284,4 @@ final class RegexFindAllTests: XCTestCase {
 }
 
 
-#endif
+

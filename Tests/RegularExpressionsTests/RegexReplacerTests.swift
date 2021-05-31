@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+
 
 import Foundation
 import RegularExpressions
@@ -9,7 +9,7 @@ final class RegexReplacerTests: XCTestCase {
     static var allTests = [
         ("testReplacing", testReplacing),
         ("testReplacingShort", testReplacingShort),
-        ("testCapturreGroupReplacing", testCapturreGroupReplacing),
+        ("testCaptureGroupReplacing", testCaptureGroupReplacing),
         ("testCaptureGroupReplacerDocs", testCaptureGroupReplacerDocs),
         ("testReplacingMatchAndCaptureGroupsDocs", testReplacingMatchAndCaptureGroupsDocs),
         ("testReplacingDocs2", testReplacingDocs2)
@@ -210,7 +210,7 @@ final class RegexReplacerTests: XCTestCase {
 
     }
     
-    func testCapturreGroupReplacing() throws {
+    func testCaptureGroupReplacing() throws {
         
         let inputText = "name: peter, id: 35"
         let pattern = #"name: (\w+), id: (\d+)"#
@@ -353,4 +353,4 @@ final class RegexReplacerTests: XCTestCase {
 
 
 
-#endif
+
