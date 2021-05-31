@@ -1,13 +1,9 @@
 name: Swift
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  build:
+  test_macOS:
 
     runs-on: macos-latest
 
@@ -17,3 +13,20 @@ jobs:
       run: swift build
     - name: Run tests
       run: swift test
+      
+  test_linux:
+    strategy:
+      matrix:
+        image: ["swift:5.0", "swift:5.1", "swift:5.2", "swift:5.3", "swift:5.4"]
+        
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: swift build
+    - name: Run tests
+      run: swift test
+
+  
