@@ -6,6 +6,7 @@ jobs:
   build:
     name: Swift ${{ matrix.swift }} on ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
         swift: ["5.0", "5.1", "5.2", "5.3", "5.4"]
